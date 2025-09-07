@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Product;
 use App\Models\ProductBatch;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -88,6 +90,16 @@ class PosController extends Controller
                 }
             }
 
+            ActivityLog::create([
+                'user_id'    => Auth::id(),
+                'event'      => 'created',
+                'module'     => 'sales',
+                'description' => 'Created sale: ' . $sale->sale_date,
+                'properties' => ['sale_id' => $sale->id],
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->header('User-Agent'),
+            ]);
+
             DB::commit();
 
             return redirect()->back()
@@ -105,7 +117,7 @@ class PosController extends Controller
     public function receipt(Sale $sale)
     {
         // Eager load sale details and their products
-        $sale->load(['saleDetail.product']);
+        $sale->load(['saleDetails.product']);
 
         return Inertia::render('Pos/Receipt', [
             'sale' => $sale,

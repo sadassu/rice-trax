@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->string('event'); // e.g. created, updated, deleted
-            $table->string('module')->nullable(); // e.g. products, orders
-            $table->text('description')->nullable(); // Details of the action
-            $table->json('properties')->nullable(); // Extra data (before/after changes)
+            $table->string('event');                        // e.g. created, updated, deleted
+            $table->string('module')->nullable();           // e.g. products, orders
+            $table->text('description')->nullable();        // Details of the action
+            $table->json('properties')->nullable();         // Extra data (before/after changes)
             $table->ipAddress('ip_address')->nullable();
-            $table->string('user_agent')->nullable(); // Browser/device
+            $table->string('user_agent')->nullable();       // Browser/device
             $table->timestamps();
         });
     }

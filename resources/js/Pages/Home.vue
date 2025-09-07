@@ -7,7 +7,7 @@ const props = defineProps({
 
 <template>
     <Head
-        :title="`RiceTrax - ${$page.component} | Rich-Anne Store POS System`"
+        :title="`${$page.component} | Rich-Anne Store POS System`"
     />
 
     <div

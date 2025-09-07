@@ -9,35 +9,45 @@ const page = usePage();
 const navItems = [
     {
         href: "admin.dashboard",
+        pageComponent: "Dashboard/AdminDashboard",
         label: "Dashboard",
         icon: "/storage/assets/icons/dashboard.svg",
         role: "admin",
     },
     {
         href: "pos.index",
+        pageComponent: "Pos/Pos",
         label: "POS",
         icon: "/storage/assets/icons/products.svg",
     },
     {
         href: "products.index",
+        pageComponent: "Products/ShowProducts",
         label: "Products",
         icon: "/storage/assets/icons/products.svg",
     },
     {
         href: "sales.index",
+        pageComponent: "Sales/Sales",
         label: "Sales",
         icon: "/storage/assets/icons/sale.svg",
         role: "admin",
     },
     {
+        href: "attendances.index",
+        pageComponent: "Attendances/Attendances",
+        label: "Employee",
+        icon: "/storage/assets/icons/accounts.svg",
+        role: "admin",
+    },
+    {
         href: "accounts",
+        pageComponent: "Auth/Accounts",
         label: "Accounts",
         icon: "/storage/assets/icons/accounts.svg",
         role: "admin",
     },
 ];
-
-window.assetBaseUrl = "{{ asset('') }}";
 
 // Track sidebar expanded state
 const expanded = ref(true);
@@ -60,11 +70,6 @@ function handleClickOutside(event) {
 document.addEventListener("click", handleClickOutside);
 
 const currentTime = ref("");
-
-// Check if route is active
-function isActive(routeName) {
-    return page.url.startsWith(route(routeName));
-}
 
 // Filter nav items based on user role
 const filteredNavItems = computed(() => {
@@ -94,7 +99,7 @@ const filteredNavItems = computed(() => {
                 >
                     <div class="relative">
                         <img
-                            :src="'storage/assets/img/logo.jpg'"
+                            :src="'../storage/assets/img/logo.jpg'"
                             alt="Company Logo"
                             class="rounded-xl w-full shadow-lg ring-2 ring-white/20"
                         />
@@ -134,49 +139,72 @@ const filteredNavItems = computed(() => {
                         <div class="relative">
                             <Link
                                 :href="route(item.href)"
-                                :class="`flex w-full items-center px-4 py-3 rounded-xl font-medium transition-all duration-200 backdrop-blur-sm ${
-                                    isActive(item.href)
-                                        ? 'bg-white/20 text-white shadow-lg translate-x-1 border border-white/20'
-                                        : 'hover:bg-white/10 hover:shadow-lg hover:translate-x-1 text-white/90 hover:text-white'
-                                } group/link`"
+                                :class="[
+                                    'flex w-full items-center px-4 py-3 rounded-xl font-medium transition-all duration-300 ease-out group/link relative overflow-hidden',
+                                    'hover:bg-white/10 hover:shadow-lg hover:translate-x-1 hover:scale-105',
+                                    'active:scale-95',
+                                    $page.component == item.pageComponent
+                                        ? 'bg-gradient-to-r from-white/25 to-white/15 text-white shadow-lg transform translate-x-1 border border-white/30 ring-2 ring-white/10'
+                                        : 'text-white/90 hover:text-white border border-transparent hover:border-white/10',
+                                ]"
                             >
+                                <!-- Active background pulse effect -->
+                                <div
+                                    v-if="$page.component == item.pageComponent"
+                                    class="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-300"
+                                ></div>
+
                                 <!-- Icon Container -->
                                 <div
-                                    :class="`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 ${
-                                        isActive(item.href)
-                                            ? 'bg-white/30'
+                                    :class="`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 relative z-10 ${
+                                        $page.component == item.pageComponent
+                                            ? 'bg-white/30 shadow-md'
                                             : 'bg-white/10 group-hover/link:bg-white/20'
                                     }`"
                                 >
                                     <img
                                         :src="item.icon"
                                         :alt="item.label"
-                                        class="w-5 h-5 filter brightness-0 invert"
+                                        :class="`w-5 h-5 filter brightness-0 invert transition-transform duration-200 ${
+                                            $page.component ==
+                                            item.pageComponent
+                                                ? 'scale-110'
+                                                : 'group-hover/link:scale-105'
+                                        }`"
                                     />
                                 </div>
 
                                 <!-- Label -->
                                 <span
-                                    :class="`overflow-hidden transition-all duration-300 ease-in-out whitespace-nowrap ${
+                                    :class="`overflow-hidden transition-all duration-300 ease-in-out whitespace-nowrap relative z-10 ${
                                         expanded
                                             ? 'w-40 ml-4 opacity-100'
                                             : 'w-0 ml-0 opacity-0'
+                                    } ${
+                                        $page.component == item.pageComponent
+                                            ? 'font-semibold'
+                                            : 'font-medium'
                                     }`"
                                 >
                                     {{ item.label }}
                                 </span>
 
-                                <!-- Active indicator -->
+                                <!-- Enhanced active indicator -->
                                 <div
-                                    :class="`absolute left-0 w-1 h-8 bg-white rounded-r-full transition-opacity duration-200 ${
-                                        isActive(item.href)
-                                            ? 'opacity-100'
-                                            : 'opacity-0 group-hover/link:opacity-100'
+                                    :class="`absolute left-0 w-1 h-8 bg-gradient-to-b from-white to-white/80 rounded-r-full transition-all duration-300 ${
+                                        $page.component == item.pageComponent
+                                            ? 'opacity-100 shadow-lg shadow-white/25'
+                                            : 'opacity-0 group-hover/link:opacity-60'
                                     }`"
+                                ></div>
+
+                                <!-- Subtle glow effect for active items -->
+                                <div
+                                    v-if="$page.component == item.pageComponent"
+                                    class="absolute inset-0 rounded-xl bg-gradient-to-r from-white/5 to-transparent pointer-events-none"
                                 ></div>
                             </Link>
 
-                            <!-- Tooltip for collapsed state -->
                             <div
                                 v-if="!expanded"
                                 class="absolute left-full top-1/2 -translate-y-1/2 ml-4 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-xl invisible opacity-0 -translate-x-2 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap z-50 border border-gray-700"
@@ -208,7 +236,7 @@ const filteredNavItems = computed(() => {
                             }}
                         </div>
                         <div
-                            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-teal-700"
+                            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-teal-700 animate-pulse"
                         ></div>
                     </div>
 
@@ -230,7 +258,11 @@ const filteredNavItems = computed(() => {
 
                         <button
                             @click.stop="toggleUserMenu"
-                            class="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 ml-2"
+                            :class="`p-2 rounded-lg transition-all duration-200 ml-2 ${
+                                showUserMenu
+                                    ? 'bg-white/20 text-white transform scale-110'
+                                    : 'hover:bg-white/10 text-teal-200 hover:text-white'
+                            }`"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -238,7 +270,9 @@ const filteredNavItems = computed(() => {
                                 viewBox="0 0 24 24"
                                 stroke-width="1.5"
                                 stroke="currentColor"
-                                class="w-4 h-4 text-teal-200"
+                                :class="`w-4 h-4 transition-transform duration-200 ${
+                                    showUserMenu ? 'rotate-90' : ''
+                                }`"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -290,18 +324,22 @@ const filteredNavItems = computed(() => {
                 <template v-for="item in filteredNavItems" :key="item.label">
                     <Link
                         :href="route(item.href)"
-                        :class="`flex flex-col items-center justify-center py-3 px-4 rounded-xl transition-all duration-200 min-w-0 ${
-                            isActive(item.href)
-                                ? 'bg-white/20 text-white transform scale-110'
-                                : 'text-white/80 hover:text-white hover:bg-white/10'
-                        }`"
+                        :class="[
+                            'flex flex-col items-center justify-center py-3 px-4 rounded-xl transition-all duration-300 ease-out min-w-0 relative',
+                            'hover:bg-white/10 hover:scale-105 hover:shadow-sm',
+                            'active:scale-95',
+                            $page.component == item.pageComponent
+                                ? 'bg-gradient-to-r from-white/25 to-white/15 text-white transform scale-110 shadow-lg'
+                                : 'text-white/80 hover:text-white',
+                        ]"
                     >
                         <div
-                            :class="`w-6 h-6 flex items-center justify-center rounded-lg transition-all duration-200 ${
-                                isActive(item.href)
-                                    ? 'bg-white/20 mb-1'
-                                    : 'mb-1'
-                            }`"
+                            :class="[
+                                'w-6 h-6 flex items-center justify-center rounded-lg transition-all duration-200 mb-1',
+                                $page.component == item.pageComponent
+                                    ? 'bg-white/30 shadow-md'
+                                    : '',
+                            ]"
                         >
                             <img
                                 :src="item.icon"
@@ -309,13 +347,13 @@ const filteredNavItems = computed(() => {
                                 class="w-5 h-5 filter brightness-0 invert"
                             />
                         </div>
-                        <!-- Show label only for active item on very small screens, or always on larger mobile screens -->
                         <span
-                            :class="`text-xs font-medium transition-all duration-200 ${
-                                isActive(item.href)
-                                    ? 'block'
-                                    : 'hidden xs:block'
-                            }`"
+                            :class="[
+                                'text-xs font-medium transition-all duration-200',
+                                $page.component == item.pageComponent
+                                    ? 'block font-semibold'
+                                    : 'hidden xs:block',
+                            ]"
                         >
                             {{ item.label }}
                         </span>
@@ -328,12 +366,14 @@ const filteredNavItems = computed(() => {
                         @click.stop="toggleUserMenu"
                         :class="`flex flex-col items-center justify-center py-3 px-4 rounded-xl transition-all duration-200 ${
                             showUserMenu
-                                ? 'bg-white/20 text-white transform scale-110'
+                                ? 'bg-white/25 text-white transform scale-110 shadow-lg'
                                 : 'text-white/80 hover:text-white hover:bg-white/10'
                         }`"
                     >
                         <div
-                            class="w-6 h-6 rounded-full bg-gradient-to-br from-teal-300 to-teal-500 flex items-center justify-center text-teal-900 font-bold text-xs mb-1"
+                            :class="`w-6 h-6 rounded-full bg-gradient-to-br from-teal-300 to-teal-500 flex items-center justify-center text-teal-900 font-bold text-xs mb-1 transition-all duration-200 ${
+                                showUserMenu ? 'shadow-md scale-110' : ''
+                            }`"
                         >
                             {{
                                 $page.props.auth.user.name
@@ -342,9 +382,15 @@ const filteredNavItems = computed(() => {
                                     .join("")
                             }}
                         </div>
-                        <span class="text-xs font-medium hidden xs:block"
-                            >Profile</span
+                        <span
+                            :class="`text-xs font-medium transition-all duration-200 ${
+                                showUserMenu
+                                    ? 'hidden xs:block font-semibold'
+                                    : 'hidden xs:block'
+                            }`"
                         >
+                            Profile
+                        </span>
                     </button>
 
                     <!-- Mobile User Menu Dropdown -->
@@ -432,5 +478,20 @@ const filteredNavItems = computed(() => {
     .xs\:block {
         display: block;
     }
+}
+
+/* Additional smooth animations */
+@keyframes pulse-glow {
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
 }
 </style>

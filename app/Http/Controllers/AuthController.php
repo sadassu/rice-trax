@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,17 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', 'max:255'],
         ]);
 
-        User::create($fields);
+        $user = User::create($fields);
+
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'created',
+            'module'      => 'users',
+            'description' => 'Created product: ' . $user->name,
+            'properties'  => ['user_id' => $user->id],
+            'ip_address'  => request()->ip(),
+            'user_agent'  => request()->header('User-Agent'),
+        ]);
 
         return redirect()->intended('accounts')->with('message', 'Created new account');
     }

@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductBatchController;
@@ -19,10 +22,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/product-batches/batch/{product}', [ProductBatchController::class, 'showBatchesByProduct'])->name('product-batches.product.show');
     Route::resource('/products', ProductController::class)->except(['create']);
 
-    Route::inertia('/admin-dashboard', 'Dashboard/AdminDashboard')->name('admin.dashboard')->middleware('role:admin');
+    Route::get('/admin-dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('role:admin');
     Route::inertia('/register', 'Auth/Register')->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 
+    Route::get('/attendances/create', [AttendanceController::class, 'create'])->name('attendances.create');
+    Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
+
+    Route::resource('/attendances', AttendanceController::class)->except(['create', 'store'])->middleware('role:admin');
+    Route::resource('/employees', EmployeeController::class)->except(['index', 'show']);
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
     Route::post('/pos', [PosController::class, 'checkout'])->name('checkout');
     Route::get('/receipt/{sale}', [PosController::class, 'receipt'])->name('receipt');

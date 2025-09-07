@@ -18,23 +18,30 @@ class SaleController extends Controller
 
         // Filter by month
         if (request('month')) {
-            $query->whereMonth('created_at', request('month'));
+            $query->whereMonth('sale_date', request('month'));
         }
 
         // Filter by year
         if (request('year')) {
-            $query->whereYear('created_at', request('year'));
+            $query->whereYear('sale_date', request('year'));
         }
 
         // Filter by specific date
         if (request('date')) {
-            $query->whereDate('created_at', request('date'));
+            $query->whereDate('sale_date', request('date'));
         }
+
+        $totalSalesToday = Sale::totalSalesToday();
 
         $sales = $query->latest()->paginate(10);
 
         return Inertia::render('Sales/Sales', [
             'sale' => $sales,
+            'totals' => [
+                'today' => Sale::totalSalesToday(),
+                'week'  => Sale::totalSalesWeek(),
+                'month' => Sale::totalSalesMonth(),
+            ],
             'filters' => [
                 'month' => request('month'),
                 'year' => request('year'),

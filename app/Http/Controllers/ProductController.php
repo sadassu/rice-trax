@@ -27,10 +27,13 @@ class ProductController extends Controller
             ->withQueryString();
 
 
-        return Inertia::render('Products/ShowProducts', [
-            'products'   => $products,
-            'searchTerm' => $request->search,
-        ]);
+        return Inertia::render(
+            'Products/ShowProducts',
+            [
+                'products'   => $products,
+                'searchTerm' => $request->search,
+            ]
+        );
     }
 
 

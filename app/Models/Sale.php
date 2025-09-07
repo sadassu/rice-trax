@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Sale extends Model
 {
@@ -18,8 +19,30 @@ class Sale extends Model
         'change'
     ];
 
-    public function saleDetail(): HasMany
+    public function saleDetails(): HasMany
     {
         return $this->hasMany(SaleDetail::class);
+    }
+
+    // 🔹 Total sales for today
+    public static function totalSalesToday()
+    {
+        return self::whereDate('sale_date', Carbon::today())
+            ->sum('total_price');
+    }
+
+    // 🔹 Total sales for this week
+    public static function totalSalesWeek()
+    {
+        return self::whereBetween('sale_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->sum('total_price');
+    }
+
+    // 🔹 Total sales for this month
+    public static function totalSalesMonth()
+    {
+        return self::whereYear('sale_date', Carbon::now()->year)
+            ->whereMonth('sale_date', Carbon::now()->month)
+            ->sum('total_price');
     }
 }

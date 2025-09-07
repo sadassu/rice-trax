@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -15,12 +16,12 @@ class Product extends Model
         'price_per_kilo',
     ];
 
-    public function batches()
+    public function batches(): HasMany
     {
         return $this->hasMany(ProductBatch::class);
     }
 
-    public function saleDetail()
+    public function saleDetail(): HasMany
     {
         return $this->hasMany(SaleDetail::class);
     }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
@@ -29,7 +31,20 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-        //
+        $employee = Employee::create($request->validated());
+
+        ActivityLog::create([
+            'user_id'    => Auth::id(),
+            'event'      => 'created',
+            'module'     => 'employees',
+            'description' => 'Created Employee: ' . $employee->name,
+            'properties' => ['employee_id' => $employee->id],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->header('User-Agent'),
+        ]);
+
+        return redirect()->route('attendances.index')
+            ->with('message', 'Employee added successfully!');
     }
 
     /**

@@ -5,6 +5,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import HomeLayout from "./Layouts/HomeLayout.vue";
+import VueApexCharts from "vue3-apexcharts";
 import "../css/app.css";
 
 const pinia = createPinia();
@@ -23,6 +24,7 @@ createInertiaApp({
             .use(pinia)
             .use(plugin)
             .use(ZiggyVue)
+            .component("apexchart", VueApexCharts)
             .component("Head", Head)
             .component("Link", Link)
             .mount(el);
