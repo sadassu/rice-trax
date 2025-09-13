@@ -14,6 +14,7 @@ class Employee extends Model
     protected $fillable = [
         'name',
         'contact',
+        'salary'
     ];
 
     public function attendances(): HasMany

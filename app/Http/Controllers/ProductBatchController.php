@@ -43,12 +43,13 @@ class ProductBatchController extends Controller
     public function store(StoreProductBatchRequest $request)
     {
         $batchCount = ProductBatch::count();
-
         $batchNumber = 'PB-' . ($batchCount + 1);
 
         $data = $request->validated();
 
         $data['batch_number'] = $batchNumber;
+
+        $data['kg_remaining'] = $request->input('sack') * 25;
 
         $batch = ProductBatch::create($data);
 

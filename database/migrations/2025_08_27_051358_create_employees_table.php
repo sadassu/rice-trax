@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('contact')->nullable();
+            $table->decimal('salary', 15, 2)->nullable();
             $table->timestamps();
         });
     }

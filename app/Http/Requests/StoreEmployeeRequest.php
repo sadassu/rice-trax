@@ -32,7 +32,12 @@ class StoreEmployeeRequest extends FormRequest
                 'required',
                 'string',
                 'min:7',
-            ]
+            ],
+            'salary' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
         ];
     }
 }

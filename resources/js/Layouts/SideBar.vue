@@ -18,7 +18,7 @@ const navItems = [
         href: "pos.index",
         pageComponent: "Pos/Pos",
         label: "POS",
-        icon: "/storage/assets/icons/products.svg",
+        icon: "/storage/assets/icons/cart.svg",
     },
     {
         href: "products.index",
@@ -44,7 +44,7 @@ const navItems = [
         href: "accounts",
         pageComponent: "Auth/Accounts",
         label: "Accounts",
-        icon: "/storage/assets/icons/accounts.svg",
+        icon: "/storage/assets/icons/key.svg",
         role: "admin",
     },
 ];
@@ -156,19 +156,15 @@ const filteredNavItems = computed(() => {
 
                                 <!-- Icon Container -->
                                 <div
-                                    :class="`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 relative z-10 ${
-                                        $page.component == item.pageComponent
-                                            ? 'bg-white/30 shadow-md'
-                                            : 'bg-white/10 group-hover/link:bg-white/20'
-                                    }`"
+                                    :class="`w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 relative z-10`"
                                 >
                                     <img
                                         :src="item.icon"
                                         :alt="item.label"
-                                        :class="`w-5 h-5 filter brightness-0 invert transition-transform duration-200 ${
+                                        :class="`w-10 h-10 filter brightness-0 invert transition-transform duration-200 ${
                                             $page.component ==
                                             item.pageComponent
-                                                ? 'scale-110'
+                                                ? 'scale-150'
                                                 : 'group-hover/link:scale-105'
                                         }`"
                                     />
@@ -336,9 +332,6 @@ const filteredNavItems = computed(() => {
                         <div
                             :class="[
                                 'w-6 h-6 flex items-center justify-center rounded-lg transition-all duration-200 mb-1',
-                                $page.component == item.pageComponent
-                                    ? 'bg-white/30 shadow-md'
-                                    : '',
                             ]"
                         >
                             <img

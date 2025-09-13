@@ -98,12 +98,6 @@ const togglePasswordVisibility = () => {
                                 placeholder="Enter your email"
                             />
                         </div>
-                        <div
-                            v-if="form.errors.email"
-                            class="text-sm text-red-600 mt-1"
-                        >
-                            {{ form.errors.email }}
-                        </div>
                     </div>
 
                     <!-- Password Field -->
@@ -130,13 +124,13 @@ const togglePasswordVisibility = () => {
                                 required
                                 v-model="form.password"
                                 :message="form.errors.password"
-                                class="pl-3 w-full "
+                                class="pl-3 w-full"
                                 placeholder="Enter your password"
                             />
                             <button
                                 type="button"
                                 @click="togglePasswordVisibility"
-                                class=" inset-y-0 pl-3 flex items-center text-gray-400 hover:text-teal-600 transition-colors duration-200 z-10"
+                                class="inset-y-0 pl-3 flex items-center text-gray-400 hover:text-teal-600 transition-colors duration-200 z-10"
                             >
                                 <svg
                                     v-if="showPassword"
@@ -173,12 +167,6 @@ const togglePasswordVisibility = () => {
                                     />
                                 </svg>
                             </button>
-                        </div>
-                        <div
-                            v-if="form.errors.password"
-                            class="text-sm text-red-600 mt-1"
-                        >
-                            {{ form.errors.password }}
                         </div>
                     </div>
 

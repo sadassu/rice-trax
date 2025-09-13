@@ -1,5 +1,5 @@
 <script setup>
-import { router } from '@inertiajs/vue3';
+import { router } from "@inertiajs/vue3";
 
 defineProps({
     sales: {
@@ -10,7 +10,7 @@ defineProps({
 
 // Dummy download function (replace with actual receipt download logic)
 const downloadReceipt = (saleId) => {
-    router.get(route('receipt', saleId));
+    router.get(route("receipt", saleId));
 };
 </script>
 
@@ -19,22 +19,13 @@ const downloadReceipt = (saleId) => {
         <table
             class="w-full border-collapse border border-gray-200 text-sm text-gray-700"
         >
-            <thead >
+            <thead>
                 <tr>
-                    <th class="border border-gray-200 px-3 py-2 text-left">
-                        Sale #
-                    </th>
                     <th class="border border-gray-200 px-3 py-2 text-left">
                         Date
                     </th>
                     <th class="border border-gray-200 px-3 py-2 text-left">
                         Total
-                    </th>
-                    <th class="border border-gray-200 px-3 py-2 text-left">
-                        Paid
-                    </th>
-                    <th class="border border-gray-200 px-3 py-2 text-left">
-                        Change
                     </th>
                     <th class="border border-gray-200 px-3 py-2 text-center">
                         Actions
@@ -48,19 +39,10 @@ const downloadReceipt = (saleId) => {
                     class="hover:bg-gray-50"
                 >
                     <td class="border border-gray-200 px-3 py-2">
-                        #{{ sale.id }}
-                    </td>
-                    <td class="border border-gray-200 px-3 py-2">
                         {{ new Date(sale.sale_date).toLocaleDateString() }}
                     </td>
                     <td class="border border-gray-200 px-3 py-2">
                         ₱{{ Number(sale.total_price).toFixed(2) }}
-                    </td>
-                    <td class="border border-gray-200 px-3 py-2">
-                        ₱{{ Number(sale.amount_paid).toFixed(2) }}
-                    </td>
-                    <td class="border border-gray-200 px-3 py-2">
-                        ₱{{ Number(sale.change).toFixed(2) }}
                     </td>
 
                     <td class="border border-gray-200 px-3 py-2 text-center">

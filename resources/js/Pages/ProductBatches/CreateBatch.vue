@@ -11,7 +11,7 @@ const showModal = ref(false);
 
 const form = useForm({
     product_id: props.product_id,
-    kg_remaining: null,
+    sack: null,
     price_per_sack: null,
 });
 
@@ -135,10 +135,10 @@ const handleEscape = (e) => {
                                 type="hidden"
                             />
                             <TextInput
-                                name="Kilograms"
-                                placeholder="Kilogram (Number only)"
-                                v-model="form.kg_remaining"
-                                :message="form.errors.kg_remaining"
+                                name="Sack Count"
+                                placeholder="Sack (Number only)"
+                                v-model="form.sack"
+                                :message="form.errors.sack"
                             />
                             <TextInput
                                 name="Price per Sack"

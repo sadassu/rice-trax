@@ -16,9 +16,9 @@ class DashboardController extends Controller
     {
         $forecastedSale     = $this->forecastSales();
         $topMostSaleProduct = $this->topTenMostSaleProduct();
-        $topFewSaleProduct  = $this->topTenFewSaleProduct();
         $lowStockProducts   = $this->lowStocksProduct();
         $recentLogs         = $this->recentActivityLogs();
+
 
         return Inertia::render('Dashboard/AdminDashboard', [
             'forecastedSale'     => $forecastedSale,
@@ -28,7 +28,6 @@ class DashboardController extends Controller
                 'month' => Sale::totalSalesMonth(),
             ],
             'topMostSaleProduct' => $topMostSaleProduct,
-            'topFewSaleProduct'  => $topFewSaleProduct,
             'lowStockProducts'   => $lowStockProducts,
             'recentLogs'         => $recentLogs,
         ]);
@@ -50,34 +49,39 @@ class DashboardController extends Controller
     //!!the zero value should not be count so it will not affect the equation
 
     // first take the average value per day
-    private function holtsLinearTrendSale(array $sales, float $alpha = 0.8, float $beta = 0.2, int $forecastPeriods = 5)
+    private function holtsLinearTrendSale(array $sales, array $dates, float $alpha = 0.8, float $beta = 0.2, int $forecastPeriods = 7)
     {
         $n = count($sales);
         if ($n < 2) {
             throw new \Exception("Need at least 2 non-zero data points for Holt’s Linear Trend.");
         }
 
-        // --- Initialization ---
+        // Initialization
         $level = $sales[0];
         $trend = $sales[1] - $sales[0];
 
-        $levels = [$level];
-        $trends = [$trend];
+        $levels = [['date' => $dates[0], 'value' => $level]];
+        $trends = [['date' => $dates[0], 'value' => $trend]];
 
-        // --- Update Level & Trend ---
+        // Update Level & Trend
         for ($t = 1; $t < $n; $t++) {
             $lastLevel = $level;
             $level = $alpha * $sales[$t] + (1 - $alpha) * ($level + $trend);
             $trend = $beta * ($level - $lastLevel) + (1 - $beta) * $trend;
 
-            $levels[] = $level;
-            $trends[] = $trend;
+            $levels[] = ['date' => $dates[$t], 'value' => $level];
+            $trends[] = ['date' => $dates[$t], 'value' => $trend];
         }
 
-        // --- Forecast Future ---
+        // Forecast Future (add dates)
         $forecasts = [];
+        $lastDate = new \DateTime(); // start forecasting from today
         for ($h = 1; $h <= $forecastPeriods; $h++) {
-            $forecasts[] = $level + $h * $trend;
+            $futureDate = (clone $lastDate)->modify("+{$h} day")->format("Y-m-d");
+            $forecasts[] = [
+                'date' => $futureDate,
+                'value' => $level + $h * $trend
+            ];
         }
 
         return [
@@ -90,16 +94,22 @@ class DashboardController extends Controller
     public function forecastSales()
     {
         $dailySales = DB::table('sales')
-            ->selectRaw('sale_date, SUM(total_price) as daily_revenue')
-            ->groupBy('sale_date')
+            ->selectRaw('DATE(sale_date) as sale_date, SUM(total_price) as daily_revenue')
+            ->groupBy(DB::raw('DATE(sale_date)'))
             ->havingRaw('SUM(total_price) > 0')
             ->orderBy('sale_date')
-            ->pluck('daily_revenue')
-            ->toArray();
+            ->get();
 
-        return $this->holtsLinearTrendSale($dailySales, 0.8, 0.2, 7);
+        $dates = $dailySales->pluck('sale_date')->map(function ($d) {
+            return date('Y-m-d', strtotime($d));
+        })->toArray();
+
+        $sales = $dailySales->pluck('daily_revenue')->toArray();
+
+        return $this->holtsLinearTrendSale($sales, $dates, 0.8, 0.2, 7);
     }
 
+    // DONE :: taking the top 10 most sale products
     private function topTenMostSaleProduct()
     {
         return SaleDetail::select(
@@ -114,20 +124,7 @@ class DashboardController extends Controller
             ->get();
     }
 
-    private function topTenFewSaleProduct()
-    {
-        return SaleDetail::select(
-            'products.name',
-            DB::raw('SUM(sale_details.total_price) as total_sales'),
-            DB::raw('SUM(sale_details.kilograms) as total_kilograms')
-        )
-            ->join('products', 'sale_details.product_id', '=', 'products.id')
-            ->groupBy('products.name')
-            ->orderBy('total_sales', 'asc')
-            ->limit(10)
-            ->get();
-    }
-
+    //  MAYBE :: taking the lowstocks products
     private function lowStocksProduct()
     {
         return Product::select(
@@ -141,7 +138,7 @@ class DashboardController extends Controller
             ->get();
     }
 
-
+    // DONE :: taking the 7 recent activity logs
     private function recentActivityLogs()
     {
         return ActivityLog::with('user')

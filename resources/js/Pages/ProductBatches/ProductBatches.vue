@@ -68,8 +68,6 @@ const getBatchCount = (productId) => {
                         {{ product.description }}
                     </p>
 
-                    <!-- Action Button -->
-
                 </div>
             </div>
         </div>

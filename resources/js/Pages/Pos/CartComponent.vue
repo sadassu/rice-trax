@@ -85,20 +85,20 @@ const submit = () => {
                 <div
                     v-for="item in posStore.cart"
                     :key="item.id"
-                    class="flex items-center justify-between p-3 border border-gray-200 rounded"
+                    class="flex items-center justify-between p-3 border border-green-400 bg-green-100 rounded"
                 >
                     <div>
-                        <div class="font-medium text-gray-900">
+                        <div class="font-bold uppercase text-lg text-gray-900">
                             {{ item.name }}
                         </div>
-                        <div class="text-sm text-gray-600">
+                        <div class="text-sm text-slate-800">
                             {{ formatWeight(item.kilograms) }} •
                             {{ formatPrice(item.total_price) }}
                         </div>
                     </div>
                     <button
                         @click="posStore.removeFromCart(item.id)"
-                        class="text-red-600 hover:text-red-800 p-1 text-2xl font-bold"
+                        class="text-red-600 cursor-pointer hover:text-red-800 p-1 text-2xl font-bold"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

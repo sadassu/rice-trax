@@ -8,6 +8,7 @@ const showModal = ref(false);
 const form = useForm({
     name: null,
     contact: null,
+    salary: null,
 });
 
 const openModal = () => {
@@ -119,7 +120,6 @@ const handleEscape = (e) => {
 
                         <!-- Form -->
                         <form @submit.prevent="submit" class="space-y-4">
-
                             <TextInput
                                 name="name"
                                 placeholder="Name"
@@ -133,6 +133,13 @@ const handleEscape = (e) => {
                                 :message="form.errors.contact"
                             />
 
+                            <TextInput
+                                name="Salary"
+                                placeholder="0000"
+                                v-model="form.salary"
+                                type="number"
+                                :message="form.errors.salary"
+                            />
                             <!-- Actions -->
                             <div class="flex gap-3 justify-end pt-4">
                                 <button

@@ -27,7 +27,7 @@ class StoreProductBatchRequest extends FormRequest
                 'integer',
                 'exists:products,id',
             ],
-            'kg_remaining' => [
+            'sack' => [
                 'required',
                 'numeric',
                 'min:0',
