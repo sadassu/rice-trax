@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -28,7 +29,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/attendances/create', [AttendanceController::class, 'create'])->name('attendances.create');
     Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
-
+    Route::resource('/activity-logs', ActivityLogController::class)->only(['index', 'delete']);
     Route::resource('/attendances', AttendanceController::class)->except(['create', 'store'])->middleware('role:admin');
     Route::resource('/employees', EmployeeController::class)->except(['index', 'show']);
     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/receipt/{sale}', [PosController::class, 'receipt'])->name('receipt');
     Route::get('/accounts', [AuthController::class, 'accounts'])->name('accounts')->middleware('role:admin');
     Route::resource('/sales', SaleController::class)->except(['create', 'update', 'destroy'])->middleware('role:admin');
+    Route::post('/accounts/change-password', [AuthController::class, 'changePassword'])
+        ->name('accounts.change-password')->middleware('role:admin');
 });
 
 

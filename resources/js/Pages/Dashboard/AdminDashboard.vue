@@ -25,14 +25,22 @@ const props = defineProps({
 // Line Chart Configuration
 const lineChartOptions = computed(() => {
     // unified timeline (historical + forecast)
-    const levelDates = props.forecastedSale?.levels?.map(l => l.date) || [];
-    const trendDates = props.forecastedSale?.trends?.map(t => t.date) || [];
-    const forecastDates = props.forecastedSale?.forecast?.map(f => f.date) || [];
+    const levelDates = props.forecastedSale?.levels?.map((l) => l.date) || [];
+    const trendDates = props.forecastedSale?.trends?.map((t) => t.date) || [];
+    const forecastDates =
+        props.forecastedSale?.forecast?.map((f) => f.date) || [];
 
-    const categories = [...new Set([...levelDates, ...trendDates, ...forecastDates])];
+    const categories = [
+        ...new Set([...levelDates, ...trendDates, ...forecastDates]),
+    ];
 
     return {
-        chart: { type: "line", height: 320, toolbar: { show: false }, zoom: { enabled: false } },
+        chart: {
+            type: "line",
+            height: 320,
+            toolbar: { show: false },
+            zoom: { enabled: false },
+        },
         stroke: { curve: "smooth", width: 3, dashArray: [0, 0, 5] },
         colors: ["#14b8a6", "#f43f5e", "#3b82f6"],
         grid: { borderColor: "#f0f0f0", strokeDashArray: 3 },
@@ -40,14 +48,20 @@ const lineChartOptions = computed(() => {
             categories,
             axisBorder: { show: false },
             axisTicks: { show: false },
-            labels: { style: { colors: "#666", fontSize: "12px" }, rotate: -45 },
+            labels: { show: false },
         },
         yaxis: {
             axisBorder: { show: false },
             axisTicks: { show: false },
-            labels: { style: { colors: "#666", fontSize: "12px" }, formatter: val => formatCurrency(val) },
+            labels: {
+                style: { colors: "#666", fontSize: "12px" },
+                formatter: (val) => formatCurrency(val),
+            },
         },
-        tooltip: { theme: "light", y: { formatter: val => formatCurrency(val) } },
+        tooltip: {
+            theme: "light",
+            y: { formatter: (val) => formatCurrency(val) },
+        },
         markers: { size: 5, strokeWidth: 2, hover: { size: 7 } },
     };
 });
@@ -56,31 +70,31 @@ const lineChartOptions = computed(() => {
 const lineChartSeries = computed(() => {
     const categories = lineChartOptions.value.xaxis.categories;
 
-    const levelsMap = Object.fromEntries(props.forecastedSale?.levels?.map(l => [l.date, l.value]) || []);
-    const trendsMap = Object.fromEntries(props.forecastedSale?.trends?.map(t => [t.date, t.value]) || []);
-    const forecastMap = Object.fromEntries(props.forecastedSale?.forecast?.map(f => [f.date, f.value]) || []);
+    const levelsMap = Object.fromEntries(
+        props.forecastedSale?.levels?.map((l) => [l.date, l.value]) || []
+    );
+    const trendsMap = Object.fromEntries(
+        props.forecastedSale?.trends?.map((t) => [t.date, t.value]) || []
+    );
+    const forecastMap = Object.fromEntries(
+        props.forecastedSale?.forecast?.map((f) => [f.date, f.value]) || []
+    );
 
     return [
-        { name: "Levels", data: categories.map(date => levelsMap[date] ?? null) },
-        { name: "Trends", data: categories.map(date => trendsMap[date] ?? null) },
-        { name: "Forecast", data: categories.map(date => forecastMap[date] ?? null) },
+        {
+            name: "Levels",
+            data: categories.map((date) => levelsMap[date] ?? null),
+        },
+        {
+            name: "Trends",
+            data: categories.map((date) => trendsMap[date] ?? null),
+        },
+        {
+            name: "Forecast",
+            data: categories.map((date) => forecastMap[date] ?? null),
+        },
     ];
 });
-
-
-// Top Products Bar Chart
-const barChartSeries = computed(() => [
-    {
-        name: "Sales (kg)",
-        data:
-            props.topMostSaleProduct?.map(
-                (product) =>
-                    product.total_quantity ||
-                    product.kilograms ||
-                    product.quantity
-            ) || [],
-    },
-]);
 </script>
 
 <template>

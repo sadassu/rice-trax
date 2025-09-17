@@ -47,10 +47,17 @@ class AuthController extends Controller
             'password' => ['required', 'max:255']
         ]);
 
-        if (Auth::attempt($fields, $request->remember)) {
+        if (Auth::attempt($fields, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/admin-dashboard');
+            $user = Auth::user();
+
+            // redirect based on role
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin-dashboard');
+            }
+
+            return redirect()->intended('/pos');
         }
 
         return back()->withErrors([
@@ -67,5 +74,35 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function changePassword(Request $request)
+    {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $fields = $request->validate([
+            'user_id'  => ['required', 'exists:users,id'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = User::findOrFail($fields['user_id']);
+
+        $user->update([
+            'password' => bcrypt($fields['password']),
+        ]);
+
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'updated',
+            'module'      => 'users',
+            'description' => 'Changed password for user: ' . $user->name,
+            'properties'  => ['user_id' => $user->id],
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->header('User-Agent'),
+        ]);
+
+        return redirect()->back()->with('message', 'Password updated successfully.');
     }
 }

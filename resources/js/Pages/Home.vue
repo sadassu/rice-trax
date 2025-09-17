@@ -6,9 +6,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <Head
-        :title="`${$page.component} | Rich-Anne Store POS System`"
-    />
+    <Head :title="`${$page.component} | Rich-Anne Store POS System`" />
 
     <div
         class="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50"
@@ -232,7 +230,7 @@ const props = defineProps({
                                     <div
                                         class="text-2xl font-bold text-teal-700"
                                     >
-                                        ₱{{ props.sale }}
+                                        ₱{{ Number(props.sale).toFixed(2) }}
                                     </div>
                                     <div class="text-sm text-teal-600">
                                         Total Sales

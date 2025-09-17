@@ -171,28 +171,6 @@ const togglePasswordVisibility = () => {
                     </div>
 
                     <!-- Remember Me & Forgot Password -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input
-                                id="remember"
-                                type="checkbox"
-                                v-model="form.remember"
-                                class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded transition-colors duration-200"
-                            />
-                            <label
-                                for="remember"
-                                class="ml-2 block text-sm text-gray-700 cursor-pointer"
-                            >
-                                Remember me
-                            </label>
-                        </div>
-                        <!-- <Link
-                            :href="route('password.request')"
-                            class="text-sm text-teal-600 hover:text-teal-800 transition-colors duration-200"
-                        >
-                            Forgot password?
-                        </Link> -->
-                    </div>
 
                     <!-- Submit Button -->
                     <button
@@ -226,46 +204,13 @@ const togglePasswordVisibility = () => {
                         <span v-else>Sign in</span>
                     </button>
 
-                    <!-- Divider -->
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-200"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500"
-                                >Don't have an account?</span
-                            >
-                        </div>
-                    </div>
-
                     <!-- Register Link -->
-                    <div class="text-center">
-                        <Link
-                            :href="route('register')"
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200"
-                        >
-                            <svg
-                                class="w-4 h-4 mr-2"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-                                />
-                            </svg>
-                            Create new account
-                        </Link>
-                    </div>
                 </form>
             </div>
 
             <!-- Footer -->
             <div class="mt-8 text-center text-sm text-gray-500">
-                <p>© 2025 Your Company. All rights reserved.</p>
+                <p>© 2025 Your Rice Trax. All rights reserved.</p>
             </div>
         </div>
     </div>

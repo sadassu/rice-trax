@@ -41,11 +41,23 @@ const navItems = [
         role: "admin",
     },
     {
+        href: "attendances.create",
+        pageComponent: "Attendances/CreateAttendance.vue",
+        label: "Attendance Form",
+        icon: "/storage/assets/icons/calendar.svg",
+    },
+    {
         href: "accounts",
         pageComponent: "Auth/Accounts",
         label: "Accounts",
         icon: "/storage/assets/icons/key.svg",
         role: "admin",
+    },
+    {
+        href: "activity-logs.index",
+        pageComponent: "ActivityLogs/Activity.vue",
+        label: "Activity Logs",
+        icon: "/storage/assets/icons/clock.svg",
     },
 ];
 
@@ -90,7 +102,7 @@ const filteredNavItems = computed(() => {
         >
             <!-- Header with Logo and Toggle Button -->
             <div
-                class="px-6 py-6 flex justify-between items-center border-b border-teal-500/30"
+                class="px-6 py-6 flex justify-between items-center border-b border-teal-500/30 flex-shrink-0"
             >
                 <div
                     :class="`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -132,8 +144,10 @@ const filteredNavItems = computed(() => {
                 </button>
             </div>
 
-            <!-- Navigation -->
-            <nav class="px-4 py-6 flex-1 space-y-2">
+            <!-- Navigation - Made scrollable -->
+            <nav
+                class="px-4 py-6 flex-1 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-teal-500/50 scrollbar-track-transparent"
+            >
                 <template v-for="item in filteredNavItems" :key="item.label">
                     <div class="relative group">
                         <div class="relative">
@@ -217,7 +231,7 @@ const filteredNavItems = computed(() => {
 
             <!-- User section at bottom -->
             <div
-                class="border-t border-teal-500/30 p-4 mt-auto relative user-menu-wrapper"
+                class="border-t border-teal-500/30 p-4 mt-auto relative user-menu-wrapper flex-shrink-0"
             >
                 <div class="flex items-center space-x-3">
                     <div class="relative">
@@ -312,16 +326,18 @@ const filteredNavItems = computed(() => {
             </div>
         </aside>
 
-        <!-- Mobile Bottom Navigation -->
+        <!-- Mobile Bottom Navigation - Made scrollable -->
         <nav
             class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-teal-600 via-teal-700 to-teal-800 shadow-2xl border-t border-teal-500/30"
         >
-            <div class="flex items-center justify-around py-2">
+            <div
+                class="flex items-center py-2 overflow-x-auto scrollbar-thin scrollbar-thumb-teal-500/50 scrollbar-track-transparent px-2"
+            >
                 <template v-for="item in filteredNavItems" :key="item.label">
                     <Link
                         :href="route(item.href)"
                         :class="[
-                            'flex flex-col items-center justify-center py-3 px-4 rounded-xl transition-all duration-300 ease-out min-w-0 relative',
+                            'flex flex-col items-center justify-center py-3 px-4 rounded-xl transition-all duration-300 ease-out min-w-0 relative flex-shrink-0',
                             'hover:bg-white/10 hover:scale-105 hover:shadow-sm',
                             'active:scale-95',
                             $page.component == item.pageComponent
@@ -342,7 +358,7 @@ const filteredNavItems = computed(() => {
                         </div>
                         <span
                             :class="[
-                                'text-xs font-medium transition-all duration-200',
+                                'text-xs font-medium transition-all duration-200 whitespace-nowrap',
                                 $page.component == item.pageComponent
                                     ? 'block font-semibold'
                                     : 'hidden xs:block',
@@ -354,7 +370,7 @@ const filteredNavItems = computed(() => {
                 </template>
 
                 <!-- User Menu in Mobile -->
-                <div class="relative user-menu-wrapper">
+                <div class="relative user-menu-wrapper flex-shrink-0">
                     <button
                         @click.stop="toggleUserMenu"
                         :class="`flex flex-col items-center justify-center py-3 px-4 rounded-xl transition-all duration-200 ${
@@ -376,7 +392,7 @@ const filteredNavItems = computed(() => {
                             }}
                         </div>
                         <span
-                            :class="`text-xs font-medium transition-all duration-200 ${
+                            :class="`text-xs font-medium transition-all duration-200 whitespace-nowrap ${
                                 showUserMenu
                                     ? 'hidden xs:block font-semibold'
                                     : 'hidden xs:block'
@@ -389,39 +405,44 @@ const filteredNavItems = computed(() => {
                     <!-- Mobile User Menu Dropdown -->
                     <div
                         v-if="showUserMenu"
-                        class="absolute right-0 bottom-full mb-2 bg-white text-gray-800 shadow-xl rounded-xl w-40 py-2 z-50 border border-gray-100 animate-in slide-in-from-bottom-2 duration-200"
+                        class="fixed inset-0 z-50 flex items-end justify-center bg-black/30"
+                        @click.self="showUserMenu = false"
                     >
-                        <div class="px-4 py-2 border-b border-gray-100">
-                            <p class="font-semibold text-sm truncate">
-                                {{ $page.props.auth.user.name }}
-                            </p>
-                            <p class="text-xs text-gray-600 truncate">
-                                {{ $page.props.auth.user.email }}
-                            </p>
-                        </div>
-                        <Link
-                            :href="route('logout')"
-                            method="post"
-                            as="button"
-                            type="button"
-                            class="flex items-center w-full text-left px-4 py-2 hover:bg-red-50 transition-colors duration-150 text-red-600 hover:text-red-700"
+                        <div
+                            class="w-full max-w-sm bg-white text-gray-800 shadow-xl rounded-t-2xl py-4 border-t border-gray-200 animate-in slide-in-from-bottom-2 duration-200"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-4 h-4 mr-2"
+                            <div class="px-4 py-2 border-b border-gray-100">
+                                <p class="font-semibold text-sm truncate">
+                                    {{ $page.props.auth.user.name }}
+                                </p>
+                                <p class="text-xs text-gray-600 truncate">
+                                    {{ $page.props.auth.user.email }}
+                                </p>
+                            </div>
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                as="button"
+                                type="button"
+                                class="flex items-center w-full text-left px-4 py-3 hover:bg-red-50 transition-colors duration-150 text-red-600 hover:text-red-700"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                                />
-                            </svg>
-                            Logout
-                        </Link>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-4 h-4 mr-2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                                    />
+                                </svg>
+                                Logout
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -430,7 +451,7 @@ const filteredNavItems = computed(() => {
         <main
             :class="`flex-1 bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 transition-all duration-300 ease-in-out min-h-screen ${
                 expanded ? 'md:ml-72' : 'md:ml-20'
-            } pb-20 md:pb-0`"
+            } pb-20 md:pb-0 mb-4 sm:mb-6 md:mb-0`"
         >
             <div
                 class="sticky top-0 z-30 bg-white/80 backdrop-blur-sm border-b border-gray-200/50"
@@ -486,5 +507,38 @@ const filteredNavItems = computed(() => {
 
 .animate-pulse-glow {
     animation: pulse-glow 2s infinite;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin {
+    scrollbar-width: thin;
+}
+
+.scrollbar-thumb-teal-500\/50::-webkit-scrollbar-thumb {
+    background-color: rgba(20, 184, 166, 0.5);
+    border-radius: 0.375rem;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    border-radius: 0.375rem;
+    background-color: rgba(20, 184, 166, 0.5);
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* Hide scrollbar for Firefox */
+.scrollbar-thin {
+    scrollbar-color: rgba(20, 184, 166, 0.5) transparent;
 }
 </style>

@@ -144,8 +144,8 @@ const formatDate = (date) => {
                 </div>
             </div>
 
-            <!-- Table Section -->
-            <div class="overflow-hidden">
+            <!-- Desktop Table View (hidden on mobile) -->
+            <div class="hidden lg:block overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead>
@@ -281,38 +281,129 @@ const formatDate = (date) => {
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
 
-                    <!-- Empty state -->
+            <!-- Mobile Card View (visible on mobile/tablet) -->
+            <div class="lg:hidden">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6">
                     <div
-                        v-if="employees.data.length === 0"
-                        class="text-center py-16"
+                        v-for="employee in employees.data"
+                        :key="employee.id"
+                        class="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 shadow-sm border border-gray-200/50 hover:shadow-md transition-all duration-200 hover:scale-[1.02]"
                     >
-                        <div
-                            class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
-                        >
-                            <svg
-                                class="w-12 h-12 text-gray-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                        <!-- Employee Header -->
+                        <div class="flex items-center mb-4">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg mr-4 shadow-md"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                                />
-                            </svg>
+                                {{ employee.name.charAt(0).toUpperCase() }}
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-lg font-bold text-gray-900">
+                                    {{ employee.name }}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    ID: #{{
+                                        String(employee.id).padStart(4, "0")
+                                    }}
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">
-                            No employees found
-                        </h3>
-                        <p class="text-gray-500 mb-6">
-                            Get started by adding your first team member.
-                        </p>
-                        <CreateEmployee />
+
+                        <!-- Employee Details -->
+                        <div class="space-y-3">
+                            <!-- Contact -->
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mr-3"
+                                >
+                                    <svg
+                                        class="w-4 h-4 text-emerald-600"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div
+                                        class="text-sm font-medium text-gray-900"
+                                    >
+                                        {{ employee.contact }}
+                                    </div>
+                                    <div class="text-xs text-gray-500">
+                                        Phone Number
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date Joined -->
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3"
+                                >
+                                    <svg
+                                        class="w-4 h-4 text-blue-600"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div
+                                        class="text-sm font-medium text-gray-900"
+                                    >
+                                        {{ formatDate(employee.created_at) }}
+                                    </div>
+                                    <div class="text-xs text-gray-500">
+                                        Member since
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="mt-5 pt-4 border-t border-gray-200">
+                            <ShowAttendance :employee="employee" />
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Empty state -->
+            <div v-if="employees.data.length === 0" class="text-center py-16">
+                <div
+                    class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                    <svg
+                        class="w-12 h-12 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                        />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">
+                    No employees found
+                </h3>
+                <p class="text-gray-500 mb-6">
+                    Get started by adding your first team member.
+                </p>
+                <CreateEmployee />
             </div>
 
             <!-- Pagination (if needed) -->

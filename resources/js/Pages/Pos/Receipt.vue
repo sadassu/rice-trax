@@ -314,7 +314,7 @@ function goBack() {
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="(detail, index) in sale.sale_detail"
+                                    v-for="(detail, index) in sale.sale_details"
                                     :key="detail.id"
                                     :class="
                                         index % 2 === 0

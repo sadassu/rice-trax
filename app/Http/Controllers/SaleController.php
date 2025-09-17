@@ -31,8 +31,6 @@ class SaleController extends Controller
             $query->whereDate('sale_date', request('date'));
         }
 
-        $totalSalesToday = Sale::totalSalesToday();
-
         $sales = $query->latest()->paginate(10);
 
         return Inertia::render('Sales/Sales', [

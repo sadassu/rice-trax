@@ -18,7 +18,9 @@ defineProps({
                 Latest {{ recentLogs?.length || 0 }}
             </span>
         </div>
-        <div class="overflow-x-auto" v-if="recentLogs?.length">
+
+        <!-- ✅ Table view (desktop) -->
+        <div class="overflow-x-auto hidden md:block" v-if="recentLogs?.length">
             <table class="min-w-full">
                 <thead>
                     <tr class="border-b border-gray-100">
@@ -86,6 +88,48 @@ defineProps({
                 </tbody>
             </table>
         </div>
+
+        <!-- ✅ Card view (mobile) -->
+        <div class="space-y-4 md:hidden" v-if="recentLogs?.length">
+            <div
+                v-for="log in recentLogs"
+                :key="log.id"
+                class="p-4 border rounded-xl shadow-sm hover:bg-gray-50 transition"
+            >
+                <div class="flex justify-between items-center mb-2">
+                    <span
+                        class="inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                        :class="{
+                            'bg-green-100 text-green-800':
+                                log.event === 'LOGIN',
+                            'bg-blue-100 text-blue-800': log.event === 'CREATE',
+                            'bg-yellow-100 text-yellow-800':
+                                log.event === 'UPDATE',
+                            'bg-red-100 text-red-800': log.event === 'DELETE',
+                            'bg-gray-100 text-gray-800': ![
+                                'LOGIN',
+                                'CREATE',
+                                'UPDATE',
+                                'DELETE',
+                            ].includes(log.event),
+                        }"
+                    >
+                        {{ log.event }}
+                    </span>
+                    <span class="text-xs text-gray-500">
+                        {{ formatDate(log.created_at) }}
+                    </span>
+                </div>
+                <div class="text-sm font-medium text-gray-900">
+                    {{ log.module }}
+                </div>
+                <div class="text-sm text-gray-600">
+                    {{ log.description }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty state -->
         <div v-else class="h-64 flex items-center justify-center text-gray-500">
             <div class="text-center">
                 <svg

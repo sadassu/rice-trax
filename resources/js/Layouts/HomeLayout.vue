@@ -10,8 +10,8 @@
                         <div
                             class="w-16 h-16 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center"
                         >
-                        <img :src="'storage/assets/img/logo.jpg'" alt="">
-                    </div>
+                            <img :src="'storage/assets/img/logo.jpg'" alt="" />
+                        </div>
                         <span class="text-xl font-semibold text-gray-900"
                             >Rice Trax</span
                         >
@@ -38,19 +38,19 @@
                         </Link>
 
                         <Link
-                            :href="route('about')"
+                            :href="route('login')"
                             :class="[
                                 'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
                                 'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
                                 'active:scale-95',
-                                $page.component === 'About'
+                                $page.component === 'Login'
                                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
                                     : 'text-gray-700 hover:text-gray-900',
                             ]"
                         >
-                            <span class="relative z-10">About</span>
+                            <span class="relative z-10">Login</span>
                             <div
-                                v-if="$page.component === 'About'"
+                                v-if="$page.component === 'Login'"
                                 class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
                             ></div>
                         </Link>
