@@ -9,7 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\Product;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Str;
 class ProductBatchController extends Controller
 {
     /**
@@ -42,13 +42,17 @@ class ProductBatchController extends Controller
      */
     public function store(StoreProductBatchRequest $request)
     {
-        $batchCount = ProductBatch::count();
-        $batchNumber = 'PB-' . ($batchCount + 1);
-
         $data = $request->validated();
 
-        $data['batch_number'] = $batchNumber;
+        // Get the product
+        $product = Product::findOrFail($data['product_id']);
 
+        // Generate batch number with product name
+        // Example: "PB-Rice-1"
+        $batchCount = ProductBatch::where('product_id', $product->id)->count();
+        $batchNumber =  Str::slug($product->name) . '-' . ($batchCount + 1);
+
+        $data['batch_number'] = $batchNumber;
         $data['kg_remaining'] = $request->input('sack') * 25;
 
         $batch = ProductBatch::create($data);

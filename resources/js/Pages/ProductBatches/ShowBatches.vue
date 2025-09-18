@@ -86,18 +86,9 @@ const getDate = (date) =>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div
-                                        class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3"
-                                    >
-                                        <span
-                                            class="text-sm font-medium text-blue-600"
-                                        >
-                                            #{{ batch.batch_number }}
-                                        </span>
-                                    </div>
-                                    <div
                                         class="text-sm font-medium text-gray-900"
                                     >
-                                        Batch {{ batch.batch_number }}
+                                        {{ batch.batch_number }}
                                     </div>
                                 </div>
                             </td>
