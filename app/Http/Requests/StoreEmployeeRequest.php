@@ -33,10 +33,14 @@ class StoreEmployeeRequest extends FormRequest
                 'string',
                 'min:7',
             ],
-            'salary' => [
+            'rate' => [
                 'required',
                 'numeric',
                 'min:0',
+            ],
+            'role' => [
+                'required',
+                'in:Cashier,Helper,Manager',
             ],
         ];
     }

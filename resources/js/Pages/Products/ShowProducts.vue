@@ -6,6 +6,9 @@ import UpdateProduct from "./UpdateProduct.vue";
 import { router } from "@inertiajs/vue3";
 import { debounce } from "lodash";
 import DeleteProduct from "./DeleteProduct.vue";
+import { formatCurrency } from "../../utils/currencyFormat";
+import { formatDate } from "../../utils/dateFormat";
+import { formatSack } from "../../utils/helper";
 
 defineOptions({ layout: SideBar });
 
@@ -24,18 +27,6 @@ watch(
     )
 );
 
-// Formate the date from database
-const getDate = (date) =>
-    new Date(date).toLocaleDateString("en-us", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-
-// Format price to always show 2 decimal places
-const formatPrice = (price) => {
-    return parseFloat(price).toFixed(2);
-};
 </script>
 
 <template>
@@ -89,6 +80,11 @@ const formatPrice = (price) => {
                         <th
                             class="px-6 py-3 text-left text-sm font-medium text-gray-900"
                         >
+                            Sack
+                        </th>
+                        <th
+                            class="px-6 py-3 text-left text-sm font-medium text-gray-900"
+                        >
                             Last Updated
                         </th>
                         <th
@@ -117,13 +113,19 @@ const formatPrice = (price) => {
                             </div>
                         </td>
                         <td class="px-6 py-4 text-gray-900">
-                            ₱{{ formatPrice(product.price_per_kilo) }}
+                            {{ formatCurrency(product.price_per_kilo) }}
                         </td>
                         <td class="px-6 py-4 text-gray-900">
                             {{ product.batches_sum_kg_remaining ?? 0 }} kg
                         </td>
+                        <td class="px-6 py-4 text-gray-900">
+                            {{
+                                formatSack(product.batches_sum_kg_remaining) ??
+                                0
+                            }}
+                        </td>
                         <td class="px-6 py-4 text-gray-600">
-                            {{ getDate(product.updated_at) }}
+                            {{ formatDate(product.updated_at) }}
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-2">
@@ -139,6 +141,17 @@ const formatPrice = (price) => {
                                     class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
                                 >
                                     Batches
+                                </Link>
+                                <Link
+                                    :href="
+                                        route(
+                                            'products.show',
+                                            product.id
+                                        )
+                                    "
+                                    class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                                >
+                                    View Product
                                 </Link>
                             </div>
                         </td>
@@ -165,7 +178,7 @@ const formatPrice = (price) => {
                             {{ product.name }}
                         </h2>
                         <p class="text-sm text-gray-500">
-                            ₱{{ formatPrice(product.price_per_kilo) }}/kg
+                            ₱{{ formatCurrency(product.price_per_kilo) }}/kg
                         </p>
                     </div>
                 </div>
@@ -176,7 +189,7 @@ const formatPrice = (price) => {
                     </p>
                     <p>
                         <span class="font-medium">Updated:</span>
-                        {{ getDate(product.updated_at) }}
+                        {{ formatDate(product.updated_at) }}
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-2 mt-3">

@@ -5,11 +5,14 @@ import { useForm } from "@inertiajs/vue3";
 
 const posStore = usePosStore();
 const amountPaid = ref(0);
+const priceOverride = ref(null);
+const isPriceOverrideMode = ref(false);
 
 const form = useForm({
     cart: [],
     total: 0,
     amount_paid: 0,
+    price_override: false,
 });
 
 // Format price for display
@@ -25,14 +28,26 @@ const formatWeight = (kg) => {
     return `${kg}kg`;
 };
 
-// Calculate total
-const cartTotal = () => {
+// Calculate cart total (sum of all items)
+const cartItemsTotal = () => {
     return posStore.cart.reduce((sum, item) => sum + item.total_price, 0);
+};
+
+// Get final total (either cart total or price override)
+const getFinalTotal = () => {
+    if (
+        isPriceOverrideMode.value &&
+        priceOverride.value !== null &&
+        priceOverride.value >= 0
+    ) {
+        return priceOverride.value;
+    }
+    return cartItemsTotal();
 };
 
 // Calculate change
 const calculateChange = () => {
-    return Math.max(0, amountPaid.value - cartTotal());
+    return Math.max(0, amountPaid.value - getFinalTotal());
 };
 
 // Set amount paid from preset buttons
@@ -45,20 +60,39 @@ const addToAmountPaid = (amount) => {
     amountPaid.value += amount;
 };
 
-// Set exact amount (same as cart total)
+// Set exact amount (same as final total)
 const setExactAmount = () => {
-    amountPaid.value = cartTotal();
+    amountPaid.value = getFinalTotal();
+};
+
+// Toggle price override mode
+const togglePriceOverrideMode = () => {
+    isPriceOverrideMode.value = !isPriceOverrideMode.value;
+    if (!isPriceOverrideMode.value) {
+        priceOverride.value = null;
+    } else {
+        // Set default to current cart total when enabling override mode
+        priceOverride.value = cartItemsTotal();
+    }
+};
+
+// Reset everything when clearing cart
+const clearAll = () => {
+    posStore.clearCart();
+    amountPaid.value = 0;
+    priceOverride.value = null;
+    isPriceOverrideMode.value = false;
 };
 
 const submit = () => {
     form.cart = posStore.cart;
-    form.total = cartTotal();
+    form.total = getFinalTotal();
     form.amount_paid = amountPaid.value;
+    form.price_override = isPriceOverrideMode.value;
 
     form.post(route("checkout"), {
         onSuccess: () => {
-            posStore.clearCart();
-            amountPaid.value = 0;
+            clearAll();
         },
     });
 };
@@ -117,13 +151,67 @@ const submit = () => {
                     </button>
                 </div>
 
-                <!-- Total -->
+                <!-- Total Section -->
                 <div class="border-t border-gray-200 pt-3 mt-4">
+                    <!-- Price Override Section -->
+                    <div
+                        class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg"
+                    >
+                        <div class="flex items-center justify-between mb-3">
+                            <label
+                                class="block text-sm font-medium text-gray-700"
+                            >
+                                Price Override
+                            </label>
+                            <button
+                                @click="togglePriceOverrideMode"
+                                :class="{
+                                    'bg-yellow-500 text-white':
+                                        isPriceOverrideMode,
+                                    'bg-gray-200 text-gray-700':
+                                        !isPriceOverrideMode,
+                                }"
+                                class="px-3 py-1 rounded text-xs font-medium transition-colors"
+                            >
+                                {{ isPriceOverrideMode ? "ON" : "OFF" }}
+                            </button>
+                        </div>
+
+                        <div v-if="isPriceOverrideMode" class="space-y-2">
+                            <input
+                                v-model.number="priceOverride"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                class="w-full p-2 border border-yellow-300 rounded text-center text-lg font-medium"
+                                placeholder="Enter custom total"
+                            />
+                            <p class="text-xs text-gray-600">
+                                Original cart total:
+                                {{ formatPrice(cartItemsTotal()) }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Total Display -->
                     <div class="flex justify-between items-center mb-4">
-                        <span class="font-medium text-gray-900">Total:</span>
-                        <span class="font-bold text-lg">{{
-                            formatPrice(cartTotal())
-                        }}</span>
+                        <span class="font-medium text-gray-900">
+                            Total:
+                            <span
+                                v-if="isPriceOverrideMode"
+                                class="text-xs text-yellow-600"
+                                >(Price Override)</span
+                            >
+                        </span>
+                        <span
+                            class="font-bold text-lg"
+                            :class="{
+                                'text-yellow-600': isPriceOverrideMode,
+                                'text-gray-900': !isPriceOverrideMode,
+                            }"
+                        >
+                            {{ formatPrice(getFinalTotal()) }}
+                        </span>
                     </div>
 
                     <!-- Amount Paid Section -->
@@ -162,25 +250,10 @@ const submit = () => {
                                 @click="setExactAmount"
                                 class="w-full py-2 px-3 bg-green-100 border border-green-300 rounded text-sm font-medium hover:bg-green-200 transition-colors text-green-800"
                             >
-                                Exact Amount ({{ formatPrice(cartTotal()) }})
+                                Exact Amount ({{
+                                    formatPrice(getFinalTotal())
+                                }})
                             </button>
-                        </div>
-
-                        <!-- Add Amount Buttons -->
-                        <div class="mb-3">
-                            <p class="text-xs text-gray-600 mb-2">
-                                Add to current amount:
-                            </p>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button
-                                    v-for="amount in [20, 50, 100]"
-                                    :key="`add-${amount}`"
-                                    @click="addToAmountPaid(amount)"
-                                    class="py-1 px-2 bg-blue-100 border border-blue-200 rounded text-xs font-medium hover:bg-blue-200 transition-colors"
-                                >
-                                    +₱{{ amount }}
-                                </button>
-                            </div>
                         </div>
 
                         <!-- Change Display -->
@@ -194,8 +267,10 @@ const submit = () => {
                             <span
                                 class="font-bold text-lg"
                                 :class="{
-                                    'text-green-600': amountPaid >= cartTotal(),
-                                    'text-red-600': amountPaid < cartTotal(),
+                                    'text-green-600':
+                                        amountPaid >= getFinalTotal(),
+                                    'text-red-600':
+                                        amountPaid < getFinalTotal(),
                                 }"
                             >
                                 {{ formatPrice(calculateChange()) }}
@@ -204,12 +279,15 @@ const submit = () => {
 
                         <!-- Insufficient Payment Warning -->
                         <div
-                            v-if="amountPaid > 0 && amountPaid < cartTotal()"
+                            v-if="
+                                amountPaid > 0 && amountPaid < getFinalTotal()
+                            "
                             class="mt-2 p-2 bg-red-50 border border-red-200 rounded"
                         >
                             <p class="text-xs text-red-700">
                                 Insufficient payment: Need
-                                {{ formatPrice(cartTotal() - amountPaid) }} more
+                                {{ formatPrice(getFinalTotal() - amountPaid) }}
+                                more
                             </p>
                         </div>
                     </div>
@@ -217,23 +295,23 @@ const submit = () => {
                     <!-- Buttons -->
                     <div class="space-y-2">
                         <button
-                            :disabled="amountPaid < cartTotal()"
+                            :disabled="amountPaid < getFinalTotal()"
                             :class="{
                                 'bg-blue-600 hover:bg-blue-700 text-white':
-                                    amountPaid >= cartTotal(),
+                                    amountPaid >= getFinalTotal(),
                                 'bg-gray-300 text-gray-500 cursor-not-allowed':
-                                    amountPaid < cartTotal(),
+                                    amountPaid < getFinalTotal(),
                             }"
                             class="w-full py-2 px-4 rounded transition-colors"
                             @click="submit"
                         >
                             Checkout
+                            <span v-if="isPriceOverrideMode" class="text-xs"
+                                >(Price Override)</span
+                            >
                         </button>
                         <button
-                            @click="
-                                posStore.clearCart();
-                                amountPaid = 0;
-                            "
+                            @click="clearAll"
                             class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded hover:bg-gray-50"
                         >
                             Clear Cart

@@ -34,8 +34,8 @@ const navItems = [
         role: "admin",
     },
     {
-        href: "attendances.index",
-        pageComponent: "Attendances/Attendances",
+        href: "employees.index",
+        pageComponent: "Employees/Employees",
         label: "Employee",
         icon: "/storage/assets/icons/accounts.svg",
         role: "admin",

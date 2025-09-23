@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('time_out')->nullable();
             $table->enum('status', ['present', 'absent', 'late', 'on_leave'])->default('present');
             $table->string('remarks')->nullable();
+            $table->decimal('earned_amount', 15, 2)->nullable();
             $table->timestamps();
         });
     }

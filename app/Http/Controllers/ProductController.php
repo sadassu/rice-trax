@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -64,8 +65,46 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        // Get all sale details of this product with their parent sale
+        $sales = $product->saleDetail()
+            ->with('sale')
+            ->get();
+
+        // 🔹 Daily sales (group by sale_date)
+        $dailySales = $sales->groupBy(
+            fn($detail) =>
+            Carbon::parse($detail->sale->sale_date)->format('Y-m-d')
+        )->map(function ($group) {
+            return $group->sum('total_price');
+        });
+
+        // 🔹 Monthly sales (group by year-month)
+        $monthlySales = $sales->groupBy(
+            fn($detail) =>
+            Carbon::parse($detail->sale->sale_date)->format('Y-m')
+        )->map(function ($group) {
+            return $group->sum('total_price');
+        });
+
+        // 🔹 Load product batches
+        $product->load('batches');
+
+        // 🔹 Compute total kg remaining
+        $totalKgRemaining = $product->batches->sum('kg_remaining');
+
+        // 🔹 Compute total inventory value (kg_remaining × product->price_per_kilo)
+        $totalInventoryValue = $totalKgRemaining * $product->price_per_kilo;
+
+        return Inertia::render('Products/SpecificProduct', [
+            'product' => $product,
+            'dailySales' => $dailySales,
+            'monthlySales' => $monthlySales,
+            'totalKgRemaining' => $totalKgRemaining,
+            'totalInventoryValue' => $totalInventoryValue,
+        ]);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

@@ -17,45 +17,35 @@ class AttendanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $employees = Employee::with('attendances')
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->orderBy('name', 'asc')
-            ->paginate(10)
-            ->withQueryString();
-
-        return Inertia::render(
-            'Attendances/Attendances',
-            [
-                'employees'   => $employees,
-                'searchTerm' => $request->search,
-            ]
-        );
-    }
+    public function index(Request $request) {}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
     {
+        // Get employees with their attendances
         $employees = Employee::with('attendances')
             ->when($request->search, function ($q, $search) {
                 $q->where('name', 'like', "%{$search}%");
             })
-            ->orderBy('name', 'asc')
+            ->latest()
             ->paginate(10)
-            ->withQueryString();;
+            ->withQueryString();
 
-        return Inertia::render(
-            'Attendances/CreateAttendance',
-            [
-                'employees' => $employees,
-                'searchTerm' => $request->search,
-            ]
-        );
+        // Get today's date
+        $today = now()->toDateString();
+
+        // Fetch today's attendances
+        $todayAttendances = Attendance::with('employee')
+            ->whereDate('date', $today)
+            ->get();
+
+        return Inertia::render('Attendances/CreateAttendance', [
+            'todayAttendances' => $todayAttendances,
+            'employees' => $employees,
+            'searchTerm' => $request->search,
+        ]);
     }
 
     /**
@@ -69,33 +59,53 @@ class AttendanceController extends Controller
 
         $today = now()->toDateString();
 
-        $existing = Attendance::where('employee_id', $request->employee_id)
+        $attendance = Attendance::where('employee_id', $request->employee_id)
             ->whereDate('date', $today)
             ->first();
 
-        if ($existing) {
+        if (!$attendance) {
+            // First record today → Time In
+            $attendance = Attendance::create([
+                'employee_id' => $request->employee_id,
+                'date'        => $today,
+                'time_in'     => now(),
+                'status'      => 'present',
+            ]);
+
+            $message = 'Time In recorded successfully.';
+        } elseif (is_null($attendance->time_out)) {
+            // Second record today → Time Out
+            $attendance->time_out = now();
+
+            // Calculate worked hours
+            $hoursWorked = $attendance->time_in->diffInHours($attendance->time_out);
+
+            // Get employee rate
+            $rate = $attendance->employee->rate ?? 0;
+
+            // Calculate earned amount
+            $attendance->earned_amount = $hoursWorked * $rate;
+            $attendance->save();
+
+            $message = 'Time Out recorded successfully.';
+        } else {
             return back()->withErrors([
-                'attendance' => 'This employee already has attendance for today.',
+                'attendance' => 'This employee already completed attendance today.',
             ]);
         }
 
-        $attendance = Attendance::create([
-            'employee_id' => $request->employee_id,
-            'date' => $today,
-            'status' => 'present',
-        ]);
-
+        // Log the activity
         ActivityLog::create([
             'user_id'    => Auth::id(),
             'event'      => 'created',
             'module'     => 'attendances',
-            'description' => 'Created Attendance: ' . $attendance->employee_id,
+            'description' => 'Updated Attendance: ' . $attendance->employee_id,
             'properties' => ['attendance_id' => $attendance->id],
             'ip_address' => $request->ip(),
             'user_agent' => $request->header('User-Agent'),
         ]);
 
-        return back()->with('success', 'Attendance recorded successfully.');
+        return back()->with('success', $message);
     }
 
 

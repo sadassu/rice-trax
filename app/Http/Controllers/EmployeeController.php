@@ -6,16 +6,32 @@ use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\ActivityLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $employees = Employee::with('attendances')
+            ->when($request->search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('name', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render(
+            'Employees/Employees',
+            [
+                'employees'   => $employees,
+                'searchTerm' => $request->search,
+            ]
+        );
     }
 
     /**

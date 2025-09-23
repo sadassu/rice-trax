@@ -33,12 +33,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getSale()
-    {
-        $sale = Sale::all();
-        return $sale;
-    }
-
     // Inventory Turnover Rate
 
     // Dead Stock / Slow-Moving Items
@@ -53,7 +47,22 @@ class DashboardController extends Controller
     {
         $n = count($sales);
         if ($n < 2) {
-            throw new \Exception("Need at least 2 non-zero data points for Holt’s Linear Trend.");
+            // Not enough data → return zeros
+            $forecasts = [];
+            $lastDate = new \DateTime();
+            for ($h = 1; $h <= $forecastPeriods; $h++) {
+                $futureDate = (clone $lastDate)->modify("+{$h} day")->format("Y-m-d");
+                $forecasts[] = [
+                    'date' => $futureDate,
+                    'value' => 0
+                ];
+            }
+
+            return [
+                'levels'   => [],
+                'trends'   => [],
+                'forecast' => $forecasts
+            ];
         }
 
         // Initialization
@@ -73,9 +82,9 @@ class DashboardController extends Controller
             $trends[] = ['date' => $dates[$t], 'value' => $trend];
         }
 
-        // Forecast Future (add dates)
+        // Forecast Future
         $forecasts = [];
-        $lastDate = new \DateTime(); // start forecasting from today
+        $lastDate = new \DateTime();
         for ($h = 1; $h <= $forecastPeriods; $h++) {
             $futureDate = (clone $lastDate)->modify("+{$h} day")->format("Y-m-d");
             $forecasts[] = [
@@ -85,11 +94,12 @@ class DashboardController extends Controller
         }
 
         return [
-            'levels' => $levels,
-            'trends' => $trends,
+            'levels'   => $levels,
+            'trends'   => $trends,
             'forecast' => $forecasts
         ];
     }
+
 
     public function forecastSales()
     {

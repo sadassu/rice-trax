@@ -8,7 +8,8 @@ const showModal = ref(false);
 const form = useForm({
     name: null,
     contact: null,
-    salary: null,
+    rate: null,
+    role: null,
 });
 
 const openModal = () => {
@@ -127,19 +128,48 @@ const handleEscape = (e) => {
                                 :message="form.errors.name"
                             />
                             <TextInput
-                                name="Contact"
+                                name="contact"
                                 placeholder="Contact"
                                 v-model="form.contact"
                                 :message="form.errors.contact"
                             />
-
                             <TextInput
-                                name="Salary"
+                                name="rate"
                                 placeholder="0000"
-                                v-model="form.salary"
+                                v-model="form.rate"
                                 type="number"
-                                :message="form.errors.salary"
+                                :message="form.errors.rate"
                             />
+
+                            <!-- ✅ Role Select -->
+                            <div>
+                                <label
+                                    for="role"
+                                    placeholder="Enter Role"
+                                    class="block mb-2 text-sm font-semibold text-gray-700 capitalize"
+                                    >Role
+                                </label>
+                                <select
+                                    id="role"
+                                    v-model="form.role"
+                                    class="w-full px-4 py-2 border rounded-2xl shadow-sm outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 border-gray-300"
+                                >
+                                    <option value="" disabled>
+                                        Select Role
+                                    </option>
+                                    <option value="Cashier">Cashier</option>
+                                    <option value="Helper">Helper</option>
+                                    <option value="Manager">Manager</option>
+                                </select>
+
+                                <small
+                                    v-if="form.errors.role"
+                                    class="mt-1 block text-sm text-red-500"
+                                >
+                                    {{ form.errors.role }}
+                                </small>
+                            </div>
+
                             <!-- Actions -->
                             <div class="flex gap-3 justify-end pt-4">
                                 <button
