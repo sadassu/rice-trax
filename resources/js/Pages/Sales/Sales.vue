@@ -76,7 +76,7 @@ const formatDate = (dateString) => {
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8"
         >
             <div
-                class="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 overflow-hidden"
+                class="relative bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 overflow-hidden"
             >
                 <div
                     class="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 bg-white/10 rounded-full -mr-10 sm:-mr-12 -mt-10 sm:-mt-12"
@@ -112,7 +112,7 @@ const formatDate = (dateString) => {
             </div>
 
             <div
-                class="relative bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 overflow-hidden"
+                class="relative bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 overflow-hidden"
             >
                 <div
                     class="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 bg-white/10 rounded-full -mr-10 sm:-mr-12 -mt-10 sm:-mt-12"
@@ -145,7 +145,7 @@ const formatDate = (dateString) => {
             </div>
 
             <div
-                class="relative bg-gradient-to-r from-violet-600 to-violet-700 text-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 overflow-hidden sm:col-span-2 lg:col-span-1"
+                class="relative bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 overflow-hidden sm:col-span-2 lg:col-span-1"
             >
                 <div
                     class="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 bg-white/10 rounded-full -mr-10 sm:-mr-12 -mt-10 sm:-mt-12"

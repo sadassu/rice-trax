@@ -5,11 +5,18 @@ import { formatDate } from "../../utils/dateFormat";
 import ShowAttendance from "../Attendances/ShowAttendance.vue";
 import CreateEmployee from "./CreateEmployee.vue";
 import { Link } from "@inertiajs/vue3";
+import EditEmployee from "./EditEmployee.vue";
+import DeleteEmployee from "./DeleteEmployee.vue";
+import { router } from "@inertiajs/vue3";
 
 defineOptions({ layout: SideBar });
 defineProps({
     employees: Object,
 });
+
+const goToSalary = (employeeId) => {
+    router.get(route("employees.computeSalary.page", employeeId));
+};
 </script>
 <template>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
@@ -21,75 +28,6 @@ defineProps({
             <p class="text-gray-600">
                 Manage your team members and track their information
             </p>
-        </div>
-
-        <!-- Quick Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div
-                class="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl shadow-lg p-6 overflow-hidden"
-            >
-                <div
-                    class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"
-                ></div>
-                <div class="relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-medium opacity-90">
-                            Total Employees
-                        </h3>
-                        <div
-                            class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-4 h-4"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    <p class="text-3xl font-bold">
-                        {{ employees.total || employees.data.length }}
-                    </p>
-                    <div class="mt-2 text-sm opacity-75">
-                        Active team members
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="relative bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-2xl shadow-lg p-6 overflow-hidden"
-            >
-                <div
-                    class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"
-                ></div>
-                <div class="relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-medium opacity-90">
-                            New This Month
-                        </h3>
-                        <div
-                            class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-4 h-4"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-                    <p class="text-3xl font-bold">3</p>
-                    <div class="mt-2 text-sm opacity-75">Recent hires</div>
-                </div>
-            </div>
         </div>
 
         <!-- Main Content Card -->
@@ -243,8 +181,18 @@ defineProps({
                                         Member since
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap flex gap-3"
+                                >
                                     <ShowAttendance :employee="employee" />
+                                    <button
+                                        @click="goToSalary(employee.id)"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                                    >
+                                        Compute Salary
+                                    </button>
+                                    <EditEmployee :employee="employee" />
+                                    <DeleteEmployee :employee="employee" />
                                 </td>
                             </tr>
                         </tbody>

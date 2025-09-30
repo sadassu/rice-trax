@@ -173,7 +173,7 @@ const submitForm = () => {
                 >
                     <!-- Card Header -->
                     <div
-                        class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4"
+                        class="bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-4"
                     >
                         <div class="flex items-center">
                             <div
@@ -559,7 +559,7 @@ const submitForm = () => {
                     class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
                 >
                     <div
-                        class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4"
+                        class="bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-4"
                     >
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">

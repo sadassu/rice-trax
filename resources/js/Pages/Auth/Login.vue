@@ -37,44 +37,50 @@ const togglePasswordVisibility = () => {
     <Head :title="`Login | ${$page.component}`" />
 
     <div
-        class="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-cyan-100 flex items-center justify-center p-4"
+        class="min-h-screen bg-[url(assets/img/background-login.webp)] flex items-center justify-center p-4"
     >
-        <div class="w-full max-w-md">
-            <!-- Logo/Brand area -->
-            <div class="text-center mb-8">
-                <div
-                    class="w-16 h-16 bg-gradient-to-r from-teal-600 to-emerald-600 rounded-full mx-auto mb-4 flex items-center justify-center"
-                >
-                    <svg
-                        class="w-8 h-8 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+        <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2">
+            <!-- Welcome Section - Semi-transparent -->
+            <div
+                class="bg-black/30 backdrop-blur-sm rounded-l-2xl shadow-xl p-8 border border-white/10 flex items-center"
+            >
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-r from-teal-600 to-emerald-600 rounded-full mx-auto mb-4 flex items-center justify-center"
                     >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                        />
-                    </svg>
+                        <svg
+                            class="w-8 h-8 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                            />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-white mb-2">
+                        Welcome back
+                    </h1>
+                    <p class="text-gray-200">
+                        Sign in to your account to continue
+                    </p>
                 </div>
-                <h1 class="text-2xl font-bold text-gray-900 mb-2">
-                    Welcome back
-                </h1>
-                <p class="text-gray-600">Sign in to your account to continue</p>
             </div>
 
-            <!-- Login Form Card -->
+            <!-- Login Form Card - More opaque -->
             <div
-                class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100"
+                class="bg-black/80 backdrop-blur-md rounded-r-2xl shadow-xl p-8 border border-white/10"
             >
                 <form @submit.prevent="submit" class="space-y-6">
                     <!-- Email Field -->
                     <div class="space-y-2">
                         <div class="flex items-center justify-center">
                             <svg
-                                class="h-5 w-5 text-gray-400 group-focus-within:text-teal-500 transition-colors duration-200"
+                                class="h-5 w-5 text-gray-300 group-focus-within:text-teal-400 transition-colors duration-200"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -94,7 +100,7 @@ const togglePasswordVisibility = () => {
                                 required
                                 v-model="form.email"
                                 :message="form.errors.email"
-                                class="pl-3 w-full"
+                                class="pl-3 w-full text-white"
                                 placeholder="Enter your email"
                             />
                         </div>
@@ -104,7 +110,7 @@ const togglePasswordVisibility = () => {
                     <div class="space-y-2">
                         <div class="flex items-center justify-center">
                             <svg
-                                class="h-5 w-5 text-gray-400 group-focus-within:text-teal-500 transition-colors duration-200"
+                                class="h-5 w-5 text-gray-300 group-focus-within:text-teal-400 transition-colors duration-200"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -124,13 +130,13 @@ const togglePasswordVisibility = () => {
                                 required
                                 v-model="form.password"
                                 :message="form.errors.password"
-                                class="pl-3 w-full"
+                                class="pl-3 w-full text-white"
                                 placeholder="Enter your password"
                             />
                             <button
                                 type="button"
                                 @click="togglePasswordVisibility"
-                                class="inset-y-0 pl-3 flex items-center text-gray-400 hover:text-teal-600 transition-colors duration-200 z-10"
+                                class="inset-y-0 pl-3 flex items-center text-gray-300 hover:text-teal-400 transition-colors duration-200 z-10"
                             >
                                 <svg
                                     v-if="showPassword"
@@ -170,8 +176,6 @@ const togglePasswordVisibility = () => {
                         </div>
                     </div>
 
-                    <!-- Remember Me & Forgot Password -->
-
                     <!-- Submit Button -->
                     <button
                         type="submit"
@@ -203,13 +207,11 @@ const togglePasswordVisibility = () => {
                         >
                         <span v-else>Sign in</span>
                     </button>
-
-                    <!-- Register Link -->
                 </form>
             </div>
 
             <!-- Footer -->
-            <div class="mt-8 text-center text-sm text-gray-500">
+            <div class="mt-8 text-center text-sm text-gray-300">
                 <p>© 2025 Your Rice Trax. All rights reserved.</p>
             </div>
         </div>

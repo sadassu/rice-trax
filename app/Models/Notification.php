@@ -14,6 +14,7 @@ class Notification extends Model
         'message',
         'title',
         'expired_at',
+        'recipient_role',
     ];
 
 

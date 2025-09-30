@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50">
         <header
-            class="backdrop-blur-sm bg-white/80 border-b border-gray-200/50 sticky top-0 z-50"
+            class="fixed top-0 left-0 w-full z-50 backdrop-blur-md  border-b border-gray-200/50"
         >
             <nav class="max-w-6xl mx-auto px-6 py-4">
                 <div class="flex items-center justify-between">
@@ -12,7 +12,7 @@
                         >
                             <img :src="'storage/assets/img/logo.jpg'" alt="" />
                         </div>
-                        <span class="text-xl font-semibold text-gray-900"
+                        <span class="text-xl font-semibold text-white"
                             >Rice Trax</span
                         >
                     </div>
@@ -48,7 +48,7 @@
                                     : 'text-gray-700 hover:text-gray-900',
                             ]"
                         >
-                            <span class="relative z-10">Login</span>
+                            <span class="relative z-10 text-green-800">Login</span>
                             <div
                                 v-if="$page.component === 'Login'"
                                 class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
@@ -58,8 +58,7 @@
                 </div>
             </nav>
         </header>
-        <main>
-            <!-- Content container with subtle animation -->
+        <main >
             <div class="animate-fadeIn">
                 <slot />
             </div>

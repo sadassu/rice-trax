@@ -12,6 +12,7 @@ const form = useForm({
     email: null,
     password: null,
     password_confirmation: null,
+    role: "cashier",
 });
 
 const submit = () => {
@@ -72,6 +73,28 @@ const submit = () => {
                     v-model="form.password_confirmation"
                     class="w-full"
                 />
+            </div>
+
+            <!-- Role -->
+            <div>
+                <label
+                    for="role"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                    Role
+                </label>
+                <select
+                    id="role"
+                    v-model="form.role"
+                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                >
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="cashier">Cashier</option>
+                </select>
+                <div v-if="form.errors.role" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.role }}
+                </div>
             </div>
 
             <!-- Submit Button -->

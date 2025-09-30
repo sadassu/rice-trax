@@ -10,7 +10,9 @@ use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductBatchController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::inertia('/about', 'About')->name('about');
@@ -29,6 +31,14 @@ Route::middleware('auth')->group(function () {
     //others
     Route::get('/product-batches/batch/{product}', [ProductBatchController::class, 'showBatchesByProduct'])->name('product-batches.product.show');
     Route::get('/admin-dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('role:admin');
+    Route::get('/sales-report', [DashboardController::class, 'salesReport'])->name('dashboard.sales-report');
+    Route::post('/employees/{employee}/compute-salary', [EmployeeController::class, 'computeSalary'])
+        ->name('employees.computeSalary');
+    Route::get('/employee/{employee}/compute-salary', function (Employee $employee) {
+        return Inertia::render('Employees/ComputeSalary', [
+            'employee' => $employee,
+        ]);
+    })->name('employees.computeSalary.page');
 
     //attendances without the middleware of admin this can be accessed by the normal user
     Route::get('/attendances/create', [AttendanceController::class, 'create'])->name('attendances.create');

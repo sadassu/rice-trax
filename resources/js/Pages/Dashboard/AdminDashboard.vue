@@ -8,6 +8,7 @@ import { formatCurrency } from "../../utils/currencyFormat";
 import TopSellingProduct from "./TopSellingProduct.vue";
 import LowStockChart from "./LowStockChart.vue";
 import { formatDate } from "../../utils/dateFormat";
+import SalesReports from "./SalesReports.vue";
 
 defineOptions({ layout: SideBar });
 
@@ -112,58 +113,70 @@ const lineChartSeries = computed(() => {
         <!-- Sales Summary Cards -->
         <SaleCards :totals="totals" />
 
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
-            <!-- Levels/Trends/Forecast Line Chart -->
-            <div
-                class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
-            >
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-semibold text-gray-900">
-                        Levels, Trends & Forecast
-                    </h3>
-                    <div class="flex items-center space-x-3">
-                        <div
-                            class="flex items-center space-x-1 text-sm text-gray-600"
-                        >
-                            <div class="w-3 h-3 bg-teal-500 rounded-full"></div>
-                            <span>Levels</span>
-                        </div>
-                        <div
-                            class="flex items-center space-x-1 text-sm text-gray-600"
-                        >
-                            <div class="w-3 h-3 bg-rose-500 rounded-full"></div>
-                            <span>Trends</span>
-                        </div>
-                        <div
-                            class="flex items-center space-x-1 text-sm text-gray-600"
-                        >
-                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-                            <span>Forecast</span>
+        <!-- Main Content: Charts (2/3) + Activity Logs (1/3) -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <!-- Left Side: Charts (2/3 width) -->
+            <div class="xl:col-span-2 space-y-6">
+                <SalesReports />
+                <!-- Levels/Trends/Forecast Line Chart -->
+                <div
+                    class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
+                >
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            Levels, Trends & Forecast
+                        </h3>
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="flex items-center space-x-1 text-sm text-gray-600"
+                            >
+                                <div
+                                    class="w-3 h-3 bg-teal-500 rounded-full"
+                                ></div>
+                                <span>Levels</span>
+                            </div>
+                            <div
+                                class="flex items-center space-x-1 text-sm text-gray-600"
+                            >
+                                <div
+                                    class="w-3 h-3 bg-rose-500 rounded-full"
+                                ></div>
+                                <span>Trends</span>
+                            </div>
+                            <div
+                                class="flex items-center space-x-1 text-sm text-gray-600"
+                            >
+                                <div
+                                    class="w-3 h-3 bg-blue-500 rounded-full"
+                                ></div>
+                                <span>Forecast</span>
+                            </div>
                         </div>
                     </div>
+                    <div class="h-80">
+                        <VueApexCharts
+                            type="line"
+                            height="320"
+                            :options="lineChartOptions"
+                            :series="lineChartSeries"
+                        />
+                    </div>
                 </div>
-                <div class="h-80">
-                    <VueApexCharts
-                        type="line"
-                        height="320"
-                        :options="lineChartOptions"
-                        :series="lineChartSeries"
-                    />
-                </div>
+
+                <!-- Top Products Bar Chart -->
+                <TopSellingProduct :topMostSaleProducts="topMostSaleProduct" />
+
+                <!-- Low Stock Chart -->
+                <LowStockChart :lowStockProducts="lowStockProducts" />
             </div>
 
-            <!-- Top Products Bar Chart -->
-            <TopSellingProduct :topMostSaleProducts="topMostSaleProduct" />
-        </div>
+            <!-- Right Side: Activity Logs (1/3 width) -->
+            <div class="xl:col-span-1 space-y-6">
+                <ActivityLogs :recent-logs="recentLogs" />
 
-        <!-- Low Stock and Recent Logs Row -->
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 h-[300px]">
-            <LowStockChart
-                :lowStockProducts="lowStockProducts"
-                class="h-full"
-            />
-            <ActivityLogs :recent-logs="recentLogs" class="h-full" />
+                <!-- You can add more components here -->
+                <!-- Example: <AnotherComponent /> -->
+            </div>
         </div>
     </div>
 </template>

@@ -6,7 +6,9 @@ use App\Models\ActivityLog;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -32,6 +34,94 @@ class DashboardController extends Controller
             'recentLogs'         => $recentLogs,
         ]);
     }
+
+    public function salesReport(Request $request)
+    {
+        $filter = $request->input('filter', 'daily'); // default daily
+        $year   = $request->input('year', date('Y'));
+        $month  = $request->input('month', date('m')); // only for daily
+
+        $driver = DB::getDriverName(); // "sqlite" or "mysql"
+
+        if ($filter === 'daily') {
+            $start = Carbon::createFromDate($year, $month, 1);
+            $end   = $start->copy()->endOfMonth();
+
+            $dates = collect(CarbonPeriod::create($start, $end))->map(fn($date) => [
+                'period' => $date->format('Y-m-d'),
+                'total_sales' => 0,
+            ])->keyBy('period');
+
+            if ($driver === 'sqlite') {
+                $sales = DB::table('sales')
+                    ->selectRaw("date(sale_date) as period, SUM(total_price) as total_sales")
+                    ->whereRaw("strftime('%Y', sale_date) = ?", [$year])
+                    ->whereRaw("strftime('%m', sale_date) = ?", [str_pad($month, 2, '0', STR_PAD_LEFT)])
+                    ->groupBy('period')
+                    ->pluck('total_sales', 'period');
+            } else { // mysql
+                $sales = DB::table('sales')
+                    ->selectRaw("DATE(sale_date) as period, SUM(total_price) as total_sales")
+                    ->whereYear('sale_date', $year)
+                    ->whereMonth('sale_date', $month)
+                    ->groupBy('period')
+                    ->pluck('total_sales', 'period');
+            }
+
+            $report = $dates->map(function ($day) use ($sales) {
+                $day['total_sales'] = $sales->get($day['period'], 0);
+                return $day;
+            })->values();
+        } elseif ($filter === 'monthly') {
+            $months = collect(range(1, 12))->map(fn($m) => [
+                'period' => $m,
+                'total_sales' => 0,
+            ])->keyBy('period');
+
+            if ($driver === 'sqlite') {
+                $sales = DB::table('sales')
+                    ->selectRaw("CAST(strftime('%m', sale_date) AS INTEGER) as period, SUM(total_price) as total_sales")
+                    ->whereRaw("strftime('%Y', sale_date) = ?", [$year])
+                    ->groupBy('period')
+                    ->pluck('total_sales', 'period');
+            } else { // mysql
+                $sales = DB::table('sales')
+                    ->selectRaw("MONTH(sale_date) as period, SUM(total_price) as total_sales")
+                    ->whereYear('sale_date', $year)
+                    ->groupBy('period')
+                    ->pluck('total_sales', 'period');
+            }
+
+            $report = $months->map(function ($m) use ($sales) {
+                $m['total_sales'] = $sales->get($m['period'], 0);
+                return $m;
+            })->values();
+        } elseif ($filter === 'yearly') {
+            if ($driver === 'sqlite') {
+                $report = DB::table('sales')
+                    ->selectRaw("strftime('%Y', sale_date) as period, SUM(total_price) as total_sales")
+                    ->groupBy('period')
+                    ->orderBy('period')
+                    ->get();
+            } else { // mysql
+                $report = DB::table('sales')
+                    ->selectRaw("YEAR(sale_date) as period, SUM(total_price) as total_sales")
+                    ->groupBy('period')
+                    ->orderBy('period')
+                    ->get();
+            }
+        } else {
+            return response()->json(['error' => 'Invalid filter option'], 400);
+        }
+
+        return response()->json([
+            'filter' => $filter,
+            'year'   => $year,
+            'month'  => $month,
+            'report' => $report,
+        ]);
+    }
+
 
     // Inventory Turnover Rate
 

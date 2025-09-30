@@ -13,21 +13,27 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $fields = $request->validate([
-            'name' => ['required', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', 'max:255'],
+            'name'                  => ['required', 'max:255'],
+            'email'                 => ['required', 'email', 'max:255', 'unique:users'],
+            'password'              => ['required', 'confirmed', 'max:255'],
+            'role'                  => ['required', 'in:admin,manager,cashier'],
         ]);
 
-        $user = User::create($fields);
+        $user = User::create([
+            'name'     => $fields['name'],
+            'email'    => $fields['email'],
+            'password' => bcrypt($fields['password']), // hash password
+            'role'     => $fields['role'], // assign role
+        ]);
 
         ActivityLog::create([
             'user_id'     => Auth::id(),
             'event'       => 'created',
             'module'      => 'users',
-            'description' => 'Created product: ' . $user->name,
+            'description' => 'Created user: ' . $user->name . ' with role ' . $user->role,
             'properties'  => ['user_id' => $user->id],
-            'ip_address'  => request()->ip(),
-            'user_agent'  => request()->header('User-Agent'),
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->header('User-Agent'),
         ]);
 
         return redirect()->intended('accounts')->with('message', 'Created new account');

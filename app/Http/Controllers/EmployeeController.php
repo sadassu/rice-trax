@@ -6,6 +6,8 @@ use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\ActivityLog;
+use App\Models\Attendance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -33,7 +35,52 @@ class EmployeeController extends Controller
             ]
         );
     }
+    public function computeSalary(Request $request, Employee $employee)
+    {
+        $validated = $request->validate([
+            'start_date' => ['required', 'date'],
+            'end_date'   => ['required', 'date', 'after_or_equal:start_date'],
+        ]);
 
+        $startDate = Carbon::parse($validated['start_date'])->startOfDay();
+        $endDate   = Carbon::parse($validated['end_date'])->endOfDay();
+
+        // Fetch attendance records for the employee within the range
+        $attendances = Attendance::where('employee_id', $employee->id)
+            ->whereBetween('date', [$startDate, $endDate])
+            ->get();
+
+        $totalHours = 0;
+        $totalAmount = 0;
+
+        foreach ($attendances as $attendance) {
+            if ($attendance->time_in && $attendance->time_out && $attendance->status === 'present') {
+                $timeIn  = Carbon::parse($attendance->time_in);
+                $timeOut = Carbon::parse($attendance->time_out);
+                $hours   = $timeOut->diffInHours($timeIn);
+
+                $earned = $hours * $employee->rate;
+
+                // save to attendance record if you want
+                $attendance->earned_amount = $earned;
+                $attendance->save();
+
+                $totalHours += $hours;
+                $totalAmount += $earned;
+            }
+        }
+
+        return response()->json([
+            'employee_id' => $employee->id,
+            'employee_name' => $employee->name,
+            'total_hours' => $totalHours,
+            'total_salary' => $totalAmount,
+            'period' => [
+                'start_date' => $startDate->toDateString(),
+                'end_date'   => $endDate->toDateString(),
+            ]
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -84,7 +131,21 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        //
+        $employee->update($request->validated());
+
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'updated',
+            'module'      => 'employees',
+            'description' => 'Updated Employee: ' . $employee->name,
+            'properties'  => ['employee_id' => $employee->id],
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->header('User-Agent'),
+        ]);
+
+        return redirect()
+            ->back()
+            ->with('message', 'Employee updated successfully!');
     }
 
     /**
@@ -92,6 +153,19 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        //
+        $employee->delete();
+
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'deleted',
+            'module'      => 'employee',
+            'description' => 'Deleted employee: ' . $employee->name,
+            'properties'  => ['employee_id' => $employee->id],
+            'ip_address'  => request()->ip(),
+            'user_agent'  => request()->header('User-Agent'),
+        ]);
+
+        return redirect()->back()
+            ->with('message', 'Employee deleted successfully!');
     }
 }

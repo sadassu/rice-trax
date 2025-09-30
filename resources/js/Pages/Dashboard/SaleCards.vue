@@ -42,7 +42,7 @@ defineProps({
 
         <!-- Weekly Sales Card -->
         <div
-            class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg"
+            class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg"
         >
             <div class="flex items-center justify-between">
                 <div>
@@ -75,7 +75,7 @@ defineProps({
 
         <!-- Monthly Sales Card -->
         <div
-            class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg"
+            class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg"
         >
             <div class="flex items-center justify-between">
                 <div>
