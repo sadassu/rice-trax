@@ -30,8 +30,7 @@ class AttendanceController extends Controller
                 $q->where('name', 'like', "%{$search}%");
             })
             ->latest()
-            ->paginate(10)
-            ->withQueryString();
+            ->get();
 
         // Get today's date
         $today = now()->toDateString();
@@ -40,7 +39,6 @@ class AttendanceController extends Controller
         $todayAttendances = Attendance::with('employee')
             ->whereDate('date', $today)
             ->get();
-
         return Inertia::render('Attendances/CreateAttendance', [
             'todayAttendances' => $todayAttendances,
             'employees' => $employees,

@@ -1,4 +1,5 @@
 <script setup>
+import PaginationLinks from "../../Components/PaginationLinks.vue";
 import SideBar from "../../Layouts/SideBar.vue";
 import ChangePassword from "./ChangePassword.vue";
 
@@ -55,6 +56,13 @@ defineProps({
                     </tr>
                 </tbody>
             </table>
+
+            <PaginationLinks
+                :links="accounts.links"
+                :from="accounts.from"
+                :to="accounts.to"
+                :total="accounts.total"
+            />
         </div>
 
         <!-- Card layout for small screens -->

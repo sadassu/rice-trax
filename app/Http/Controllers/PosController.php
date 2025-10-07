@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\ProductBatch;
 use App\Models\Sale;
@@ -22,7 +23,8 @@ class PosController extends Controller
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
-            ->orderBy('name', 'asc')
+            ->orderByDesc('total_kg_remaining') // prioritize >0
+            ->orderByRaw('LOWER(name) ASC')     // alphabetical within each group
             ->paginate(15)
             ->withQueryString();
 
@@ -88,8 +90,21 @@ class PosController extends Controller
                 if ($remainingKg > 0) {
                     throw new \Exception("Not enough stock for product ID: {$product['id']}");
                 }
+
+                // ✅ Check total remaining stock for this product after update
+                $totalRemaining = ProductBatch::where('product_id', $product['id'])->sum('kg_remaining');
+
+                if ($totalRemaining <= 100) {
+                    Notification::create([
+                        'title' => 'Low Stock Alert',
+                        'message' => 'Product ID ' . $product['id'] . ' is low on stock (' . $totalRemaining . ' kg remaining).',
+                        'recipient_role' => 'admin',
+                        'expires_at' => Carbon::now()->addDays(7),
+                    ]);
+                }
             }
 
+            // Log the sale activity
             ActivityLog::create([
                 'user_id'    => Auth::id(),
                 'event'      => 'created',

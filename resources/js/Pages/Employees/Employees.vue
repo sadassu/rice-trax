@@ -8,6 +8,7 @@ import { Link } from "@inertiajs/vue3";
 import EditEmployee from "./EditEmployee.vue";
 import DeleteEmployee from "./DeleteEmployee.vue";
 import { router } from "@inertiajs/vue3";
+import PaginationLinks from "../../Components/PaginationLinks.vue";
 
 defineOptions({ layout: SideBar });
 defineProps({
@@ -16,6 +17,10 @@ defineProps({
 
 const goToSalary = (employeeId) => {
     router.get(route("employees.computeSalary.page", employeeId));
+};
+
+const goToSpecificEmployee = (employeeId) => {
+    router.get(route("employees.show", employeeId));
 };
 </script>
 <template>
@@ -50,7 +55,7 @@ const goToSalary = (employeeId) => {
                     <div class="flex gap-3">
                         <Link
                             :href="route('attendances.create')"
-                            class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                            class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-lime-500 hover:bg-lime-600 rounded-xl transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                         >
                             <svg
                                 class="w-4 h-4 mr-2"
@@ -84,11 +89,7 @@ const goToSalary = (employeeId) => {
                                 >
                                     Employee Name
                                 </th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-                                >
-                                    Contact Info
-                                </th>
+
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                 >
@@ -144,16 +145,7 @@ const goToSalary = (employeeId) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div
-                                        class="text-sm text-gray-900 font-medium"
-                                    >
-                                        {{ employee.contact }}
-                                    </div>
-                                    <div class="text-sm text-gray-500">
-                                        Phone Number
-                                    </div>
-                                </td>
+
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
                                         class="px-2 py-1 text-xs font-medium rounded-lg bg-blue-100 text-blue-700"
@@ -168,7 +160,7 @@ const goToSalary = (employeeId) => {
                                         {{ formatCurrency(employee.rate) }}
                                     </div>
                                     <div class="text-xs text-gray-500">
-                                        per day
+                                        per hr
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -184,6 +176,14 @@ const goToSalary = (employeeId) => {
                                 <td
                                     class="px-6 py-4 whitespace-nowrap flex gap-3"
                                 >
+                                    <button
+                                        @click="
+                                            goToSpecificEmployee(employee.id)
+                                        "
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                                    >
+                                        View Employee
+                                    </button>
                                     <ShowAttendance :employee="employee" />
                                     <button
                                         @click="goToSalary(employee.id)"
@@ -340,7 +340,14 @@ const goToSalary = (employeeId) => {
 
                         <!-- Actions -->
                         <div class="mt-5 pt-4 border-t border-gray-200">
+                            <button
+                                class="cursor-pointer inline-flex items-center px-3 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition"
+                            >
+                                Edit
+                            </button>
                             <ShowAttendance :employee="employee" />
+                            <EditEmployee :employee="employee" />
+                            <DeleteEmployee :employee="employee" />
                         </div>
                     </div>
                 </div>
@@ -375,33 +382,12 @@ const goToSalary = (employeeId) => {
             </div>
 
             <!-- Pagination (if needed) -->
-            <div
-                v-if="employees.links && employees.links.length > 3"
-                class="bg-gray-50 px-6 py-3 border-t border-gray-200 mt-4 rounded-b-2xl"
-            >
-                <div class="flex items-center justify-between flex-wrap gap-3">
-                    <div class="text-sm text-gray-700">
-                        {{ employees.from }}-{{ employees.to }} of
-                        {{ employees.total }} results
-                    </div>
-                    <div class="flex gap-1 flex-wrap">
-                        <button
-                            v-for="link in employees.links"
-                            :key="link.label"
-                            @click="link.url ? $inertia.get(link.url) : null"
-                            v-html="link.label"
-                            class="px-3 py-1 text-sm rounded-md transition-all duration-200"
-                            :class="{
-                                'text-gray-400 cursor-not-allowed': !link.url,
-                                'bg-gray-900 text-white': link.active,
-                                'text-gray-700 hover:bg-gray-200 hover:scale-105':
-                                    link.url && !link.active,
-                            }"
-                            :disabled="!link.url"
-                        />
-                    </div>
-                </div>
-            </div>
+            <PaginationLinks
+                :links="employees.links"
+                :from="employees.from"
+                :to="employees.to"
+                :total="employees.total"
+            />
         </div>
     </div>
 </template>

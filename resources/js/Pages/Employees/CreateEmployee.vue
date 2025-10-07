@@ -42,7 +42,7 @@ const handleEscape = (e) => {
 <template>
     <button
         @click="openModal"
-        class="group inline-flex items-center gap-2 px-4 py-2.5 border border-blue-200 rounded-xl text-sm font-medium text-blue-600 bg-white hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all duration-200 shadow-sm hover:shadow"
+        class="group inline-flex items-center gap-2 px-4 py-2.5 border border-lime-200 rounded-xl text-sm font-medium text-white bg-lime-500 hover:bg-lime-800 hover:border-lime-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all duration-200 shadow-sm hover:shadow"
     >
         <svg
             class="w-4 h-4 transition-transform duration-200 group-hover:scale-110"

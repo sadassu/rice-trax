@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
@@ -21,6 +22,10 @@ class DashboardController extends Controller
         $lowStockProducts   = $this->lowStocksProduct();
         $recentLogs         = $this->recentActivityLogs();
 
+        // Fetch notifications that haven't expired yet
+        $notifications = Notification::where('expired_at', '>', now())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return Inertia::render('Dashboard/AdminDashboard', [
             'forecastedSale'     => $forecastedSale,
@@ -32,6 +37,7 @@ class DashboardController extends Controller
             'topMostSaleProduct' => $topMostSaleProduct,
             'lowStockProducts'   => $lowStockProducts,
             'recentLogs'         => $recentLogs,
+            'notifications'      => $notifications,
         ]);
     }
 

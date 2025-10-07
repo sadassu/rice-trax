@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SaleExport;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
@@ -63,14 +67,18 @@ class SaleController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function export(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'start_date' => ['required', 'date'],
+            'end_date'   => ['required', 'date', 'after_or_equal:start_date'],
+        ]);
 
+        $startDate = Carbon::parse($request->start_date)->startOfDay();
+        $endDate = Carbon::parse($request->end_date)->endOfDay();
+
+        return Excel::download(new SaleExport($startDate, $endDate), 'sales.xlsx');
+    }
     /**
      * Store a newly created resource in storage.
      */

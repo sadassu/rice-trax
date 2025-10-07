@@ -42,7 +42,7 @@ const navItems = [
     },
     {
         href: "attendances.create",
-        pageComponent: "Attendances/CreateAttendance.vue",
+        pageComponent: "Attendances/CreateAttendance",
         label: "Attendance Form",
         icon: "/storage/assets/icons/calendar.svg",
     },
@@ -55,7 +55,7 @@ const navItems = [
     },
     {
         href: "activity-logs.index",
-        pageComponent: "ActivityLogs/Activity.vue",
+        pageComponent: "ActivityLogs/Activity",
         label: "Activity Logs",
         icon: "/storage/assets/icons/clock.svg",
     },
@@ -98,7 +98,7 @@ const filteredNavItems = computed(() => {
         <aside
             :class="`${
                 expanded ? 'w-72' : 'w-20'
-            } fixed left-0 top-0 h-screen z-40 bg-gradient-to-b from-teal-600 via-teal-700 to-teal-800 shadow-2xl transition-all duration-300 ease-in-out flex-col hidden md:flex`"
+            } fixed left-0 top-0 h-screen z-40 bg-gradient-to-b from-lime-500 via-lime-800 to-lime-900 shadow-2xl transition-all duration-300 ease-in-out flex-col hidden md:flex`"
         >
             <!-- Header with Logo and Toggle Button -->
             <div

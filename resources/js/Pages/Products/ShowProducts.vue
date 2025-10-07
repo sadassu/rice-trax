@@ -9,6 +9,7 @@ import DeleteProduct from "./DeleteProduct.vue";
 import { formatCurrency } from "../../utils/currencyFormat";
 import { formatDate } from "../../utils/dateFormat";
 import { formatSack } from "../../utils/helper";
+import PaginationLinks from "../../Components/PaginationLinks.vue";
 
 defineOptions({ layout: SideBar });
 
@@ -26,7 +27,6 @@ watch(
         500
     )
 );
-
 </script>
 
 <template>
@@ -107,7 +107,9 @@ watch(
                                 >
                                     {{ product.name.charAt(0).toUpperCase() }}
                                 </div>
-                                <span class="font-medium text-gray-900">
+                                <span
+                                    class="font-medium text-gray-900 capitalize"
+                                >
                                     {{ product.name }}
                                 </span>
                             </div>
@@ -143,12 +145,7 @@ watch(
                                     Batches
                                 </Link>
                                 <Link
-                                    :href="
-                                        route(
-                                            'products.show',
-                                            product.id
-                                        )
-                                    "
+                                    :href="route('products.show', product.id)"
                                     class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
                                 >
                                     View Product
@@ -208,31 +205,11 @@ watch(
         </div>
 
         <!-- Pagination -->
-        <div
-            class="bg-gray-50 px-6 py-3 border-t border-gray-200 mt-4 rounded-lg"
-        >
-            <div class="flex items-center justify-between flex-wrap gap-3">
-                <div class="text-sm text-gray-700">
-                    {{ products.from }}-{{ products.to }} of
-                    {{ products.total }} results
-                </div>
-                <div class="flex gap-1 flex-wrap">
-                    <Link
-                        v-for="link in products.links"
-                        :key="link.label"
-                        :href="link.url || '#'"
-                        v-html="link.label"
-                        preserve-scroll
-                        class="px-3 py-1 text-sm rounded-md"
-                        :class="{
-                            'text-gray-400 cursor-not-allowed': !link.url,
-                            'bg-gray-900 text-white': link.active,
-                            'text-gray-700 hover:bg-gray-200':
-                                link.url && !link.active,
-                        }"
-                    />
-                </div>
-            </div>
-        </div>
+        <PaginationLinks
+            :links="products.links"
+            :from="products.from"
+            :to="products.to"
+            :total="products.total"
+        />
     </div>
 </template>

@@ -2,6 +2,7 @@
 import SideBar from "../../Layouts/SideBar.vue";
 import { Link, router } from "@inertiajs/vue3";
 import { watch } from "vue";
+import PaginationLinks from "../../Components/PaginationLinks.vue";
 
 defineOptions({
     layout: SideBar,
@@ -526,33 +527,12 @@ const formatDate = (dateString) => {
             </div>
 
             <!-- Modern Pagination -->
-            <div
-                v-if="sale.links && sale.links.length > 3"
-                class="bg-gray-50 px-4 sm:px-6 py-3 border-t border-gray-200 mt-4 rounded-b-xl sm:rounded-b-2xl"
-            >
-                <div class="flex items-center justify-between flex-wrap gap-3">
-                    <div class="text-xs sm:text-sm text-gray-700">
-                        {{ sale.from }}-{{ sale.to }} of
-                        {{ sale.total }} results
-                    </div>
-                    <div class="flex gap-1 flex-wrap">
-                        <Link
-                            v-for="link in sale.links"
-                            :key="link.label"
-                            :href="link.url || ''"
-                            :preserve-scroll="true"
-                            v-html="link.label"
-                            class="px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-md transition-all duration-200"
-                            :class="{
-                                'text-gray-400 cursor-not-allowed': !link.url,
-                                'bg-gray-900 text-white': link.active,
-                                'text-gray-700 hover:bg-gray-200 hover:scale-105':
-                                    link.url && !link.active,
-                            }"
-                        />
-                    </div>
-                </div>
-            </div>
+            <PaginationLinks
+                :links="sale.links"
+                :from="sale.from"
+                :to="sale.to"
+                :total="sale.total"
+            />
         </div>
     </div>
 </template>

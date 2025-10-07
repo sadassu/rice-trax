@@ -1,6 +1,7 @@
 <script setup>
 import { formatCurrency } from "../../utils/currencyFormat";
 import { formatTime } from "../../utils/helper";
+import { router } from "@inertiajs/vue3";
 
 defineProps({
     todayAttendances: Object,
@@ -14,6 +15,22 @@ const getStatusColor = (status) => {
         "half-day": "bg-blue-100 text-blue-800",
     };
     return colors[status] || "bg-gray-100 text-gray-800";
+};
+
+const recordAttendance = (employeeId) => {
+    router.post(
+        "/attendances",
+        { employee_id: employeeId },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                console.log("Attendance recorded successfully.");
+            },
+            onError: (errors) => {
+                console.error(errors);
+            },
+        }
+    );
 };
 </script>
 
@@ -66,12 +83,12 @@ const getStatusColor = (status) => {
                 <div
                     v-for="attendance in todayAttendances"
                     :key="attendance.id"
-                    class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow"
+                    class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md hover:border-purple-300 transition-all group"
                 >
                     <div class="flex items-start justify-between mb-3">
                         <div class="flex items-center">
                             <div
-                                class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3 text-green-700 font-semibold"
+                                class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3 text-purple-700 font-semibold group-hover:bg-purple-200 transition-colors"
                             >
                                 {{
                                     attendance.employee.name
@@ -80,7 +97,9 @@ const getStatusColor = (status) => {
                                 }}
                             </div>
                             <div>
-                                <h4 class="font-medium text-gray-900">
+                                <h4
+                                    class="font-medium text-gray-900 group-hover:text-purple-700 transition-colors"
+                                >
                                     {{ attendance.employee.name }}
                                 </h4>
                                 <p class="text-sm text-gray-500">
@@ -105,28 +124,57 @@ const getStatusColor = (status) => {
                                 formatTime(attendance.time_in) || "Not set"
                             }}</span>
                         </div>
-                        <div class="flex justify-between text-sm">
+
+                        <div v-if="attendance.remarks" class="mt-2">
+                            <p class="text-xs text-gray-500">Remarks:</p>
+                            <p class="text-sm text-gray-700">
+                                {{ attendance.remarks }}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between text-sm items-center">
                             <span class="text-gray-500">Time Out:</span>
-                            <span class="font-medium">{{
-                                formatTime(attendance.time_out) || "Not set"
-                            }}</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    v-if="attendance.time_out"
+                                    class="font-medium"
+                                >
+                                    {{ formatTime(attendance.time_out) }}
+                                </span>
+
+                                <!-- ✅ Purple version of "Add Time Out" button -->
+                                <button
+                                    v-else
+                                    @click="
+                                        recordAttendance(attendance.employee.id)
+                                    "
+                                    class="flex items-center text-purple-600 text-sm font-medium hover:text-purple-700 transition-colors"
+                                >
+                                    <svg
+                                        class="w-4 h-4 mr-1"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                        ></path>
+                                    </svg>
+                                    Add Time Out
+                                </button>
+                            </div>
                         </div>
                         <div
                             v-if="attendance.earned_amount"
                             class="flex justify-between text-sm"
                         >
                             <span class="text-gray-500">Earned:</span>
-                            <span class="font-medium text-green-600"
-                                >{{
-                                    formatCurrency(attendance.earned_amount)
-                                }}</span
-                            >
-                        </div>
-                        <div v-if="attendance.remarks" class="mt-2">
-                            <p class="text-xs text-gray-500">Remarks:</p>
-                            <p class="text-sm text-gray-700">
-                                {{ attendance.remarks }}
-                            </p>
+                            <span class="font-medium text-green-600">{{
+                                formatCurrency(attendance.earned_amount)
+                            }}</span>
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@ const props = defineProps({
     >
         <!-- Hero Section with Brand Identity -->
         <section
-            class="relative overflow-hidden bg-[url(assets/img/background.jpg)] text-white h-1/2"
+            class="relative overflow-hidden bg-[url(assets/img/background-rt.jpg)] bg-no-repeat bg-cover text-white h-1/2"
         >
             <!-- Background Pattern -->
             <div class="absolute inset-0 opacity-10">
@@ -27,7 +27,7 @@ const props = defineProps({
             </div>
 
             <div class="relative max-w-7xl mx-auto px-6 py-72">
-                <div class="text-center space-y-6">
+                <div class="text-center space-y-6 p-5 bg-black/50 rounded-xl">
                     <!-- Logo and Brand -->
                     <div
                         class="flex items-center justify-center space-x-4 mb-8"
@@ -37,15 +37,11 @@ const props = defineProps({
                                 class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/30"
                             >
                                 <!-- Rice grain icon -->
-                                <svg
-                                    class="w-8 h-8 text-white"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        d="M12 2C10.9 2 10 2.9 10 4V6.17C8.83 6.58 8 7.69 8 9V20C8 21.1 8.9 22 10 22H14C15.1 22 16 21.1 16 20V9C16 7.69 15.17 6.58 14 6.17V4C14 2.9 13.1 2 12 2ZM12 4V6H12C13.1 6 14 6.9 14 8V20H10V8C10 6.9 10.9 6 12 6V4Z"
-                                    />
-                                </svg>
+                                <img
+                                    :src="'storage/assets/img/logo.jpg'"
+                                    alt=""
+                                    class="rounded-2xl"
+                                />
                             </div>
                             <div
                                 class="absolute -top-1 -right-1 w-6 h-6 bg-amber-400 rounded-full flex items-center justify-center"

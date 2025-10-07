@@ -14,6 +14,7 @@ const props = defineProps({
     monthlySales: Object,
     totalKgRemaining: Number,
     totalInventoryValue: Number,
+    salesTable: Array,
 });
 
 // Chart options for daily sales
@@ -542,6 +543,77 @@ const bestSellingDay = computed(() => {
                             }}
                         </p>
                     </div>
+                </div>
+            </div>
+
+            <!-- Sales History Table -->
+            <div
+                class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            >
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    Sales History
+                </h3>
+
+                <div
+                    v-if="salesTable && salesTable.length > 0"
+                    class="overflow-x-auto"
+                >
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    class="px-4 py-3 text-left font-semibold text-gray-600"
+                                >
+                                    Date
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-4 py-3 text-left font-semibold text-gray-600"
+                                >
+                                    Kilograms Sold
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-4 py-3 text-left font-semibold text-gray-600"
+                                >
+                                    Price per Kilo
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-4 py-3 text-left font-semibold text-gray-600"
+                                >
+                                    Total Price
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr
+                                v-for="sale in salesTable"
+                                :key="sale.id"
+                                class="hover:bg-gray-50 transition"
+                            >
+                                <td class="px-4 py-2 text-gray-800">
+                                    {{ formatDate(sale.sale_date) }}
+                                </td>
+                                <td class="px-4 py-2 text-gray-800">
+                                    {{ sale.kilograms }} kg
+                                </td>
+                                <td class="px-4 py-2 text-gray-800">
+                                    {{ formatCurrency(sale.price_per_kilo) }}
+                                </td>
+                                <td
+                                    class="px-4 py-2 font-semibold text-gray-900"
+                                >
+                                    {{ formatCurrency(sale.total_price) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div v-else class="text-center py-12 text-gray-500">
+                    No sales data available for this product.
                 </div>
             </div>
         </div>

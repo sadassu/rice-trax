@@ -1,4 +1,5 @@
 <script setup>
+import PaginationLinks from "../../Components/PaginationLinks.vue";
 import SideBar from "../../Layouts/SideBar.vue";
 import { Link, router } from "@inertiajs/vue3";
 
@@ -261,31 +262,11 @@ const formatDate = (dateString) => {
         </div>
 
         <!-- Pagination -->
-        <div
-            v-if="logs.links && logs.links.length > 3"
-            class="bg-gray-50 px-6 py-3 border border-gray-200 mt-4 rounded-2xl"
-        >
-            <div class="flex items-center justify-between flex-wrap gap-3">
-                <div class="text-sm text-gray-700">
-                    {{ logs.from }}-{{ logs.to }} of {{ logs.total }} results
-                </div>
-                <div class="flex gap-1 flex-wrap">
-                    <Link
-                        v-for="link in logs.links"
-                        :key="link.label"
-                        :href="link.url || ''"
-                        :preserve-scroll="true"
-                        v-html="link.label"
-                        class="px-3 py-1 text-sm rounded-md transition-all duration-200"
-                        :class="{
-                            'text-gray-400 cursor-not-allowed': !link.url,
-                            'bg-gray-900 text-white': link.active,
-                            'text-gray-700 hover:bg-gray-200 hover:scale-105':
-                                link.url && !link.active,
-                        }"
-                    />
-                </div>
-            </div>
-        </div>
+        <PaginationLinks
+            :links="logs.links"
+            :from="logs.from"
+            :to="logs.to"
+            :total="logs.total"
+        />
     </div>
 </template>

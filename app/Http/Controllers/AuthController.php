@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     public function accounts()
     {
-        $accounts = User::paginate(5);
+        $accounts = User::paginate(10);
 
         return Inertia::render('Auth/Accounts', ['accounts' => $accounts]);
     }

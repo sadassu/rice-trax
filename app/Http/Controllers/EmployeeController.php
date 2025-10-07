@@ -35,6 +35,7 @@ class EmployeeController extends Controller
             ]
         );
     }
+
     public function computeSalary(Request $request, Employee $employee)
     {
         $validated = $request->validate([
@@ -57,30 +58,61 @@ class EmployeeController extends Controller
             if ($attendance->time_in && $attendance->time_out && $attendance->status === 'present') {
                 $timeIn  = Carbon::parse($attendance->time_in);
                 $timeOut = Carbon::parse($attendance->time_out);
-                $hours   = $timeOut->diffInHours($timeIn);
 
+                // Ensure time_out is after time_in
+                if ($timeOut->lessThanOrEqualTo($timeIn)) {
+                    continue;
+                }
+
+                // Get accurate fractional hours
+                $hours = $timeOut->floatDiffInHours($timeIn);
+
+                // Skip if less than 1 hour
+                if ($hours < 1) {
+                    continue;
+                }
+
+                $hours = round($hours, 2);
                 $earned = $hours * $employee->rate;
-
-                // save to attendance record if you want
-                $attendance->earned_amount = $earned;
-                $attendance->save();
 
                 $totalHours += $hours;
                 $totalAmount += $earned;
             }
         }
 
+        // Log activity
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'computed',
+            'module'      => 'salary',
+            'description' => 'Computed salary for employee: ' . $employee->name .
+                ' (ID: ' . $employee->id . ') from ' .
+                $startDate->toDateString() . ' to ' . $endDate->toDateString(),
+            'properties'  => [
+                'employee_id' => $employee->id,
+                'total_hours' => round($totalHours, 2),
+                'total_salary' => round($totalAmount, 2),
+                'period' => [
+                    'start_date' => $startDate->toDateString(),
+                    'end_date'   => $endDate->toDateString(),
+                ]
+            ],
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->header('User-Agent'),
+        ]);
+
         return response()->json([
-            'employee_id' => $employee->id,
+            'employee_id'   => $employee->id,
             'employee_name' => $employee->name,
-            'total_hours' => $totalHours,
-            'total_salary' => $totalAmount,
+            'total_hours'   => round($totalHours, 2),
+            'total_salary'  => round($totalAmount, 2),
             'period' => [
                 'start_date' => $startDate->toDateString(),
                 'end_date'   => $endDate->toDateString(),
             ]
         ]);
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -115,7 +147,12 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+        $employee->load('attendances');
+
+        // Return data to the Inertia view
+        return Inertia::render('Employees/ShowSpecificEmployee', [
+            'employee' => $employee,
+        ]);
     }
 
     /**

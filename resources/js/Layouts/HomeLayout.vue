@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50">
         <header
-            class="fixed top-0 left-0 w-full z-50 backdrop-blur-md  border-b border-gray-200/50"
+            class="fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-gray-200/50"
         >
             <nav class="max-w-6xl mx-auto px-6 py-4">
                 <div class="flex items-center justify-between">
@@ -10,55 +10,86 @@
                         <div
                             class="w-16 h-16 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center"
                         >
-                            <img :src="'storage/assets/img/logo.jpg'" alt="" />
+                            <img
+                                :src="'storage/assets/img/logo.jpg'"
+                                alt=""
+                                class="rounded"
+                            />
                         </div>
-                        <span class="text-xl font-semibold text-white"
-                            >Rice Trax</span
-                        >
+                        <span class="text-xl font-semibold text-white">
+                            Rice Trax
+                        </span>
                     </div>
 
                     <!-- Navigation links -->
                     <div class="flex items-center space-x-1">
-                        <Link
-                            :href="route('home')"
-                            :class="[
-                                'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
-                                'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
-                                'active:scale-95',
-                                $page.component === 'Home'
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
-                                    : 'text-gray-700 hover:text-gray-900',
-                            ]"
-                        >
-                            <span class="relative z-10">Home</span>
-                            <div
-                                v-if="$page.component === 'Home'"
-                                class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
-                            ></div>
-                        </Link>
+                        <!-- Show these if NOT logged in -->
+                        <template v-if="!$page.props.auth?.user">
+                            <Link
+                                :href="route('home')"
+                                :class="[
+                                    'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
+                                    'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
+                                    'active:scale-95',
+                                    $page.component === 'Home'
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                                        : 'text-gray-700 hover:text-gray-900',
+                                ]"
+                            >
+                                <span class="relative z-10">Home</span>
+                                <div
+                                    v-if="$page.component === 'Home'"
+                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
+                                ></div>
+                            </Link>
 
-                        <Link
-                            :href="route('login')"
-                            :class="[
-                                'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
-                                'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
-                                'active:scale-95',
-                                $page.component === 'Login'
-                                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
-                                    : 'text-gray-700 hover:text-gray-900',
-                            ]"
-                        >
-                            <span class="relative z-10 text-green-800">Login</span>
-                            <div
-                                v-if="$page.component === 'Login'"
-                                class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
-                            ></div>
-                        </Link>
+                            <Link
+                                :href="route('login')"
+                                :class="[
+                                    'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
+                                    'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
+                                    'active:scale-95',
+                                    $page.component === 'Login'
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                                        : 'text-gray-700 hover:text-gray-900',
+                                ]"
+                            >
+                                <span class="relative z-10 text-green-800"
+                                    >Login</span
+                                >
+                                <div
+                                    v-if="$page.component === 'Login'"
+                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
+                                ></div>
+                            </Link>
+                        </template>
+
+                        <!-- Show this if logged in -->
+                        <template v-else>
+                            <Link
+                                :href="route('admin.dashboard')"
+                                :class="[
+                                    'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
+                                    'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
+                                    'active:scale-95',
+                                    $page.component === 'Admin/Dashboard'
+                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                                        : 'text-gray-700 hover:text-gray-900',
+                                ]"
+                            >
+                                <span class="relative z-10">Dashboard</span>
+                                <div
+                                    v-if="$page.component === 'Admin/Dashboard'"
+                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
+                                ></div>
+                            </Link>
+                        </template>
                     </div>
                 </div>
             </nav>
         </header>
-        <main >
+
+        <main>
             <div class="animate-fadeIn">
                 <slot />
             </div>

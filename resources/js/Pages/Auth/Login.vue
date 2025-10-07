@@ -37,7 +37,7 @@ const togglePasswordVisibility = () => {
     <Head :title="`Login | ${$page.component}`" />
 
     <div
-        class="min-h-screen bg-[url(assets/img/background-login.webp)] flex items-center justify-center p-4"
+        class="min-h-screen bg-[url(assets/img/background-login-rt.jpg)] bg-no-repeat bg-cover flex items-center justify-center p-4"
     >
         <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2">
             <!-- Welcome Section - Semi-transparent -->

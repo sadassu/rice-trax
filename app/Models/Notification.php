@@ -13,7 +13,7 @@ class Notification extends Model
     protected $fillable = [
         'message',
         'title',
-        'expired_at',
+        'expires_at',
         'recipient_role',
     ];
 

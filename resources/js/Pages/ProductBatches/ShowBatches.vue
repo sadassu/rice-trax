@@ -1,4 +1,5 @@
 <script setup>
+import PaginationLinks from "../../Components/PaginationLinks.vue";
 import SideBar from "../../Layouts/SideBar.vue";
 import { formatSack } from "../../utils/helper";
 import CreateBatch from "./CreateBatch.vue";
@@ -229,5 +230,12 @@ const getDate = (date) =>
             </p>
             <CreateBatch :product_id="product.id" />
         </div>
+
+        <PaginationLinks
+            :links="productBatches.links"
+            :from="productBatches.from"
+            :to="productBatches.to"
+            :total="productBatches.total"
+        />
     </div>
 </template>

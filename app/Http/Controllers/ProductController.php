@@ -23,10 +23,9 @@ class ProductController extends Controller
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
-            ->orderBy('name', 'asc')
+            ->orderByRaw('LOWER(name) ASC')
             ->paginate(10)
             ->withQueryString();
-
 
         return Inertia::render(
             'Products/ShowProducts',
@@ -57,7 +56,7 @@ class ProductController extends Controller
         ]);
 
         return redirect()->route('products.index')
-            ->with('message', 'Product created successfully!');
+            ->with(['product' => $product, 'message', 'Product created successfully!']);
     }
 
     /**
@@ -74,17 +73,13 @@ class ProductController extends Controller
         $dailySales = $sales->groupBy(
             fn($detail) =>
             Carbon::parse($detail->sale->sale_date)->format('Y-m-d')
-        )->map(function ($group) {
-            return $group->sum('total_price');
-        });
+        )->map(fn($group) => $group->sum('total_price'));
 
         // 🔹 Monthly sales (group by year-month)
         $monthlySales = $sales->groupBy(
             fn($detail) =>
             Carbon::parse($detail->sale->sale_date)->format('Y-m')
-        )->map(function ($group) {
-            return $group->sum('total_price');
-        });
+        )->map(fn($group) => $group->sum('total_price'));
 
         // 🔹 Load product batches
         $product->load('batches');
@@ -92,8 +87,17 @@ class ProductController extends Controller
         // 🔹 Compute total kg remaining
         $totalKgRemaining = $product->batches->sum('kg_remaining');
 
-        // 🔹 Compute total inventory value (kg_remaining × product->price_per_kilo)
+        // 🔹 Compute total inventory value
         $totalInventoryValue = $totalKgRemaining * $product->price_per_kilo;
+
+        // 🔹 Map sales for table display
+        $salesTable = $sales->map(fn($detail) => [
+            'id' => $detail->id,
+            'sale_date' => $detail->sale?->sale_date,
+            'kilograms' => $detail->kilograms,
+            'price_per_kilo' => $detail->price_per_kilo,
+            'total_price' => $detail->total_price,
+        ])->sortByDesc('sale_date')->values();
 
         return Inertia::render('Products/SpecificProduct', [
             'product' => $product,
@@ -101,6 +105,7 @@ class ProductController extends Controller
             'monthlySales' => $monthlySales,
             'totalKgRemaining' => $totalKgRemaining,
             'totalInventoryValue' => $totalInventoryValue,
+            'salesTable' => $salesTable,
         ]);
     }
 

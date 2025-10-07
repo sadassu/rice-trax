@@ -9,6 +9,7 @@ import TopSellingProduct from "./TopSellingProduct.vue";
 import LowStockChart from "./LowStockChart.vue";
 import { formatDate } from "../../utils/dateFormat";
 import SalesReports from "./SalesReports.vue";
+import NotificationBar from "./NotificationBar.vue";
 
 defineOptions({ layout: SideBar });
 
@@ -21,6 +22,7 @@ const props = defineProps({
     topMostSaleProduct: Array,
     lowStockProducts: Array,
     recentLogs: Array,
+    notifications: Array,
 });
 
 // Line Chart Configuration
@@ -172,6 +174,7 @@ const lineChartSeries = computed(() => {
 
             <!-- Right Side: Activity Logs (1/3 width) -->
             <div class="xl:col-span-1 space-y-6">
+                <NotificationBar :notifications="notifications" />
                 <ActivityLogs :recent-logs="recentLogs" />
 
                 <!-- You can add more components here -->
