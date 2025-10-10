@@ -1,10 +1,11 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
+import { Trash } from "lucide-vue-next";
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps({
-    product: Object,
+    attendance: Object,
 });
 
 const showModal = ref(false);
@@ -15,9 +16,9 @@ const closeModal = () => {
     if (!isDeleting.value) showModal.value = false;
 };
 
-const deleteProduct = (id) => {
+const deleteAttendance = (id) => {
     isDeleting.value = true;
-    router.delete(route("products.destroy", id), {
+    router.delete(route("attendances.destroy", id), {
         preserveScroll: true,
         onSuccess: () => {
             closeModal();
@@ -29,46 +30,30 @@ const deleteProduct = (id) => {
 </script>
 
 <template>
-    <!-- Trigger -->
     <button
         @click="openModal"
         class="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 border border-red-200 rounded-xl text-sm font-medium text-red-600 bg-white hover:bg-red-50 transition-all duration-200"
         :disabled="isDeleting"
     >
-        <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-        >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0
-                00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-        </svg>
+        <Trash />
     </button>
 
-    <!-- Modal -->
     <Modal
         :show="showModal"
         :danger="true"
-        title="Delete Product"
+        title="Delete Attendance"
         subtitle="This action cannot be undone"
         :processing="isDeleting"
         @close="closeModal"
     >
         <template #default>
             <p class="text-gray-600 leading-relaxed mb-3">
-                Are you sure you want to delete this product?
+                Are you sure you want to delete this attendance record?
             </p>
             <div class="bg-red-50 border border-red-200 rounded-lg p-3">
                 <p class="text-sm text-red-700">
-                    <strong>Warning:</strong> All associated data (batches,
-                    inventory records, and transactions) will be permanently
-                    removed.
+                    <strong>Warning:</strong> This attendance entry will be
+                    permanently removed.
                 </p>
             </div>
         </template>
@@ -81,8 +66,9 @@ const deleteProduct = (id) => {
             >
                 Cancel
             </button>
+
             <button
-                @click="deleteProduct(product.id)"
+                @click="deleteAttendance(attendance.id)"
                 :disabled="isDeleting"
                 class="px-4 py-2.5 rounded-xl bg-red-600 text-white font-medium hover:bg-red-700 transition-all duration-200 disabled:opacity-50 flex items-center gap-2"
             >
@@ -109,7 +95,9 @@ const deleteProduct = (id) => {
                            5.824 3 7.938l3-2.647z"
                     />
                 </svg>
-                <span>{{ isDeleting ? "Deleting..." : "Delete Product" }}</span>
+                <span>{{
+                    isDeleting ? "Deleting..." : "Delete Attendance"
+                }}</span>
             </button>
         </template>
     </Modal>

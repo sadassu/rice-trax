@@ -9,6 +9,8 @@ import EditEmployee from "./EditEmployee.vue";
 import DeleteEmployee from "./DeleteEmployee.vue";
 import { router } from "@inertiajs/vue3";
 import PaginationLinks from "../../Components/PaginationLinks.vue";
+import { isSafeRowClick } from "../../utils/eventHelper";
+import { Banknote } from "lucide-vue-next";
 
 defineOptions({ layout: SideBar });
 defineProps({
@@ -19,9 +21,10 @@ const goToSalary = (employeeId) => {
     router.get(route("employees.computeSalary.page", employeeId));
 };
 
-const goToSpecificEmployee = (employeeId) => {
-    router.get(route("employees.show", employeeId));
-};
+function onRowClick(event, id) {
+    if (!isSafeRowClick(event)) return; // skip row click
+    router.visit(route("employees.show", id));
+}
 </script>
 <template>
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
@@ -103,11 +106,6 @@ const goToSpecificEmployee = (employeeId) => {
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                 >
-                                    Date Joined
-                                </th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-                                >
                                     Actions
                                 </th>
                             </tr>
@@ -116,7 +114,8 @@ const goToSpecificEmployee = (employeeId) => {
                             <tr
                                 v-for="employee in employees.data"
                                 :key="employee.id"
-                                class="hover:bg-gray-50/50 transition-colors duration-150"
+                                @click="onRowClick($event, employee.id)"
+                                class="cursor-pointer hover:bg-gray-200 transition-colors duration-150"
                             >
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -163,33 +162,16 @@ const goToSpecificEmployee = (employeeId) => {
                                         per hr
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div
-                                        class="text-sm text-gray-900 font-medium"
-                                    >
-                                        {{ formatDate(employee.created_at) }}
-                                    </div>
-                                    <div class="text-sm text-gray-500">
-                                        Member since
-                                    </div>
-                                </td>
                                 <td
                                     class="px-6 py-4 whitespace-nowrap flex gap-3"
                                 >
-                                    <button
-                                        @click="
-                                            goToSpecificEmployee(employee.id)
-                                        "
-                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                                    >
-                                        View Employee
-                                    </button>
                                     <ShowAttendance :employee="employee" />
                                     <button
                                         @click="goToSalary(employee.id)"
+                                        title="Compute Salary"
                                         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
                                     >
-                                        Compute Salary
+                                        <Banknote />
                                     </button>
                                     <EditEmployee :employee="employee" />
                                     <DeleteEmployee :employee="employee" />

@@ -3,6 +3,7 @@ import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
 import TextInput from "@/Components/TextInput.vue";
+import { SquarePen } from "lucide-vue-next";
 
 const props = defineProps({
     employee: Object,
@@ -41,20 +42,7 @@ const submit = () => {
         @click="openModal"
         class="cursor-pointer inline-flex items-center px-3 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition"
     >
-        <svg
-            class="w-4 h-4 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-        >
-            <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-            ></path>
-        </svg>
-        Edit
+        <SquarePen />
     </button>
 
     <!-- Modal -->
@@ -106,7 +94,6 @@ const submit = () => {
                     <option value="" disabled>Select Role</option>
                     <option value="Cashier">Cashier</option>
                     <option value="Helper">Helper</option>
-                    <option value="Manager">Manager</option>
                 </select>
 
                 <small

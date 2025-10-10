@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { Calendar } from "lucide-vue-next";
 
 const props = defineProps({
     employee: Object,
@@ -123,7 +124,7 @@ const goToToday = () => {
         @click="openModal"
         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
     >
-        Attendance
+        <Calendar />
     </button>
 
     <Teleport to="body">

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -18,10 +19,10 @@ class MarkAttendanceStatus extends Command
 
     /**
      * The console command description.
-     *F
+     *
      * @var string
      */
-    protected $description = 'Mark employees absent if they did not clock in by 5:00 PM';
+    protected $description = 'Mark employees absent if no attendance, or auto time-out if no time-out by 5:00 PM';
 
     /**
      * Execute the console command.
@@ -33,36 +34,54 @@ class MarkAttendanceStatus extends Command
 
         // Only run this logic after 5 PM
         if (Carbon::now()->lessThan($cutoffTime)) {
-            $this->warn("It’s not yet 5 PM. Absent marking skipped.");
+            $this->warn("It’s not yet 5 PM. Absent/Auto Timeout marking skipped.");
             return;
         }
 
-        $employees = Employee::whereDoesntHave('attendances', function ($q) use ($today) {
+        // 1️⃣ Mark employees absent if no attendance record for today
+        $employeesWithoutAttendance = Employee::whereDoesntHave('attendances', function ($q) use ($today) {
             $q->whereDate('date', $today);
         })->get();
 
-        foreach ($employees as $employee) {
-            $attendance = Attendance::where('employee_id', $employee->id)
-                ->whereDate('date', $today)
-                ->first();
+        foreach ($employeesWithoutAttendance as $employee) {
+            Attendance::firstOrCreate(
+                [
+                    'employee_id' => $employee->id,
+                    'date'        => $today,
+                ],
+                [
+                    'status'  => 'Absent',
+                    'remarks' => 'No time-in record for today',
+                ]
+            );
 
-            if (!$attendance) {
-                Attendance::firstOrCreate(
-                    [
-                        'employee_id' => $employee->id,
-                        'date'        => $today,
-                    ],
-                    [
-                        'status'  => 'Absent',
-                        'remarks' => 'No time-in record for today',
-                    ]
-                );
-
-
-                $this->info("Employee {$employee->name} marked as Absent.");
-            }
+            $this->info("Employee {$employee->name} marked as Absent.");
         }
 
-        $this->info("Absent marking process completed for {$today->toDateString()}.");
+        // 2️⃣ Auto time-out employees who clocked in but not clocked out
+        $attendances = Attendance::whereDate('date', $today)
+            ->whereNotNull('time_in')
+            ->whereNull('time_out')
+            ->get();
+
+        foreach ($attendances as $attendance) {
+            $attendance->update([
+                'time_out' => $cutoffTime,
+                'status'   => 'present',
+                'remarks'  => 'Automatically timed out at 5:00 PM',
+            ]);
+
+            // Create notification for the employee
+            Notification::create([
+                'title'          => 'Automatic Time Out',
+                'message'        => "You were automatically timed out at 5:00 PM on {$today->toFormattedDateString()}.",
+                'recipient_role' => 'admin',
+                'expires_at'     => now()->addDays(3),
+            ]);
+
+            $this->info("Employee ID {$attendance->employee_id} auto timed out at 5:00 PM.");
+        }
+
+        $this->info("Attendance auto-marking completed for {$today->toDateString()}.");
     }
 }

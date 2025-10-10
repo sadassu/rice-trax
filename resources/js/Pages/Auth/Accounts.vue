@@ -13,7 +13,7 @@ defineProps({
 <template>
     <div class="m-6">
         <div class="mb-4 text-xl font-semibold text-gray-700">
-            Employee Accounts
+            Account management
         </div>
 
         <!-- Register Button -->

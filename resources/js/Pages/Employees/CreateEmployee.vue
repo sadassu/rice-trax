@@ -159,7 +159,6 @@ const handleEscape = (e) => {
                                     </option>
                                     <option value="Cashier">Cashier</option>
                                     <option value="Helper">Helper</option>
-                                    <option value="Manager">Manager</option>
                                 </select>
 
                                 <small

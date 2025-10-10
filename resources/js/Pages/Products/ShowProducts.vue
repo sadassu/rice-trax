@@ -10,6 +10,7 @@ import { formatCurrency } from "../../utils/currencyFormat";
 import { formatDate } from "../../utils/dateFormat";
 import { formatSack } from "../../utils/helper";
 import PaginationLinks from "../../Components/PaginationLinks.vue";
+import { isSafeRowClick } from "../../utils/eventHelper";
 
 defineOptions({ layout: SideBar });
 
@@ -19,6 +20,11 @@ const props = defineProps({
 });
 
 const search = ref(props.searchTerm);
+
+function onRowClick(event, id) {
+    if (!isSafeRowClick(event)) return;
+    router.visit(route("products.show", id));
+}
 
 watch(
     search,
@@ -82,11 +88,7 @@ watch(
                         >
                             Sack
                         </th>
-                        <th
-                            class="px-6 py-3 text-left text-sm font-medium text-gray-900"
-                        >
-                            Last Updated
-                        </th>
+
                         <th
                             class="px-6 py-3 text-center text-sm font-medium text-gray-900"
                         >
@@ -98,7 +100,8 @@ watch(
                     <tr
                         v-for="product in products.data"
                         :key="product.id"
-                        class="hover:bg-gray-50"
+                        @click="onRowClick($event, product.id)"
+                        class="hover:bg-gray-50 cursor-pointer transition-colors"
                     >
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
@@ -126,9 +129,7 @@ watch(
                                 0
                             }}
                         </td>
-                        <td class="px-6 py-4 text-gray-600">
-                            {{ formatDate(product.updated_at) }}
-                        </td>
+
                         <td class="px-6 py-4">
                             <div class="flex items-center justify-center gap-2">
                                 <UpdateProduct :product="product" />
@@ -143,12 +144,6 @@ watch(
                                     class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
                                 >
                                     Batches
-                                </Link>
-                                <Link
-                                    :href="route('products.show', product.id)"
-                                    class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
-                                >
-                                    View Product
                                 </Link>
                             </div>
                         </td>

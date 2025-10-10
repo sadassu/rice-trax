@@ -2,6 +2,7 @@
 import SideBar from "../../Layouts/SideBar.vue";
 import { Link } from "@inertiajs/vue3"; // ✅ for navigation
 import { formatDate } from "../../utils/dateFormat";
+import { ArrowBigLeft } from "lucide-vue-next";
 
 defineOptions({ layout: SideBar });
 
@@ -22,7 +23,7 @@ const formatTime = (datetime) => {
         minute: "numeric",
         hour12: true,
     };
-    return date.toLocaleTimeString("en-US", options);
+    return date.toLocaleTimeString("en-PH", options);
 };
 </script>
 
@@ -34,20 +35,7 @@ const formatTime = (datetime) => {
                 @click="goBack"
                 class="inline-flex items-center gap-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 19l-7-7 7-7"
-                    />
-                </svg>
+                <ArrowBigLeft />
                 Back
             </button>
         </div>

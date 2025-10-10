@@ -283,7 +283,7 @@ const submitForm = () => {
                                 {{
                                     isSubmitting
                                         ? "Adding Attendance..."
-                                        : "Add Attendance"
+                                        : "Time in"
                                 }}
                             </button>
                         </form>

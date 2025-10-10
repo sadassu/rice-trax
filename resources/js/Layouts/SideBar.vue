@@ -47,6 +47,12 @@ const navItems = [
         icon: "/storage/assets/icons/calendar.svg",
     },
     {
+        href: "attendances.index",
+        pageComponent: "Attendances/Attendances",
+        label: "Attendance",
+        icon: "/storage/assets/icons/calendar.svg",
+    },
+    {
         href: "accounts",
         pageComponent: "Auth/Accounts",
         label: "Accounts",
@@ -58,6 +64,7 @@ const navItems = [
         pageComponent: "ActivityLogs/Activity",
         label: "Activity Logs",
         icon: "/storage/assets/icons/clock.svg",
+        role: "admin",
     },
 ];
 
