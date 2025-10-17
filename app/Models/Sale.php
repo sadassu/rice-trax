@@ -19,6 +19,10 @@ class Sale extends Model
         'change'
     ];
 
+    protected $casts = [
+        'sale_date' => 'datetime',
+    ];
+
     public function saleDetails(): HasMany
     {
         return $this->hasMany(SaleDetail::class);

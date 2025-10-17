@@ -6,8 +6,12 @@ use App\Exports\SaleExport;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use App\Imports\SaleImport;
+use App\Models\ActivityLog;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -75,9 +79,59 @@ class SaleController extends Controller
         ]);
 
         $startDate = Carbon::parse($request->start_date)->startOfDay();
-        $endDate = Carbon::parse($request->end_date)->endOfDay();
+        $endDate   = Carbon::parse($request->end_date)->endOfDay();
 
-        return Excel::download(new SaleExport($startDate, $endDate), 'sales.xlsx');
+        $fileName = 'Sales from ' . $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y') . '.xlsx';
+        $safeFileName = str_replace([' ', ','], ['_', ''], $fileName);
+
+        // ✅ Log the export action
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'exported',
+            'module'      => 'sales',
+            'description' => 'Exported Sales data from ' . $startDate->format('F j, Y') . ' to ' . $endDate->format('F j, Y'),
+            'properties'  => [
+                'start_date' => $startDate->toDateTimeString(),
+                'end_date'   => $endDate->toDateTimeString(),
+            ],
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->header('User-Agent'),
+        ]);
+
+        return Excel::download(new SaleExport($startDate, $endDate), $safeFileName);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        Excel::import(new SaleImport, $request->file('file'));
+
+        // ✅ Log the import action
+        ActivityLog::create([
+            'user_id'     => Auth::id(),
+            'event'       => 'imported',
+            'module'      => 'sales',
+            'description' => 'Imported Sales data from Excel file: ' . $request->file('file')->getClientOriginalName(),
+            'properties'  => [
+                'file_name' => $request->file('file')->getClientOriginalName(),
+                'file_size' => $request->file('file')->getSize(),
+            ],
+            'ip_address'  => $request->ip(),
+            'user_agent'  => $request->header('User-Agent'),
+        ]);
+
+        // ✅ Create notification for admins (or target role)
+        Notification::create([
+            'title'          => 'Sales Data Imported',
+            'message'        => Auth::user()->name . ' imported sales data from "' . $request->file('file')->getClientOriginalName() . '"',
+            'recipient_role' => 'admin',
+            'expires_at'     => now()->addDays(7),
+        ]);
+
+        return back()->with('success', 'Sales imported successfully!');
     }
     /**
      * Store a newly created resource in storage.

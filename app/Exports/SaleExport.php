@@ -5,8 +5,10 @@ namespace App\Exports;
 use App\Models\Sale;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Carbon\Carbon;
 
-class SaleExport implements FromCollection, WithHeadings
+class SaleExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $startDate;
     protected $endDate;
@@ -30,7 +32,7 @@ class SaleExport implements FromCollection, WithHeadings
             foreach ($sale->saleDetails as $detail) {
                 $rows[] = [
                     'Sale ID' => $sale->id,
-                    'Sale Date' => $sale->sale_date->format('Y-m-d H:i:s'),
+                    'Sale Date' => Carbon::parse($sale->sale_date)->format('Y-m-d H:i:s'),
                     'Total Sale Price' => $sale->total_price,
                     'Amount Paid' => $sale->amount_paid,
                     'Change' => $sale->change,

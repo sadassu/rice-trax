@@ -3,6 +3,8 @@ import SideBar from "../../Layouts/SideBar.vue";
 import { Link, router } from "@inertiajs/vue3";
 import { watch } from "vue";
 import PaginationLinks from "../../Components/PaginationLinks.vue";
+import ExportSale from "./ExportSale.vue";
+import ImportSale from "./ImportSale.vue";
 
 defineOptions({
     layout: SideBar,
@@ -66,10 +68,16 @@ const formatDate = (dateString) => {
     >
         <!-- Header Section -->
         <div class="mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                Sales
-            </h1>
-            <p class="text-gray-600">Track and manage your sales performance</p>
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                    Sales
+                </h1>
+                <p class="text-gray-600">
+                    Track and manage your sales performance
+                </p>
+            </div>
+            <div><ExportSale /></div>
+            <div><ImportSale /></div>
         </div>
 
         <!-- Stats Cards with Modern Gradient Design -->

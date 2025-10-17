@@ -12,11 +12,11 @@ class SaleDetail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sale_id',
-        'product_id',
-        'kilograms',
-        'price_per_kilo',
-        'total_price',
+        'sale_id', // check
+        'product_id', // check
+        'kilograms', // check
+        'price_per_kilo', // check
+        'total_price', // check
     ];
 
     public function sale(): BelongsTo
