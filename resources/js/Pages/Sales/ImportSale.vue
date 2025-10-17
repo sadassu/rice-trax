@@ -2,6 +2,7 @@
 import axios from "axios";
 import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
+import { FileDown } from "lucide-vue-next";
 
 const showModal = ref(false);
 const processing = ref(false);
@@ -59,7 +60,7 @@ const submitForm = async () => {
         @click="openModal"
         class="cursor-pointer inline-flex items-center px-3 py-2 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-white hover:bg-blue-50 transition"
     >
-        Import Excel File
+        <FileDown />
     </button>
 
     <!-- Modal -->

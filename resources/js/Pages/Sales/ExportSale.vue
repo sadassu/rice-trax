@@ -2,6 +2,7 @@
 import axios from "axios";
 import { ref } from "vue";
 import Modal from "@/Components/Modal.vue";
+import { FileUp } from "lucide-vue-next";
 
 const showModal = ref(false);
 const form = ref({
@@ -60,7 +61,7 @@ const submitForm = async () => {
         @click="openModal"
         class="cursor-pointer inline-flex items-center px-3 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition"
     >
-        Export Excel File
+        <FileUp />
     </button>
 
     <Modal

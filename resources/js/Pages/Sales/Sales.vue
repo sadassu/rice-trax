@@ -68,16 +68,21 @@ const formatDate = (dateString) => {
     >
         <!-- Header Section -->
         <div class="mb-6 sm:mb-8">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                    Sales
-                </h1>
-                <p class="text-gray-600">
-                    Track and manage your sales performance
-                </p>
+            <!-- Header Section -->
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
+            >
+                <div>
+                    <h1
+                        class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0"
+                    >
+                        Sales
+                    </h1>
+                    <p class="text-gray-600">
+                        Track and manage your sales performance
+                    </p>
+                </div>
             </div>
-            <div><ExportSale /></div>
-            <div><ImportSale /></div>
         </div>
 
         <!-- Stats Cards with Modern Gradient Design -->
@@ -269,6 +274,10 @@ const formatDate = (dateString) => {
                             Clear Filters
                         </button>
                     </div>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <ExportSale />
+                    <ImportSale />
                 </div>
             </div>
 
