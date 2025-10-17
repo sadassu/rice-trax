@@ -8,7 +8,7 @@
                     <!-- Logo/Brand area -->
                     <div class="flex items-center space-x-2">
                         <div
-                            class="w-16 h-16 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center"
+                            class="w-16 h-16 bg-gradient-to-r from-emerald-600 to-lime-600 rounded-lg flex items-center justify-center"
                         >
                             <img
                                 :src="'storage/assets/img/logo.jpg'"
@@ -32,14 +32,14 @@
                                     'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
                                     'active:scale-95',
                                     $page.component === 'Home'
-                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                                        ? 'bg-gradient-to-r from-emerald-600 to-lime-600 text-white shadow-lg shadow-emerald-500/25'
                                         : 'text-gray-700 hover:text-gray-900',
                                 ]"
                             >
                                 <span class="relative z-10">Home</span>
                                 <div
                                     v-if="$page.component === 'Home'"
-                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
+                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-lime-600 rounded-full animate-pulse opacity-20"
                                 ></div>
                             </Link>
 
@@ -50,7 +50,7 @@
                                     'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
                                     'active:scale-95',
                                     $page.component === 'Login'
-                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                                        ? 'bg-gradient-to-r from-emerald-600 to-lime-600 text-white shadow-lg shadow-emerald-500/25'
                                         : 'text-gray-700 hover:text-gray-900',
                                 ]"
                             >
@@ -59,7 +59,7 @@
                                 >
                                 <div
                                     v-if="$page.component === 'Login'"
-                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
+                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-lime-600 rounded-full animate-pulse opacity-20"
                                 ></div>
                             </Link>
                         </template>
@@ -73,14 +73,14 @@
                                     'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
                                     'active:scale-95',
                                     $page.component === 'Admin/Dashboard'
-                                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-500/25'
+                                        ? 'bg-gradient-to-r from-emerald-600 to-lime-600 text-white shadow-lg shadow-emerald-500/25'
                                         : 'text-gray-700 hover:text-gray-900',
                                 ]"
                             >
                                 <span class="relative z-10">Dashboard</span>
                                 <div
                                     v-if="$page.component === 'Admin/Dashboard'"
-                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full animate-pulse opacity-20"
+                                    class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-lime-600 rounded-full animate-pulse opacity-20"
                                 ></div>
                             </Link>
                         </template>

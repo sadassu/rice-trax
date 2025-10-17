@@ -133,7 +133,7 @@ const lineChartSeries = computed(() => {
                                 class="flex items-center space-x-1 text-sm text-gray-600"
                             >
                                 <div
-                                    class="w-3 h-3 bg-teal-500 rounded-full"
+                                    class="w-3 h-3 bg-lime-500 rounded-full"
                                 ></div>
                                 <span>Levels</span>
                             </div>

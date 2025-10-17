@@ -109,7 +109,7 @@ const filteredNavItems = computed(() => {
         >
             <!-- Header with Logo and Toggle Button -->
             <div
-                class="px-6 py-6 flex justify-between items-center border-b border-teal-500/30 flex-shrink-0"
+                class="px-6 py-6 flex justify-between items-center border-b border-lime-500/30 flex-shrink-0"
             >
                 <div
                     :class="`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -129,7 +129,7 @@ const filteredNavItems = computed(() => {
                 </div>
                 <button
                     @click="toggleSidebar"
-                    class="p-2 rounded-xl bg-teal-500/30 hover:bg-teal-500/50 transition-all duration-200 backdrop-blur-sm border border-white/10 hover:border-white/20 group"
+                    class="p-2 rounded-xl bg-lime-500/30 hover:bg-lime-500/50 transition-all duration-200 backdrop-blur-sm border border-white/10 hover:border-white/20 group"
                     :title="expanded ? 'Collapse sidebar' : 'Expand sidebar'"
                 >
                     <svg
@@ -153,7 +153,7 @@ const filteredNavItems = computed(() => {
 
             <!-- Navigation - Made scrollable -->
             <nav
-                class="px-4 py-6 flex-1 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-teal-500/50 scrollbar-track-transparent"
+                class="px-4 py-6 flex-1 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-lime-500/50 scrollbar-track-transparent"
             >
                 <template v-for="item in filteredNavItems" :key="item.label">
                     <div class="relative group">
@@ -238,12 +238,12 @@ const filteredNavItems = computed(() => {
 
             <!-- User section at bottom -->
             <div
-                class="border-t border-teal-500/30 p-4 mt-auto relative user-menu-wrapper flex-shrink-0"
+                class="border-t border-lime-500/30 p-4 mt-auto relative user-menu-wrapper flex-shrink-0"
             >
                 <div class="flex items-center space-x-3">
                     <div class="relative">
                         <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-300 to-teal-500 flex items-center justify-center text-teal-900 font-bold text-lg shadow-lg ring-2 ring-white/20"
+                            class="w-12 h-12 rounded-full bg-gradient-to-br from-lime-300 to-lime-500 flex items-center justify-center text-lime-900 font-bold text-lg shadow-lg ring-2 ring-white/20"
                         >
                             {{
                                 $page.props.auth.user.name
@@ -253,7 +253,7 @@ const filteredNavItems = computed(() => {
                             }}
                         </div>
                         <div
-                            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-teal-700 animate-pulse"
+                            class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-lime-700 animate-pulse"
                         ></div>
                     </div>
 
@@ -268,7 +268,7 @@ const filteredNavItems = computed(() => {
                             >
                                 {{ $page.props.auth.user.name }}
                             </h4>
-                            <p class="text-xs text-teal-200 truncate">
+                            <p class="text-xs text-lime-200 truncate">
                                 {{ $page.props.auth.user.email }}
                             </p>
                         </div>
@@ -278,7 +278,7 @@ const filteredNavItems = computed(() => {
                             :class="`p-2 rounded-lg transition-all duration-200 ml-2 ${
                                 showUserMenu
                                     ? 'bg-white/20 text-white transform scale-110'
-                                    : 'hover:bg-white/10 text-teal-200 hover:text-white'
+                                    : 'hover:bg-white/10 text-lime-200 hover:text-white'
                             }`"
                         >
                             <svg
@@ -335,10 +335,10 @@ const filteredNavItems = computed(() => {
 
         <!-- Mobile Bottom Navigation - Made scrollable -->
         <nav
-            class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-teal-600 via-teal-700 to-teal-800 shadow-2xl border-t border-teal-500/30"
+            class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-lime-600 via-lime-700 to-lime-800 shadow-2xl border-t border-lime-500/30"
         >
             <div
-                class="flex items-center py-2 overflow-x-auto scrollbar-thin scrollbar-thumb-teal-500/50 scrollbar-track-transparent px-2"
+                class="flex items-center py-2 overflow-x-auto scrollbar-thin scrollbar-thumb-lime-500/50 scrollbar-track-transparent px-2"
             >
                 <template v-for="item in filteredNavItems" :key="item.label">
                     <Link
@@ -387,7 +387,7 @@ const filteredNavItems = computed(() => {
                         }`"
                     >
                         <div
-                            :class="`w-6 h-6 rounded-full bg-gradient-to-br from-teal-300 to-teal-500 flex items-center justify-center text-teal-900 font-bold text-xs mb-1 transition-all duration-200 ${
+                            :class="`w-6 h-6 rounded-full bg-gradient-to-br from-lime-300 to-lime-500 flex items-center justify-center text-lime-900 font-bold text-xs mb-1 transition-all duration-200 ${
                                 showUserMenu ? 'shadow-md scale-110' : ''
                             }`"
                         >
@@ -521,7 +521,7 @@ const filteredNavItems = computed(() => {
     scrollbar-width: thin;
 }
 
-.scrollbar-thumb-teal-500\/50::-webkit-scrollbar-thumb {
+.scrollbar-thumb-lime-500\/50::-webkit-scrollbar-thumb {
     background-color: rgba(20, 184, 166, 0.5);
     border-radius: 0.375rem;
 }

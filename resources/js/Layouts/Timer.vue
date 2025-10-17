@@ -21,7 +21,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="fixed top-0 right-0 bg-teal-900 text-white px-4 rounded-b-2xl">
+    <div class="fixed top-0 right-0 bg-lime-900 text-white px-4 rounded-b-2xl">
         Current Time: {{ currentTime }}
     </div>
 </template>

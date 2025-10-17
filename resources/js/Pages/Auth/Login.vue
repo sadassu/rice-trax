@@ -46,7 +46,7 @@ const togglePasswordVisibility = () => {
             >
                 <div class="text-center">
                     <div
-                        class="w-16 h-16 bg-gradient-to-r from-teal-600 to-emerald-600 rounded-full mx-auto mb-4 flex items-center justify-center"
+                        class="w-16 h-16 bg-gradient-to-r from-lime-600 to-emerald-600 rounded-full mx-auto mb-4 flex items-center justify-center"
                     >
                         <svg
                             class="w-8 h-8 text-white"
@@ -80,7 +80,7 @@ const togglePasswordVisibility = () => {
                     <div class="space-y-2">
                         <div class="flex items-center justify-center">
                             <svg
-                                class="h-5 w-5 text-gray-300 group-focus-within:text-teal-400 transition-colors duration-200"
+                                class="h-5 w-5 text-gray-300 group-focus-within:text-lime-400 transition-colors duration-200"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -110,7 +110,7 @@ const togglePasswordVisibility = () => {
                     <div class="space-y-2">
                         <div class="flex items-center justify-center">
                             <svg
-                                class="h-5 w-5 text-gray-300 group-focus-within:text-teal-400 transition-colors duration-200"
+                                class="h-5 w-5 text-gray-300 group-focus-within:text-lime-400 transition-colors duration-200"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -136,7 +136,7 @@ const togglePasswordVisibility = () => {
                             <button
                                 type="button"
                                 @click="togglePasswordVisibility"
-                                class="inset-y-0 pl-3 flex items-center text-gray-300 hover:text-teal-400 transition-colors duration-200 z-10"
+                                class="inset-y-0 pl-3 flex items-center text-gray-300 hover:text-lime-400 transition-colors duration-200 z-10"
                             >
                                 <svg
                                     v-if="showPassword"
@@ -180,7 +180,7 @@ const togglePasswordVisibility = () => {
                     <button
                         type="submit"
                         :disabled="form.processing || isLoading"
-                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-lime-600 to-emerald-600 hover:from-lime-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
                     >
                         <svg
                             v-if="form.processing || isLoading"

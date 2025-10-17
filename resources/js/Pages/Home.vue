@@ -9,7 +9,7 @@ const props = defineProps({
     <Head :title="`${$page.component} | Rich-Anne Store POS System`" />
 
     <div
-        class="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50"
+        class="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50"
     >
         <!-- Hero Section with Brand Identity -->
         <section
@@ -221,14 +221,14 @@ const props = defineProps({
                                     </div>
                                 </div>
                                 <div
-                                    class="bg-teal-50 rounded-lg p-4 border border-teal-200"
+                                    class="bg-lime-50 rounded-lg p-4 border border-lime-200"
                                 >
                                     <div
-                                        class="text-2xl font-bold text-teal-700"
+                                        class="text-2xl font-bold text-lime-700"
                                     >
                                         ₱{{ Number(props.sale).toFixed(2) }}
                                     </div>
-                                    <div class="text-sm text-teal-600">
+                                    <div class="text-sm text-lime-600">
                                         Total Sales
                                     </div>
                                 </div>
@@ -241,7 +241,7 @@ const props = defineProps({
                                 class="text-lg font-semibold text-gray-900 flex items-center"
                             >
                                 <span
-                                    class="w-2 h-2 bg-teal-500 rounded-full mr-3"
+                                    class="w-2 h-2 bg-lime-500 rounded-full mr-3"
                                 ></span>
                                 System Status
                             </h4>

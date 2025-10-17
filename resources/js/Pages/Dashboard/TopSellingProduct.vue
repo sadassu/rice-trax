@@ -25,7 +25,7 @@ const chartOptions = ref({
         type: "bar",
         height: 400,
     },
-    colors: ["#10B981", "#14B8A6"], // green & teal
+    colors: ["#10B981", "#14B8A6"], // green & lime
     plotOptions: {
         bar: {
             horizontal: false,

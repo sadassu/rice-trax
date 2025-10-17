@@ -72,7 +72,7 @@ const submitForm = () => {
                 <div
                     class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden sticky top-6"
                 >
-                    <div class="bg-teal-600 px-6 py-4 flex items-center">
+                    <div class="bg-lime-600 px-6 py-4 flex items-center">
                         <div
                             class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mr-3"
                         >
@@ -299,7 +299,7 @@ const submitForm = () => {
                     class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
                 >
                     <div
-                        class="bg-teal-600 px-6 py-4 flex items-center justify-between"
+                        class="bg-lime-600 px-6 py-4 flex items-center justify-between"
                     >
                         <div class="flex items-center">
                             <div
@@ -334,11 +334,11 @@ const submitForm = () => {
                                 v-for="employee in filteredEmployees"
                                 :key="employee.id"
                                 @click="selectEmployee(employee)"
-                                class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md hover:border-teal-300 transition-all cursor-pointer group"
+                                class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:shadow-md hover:border-lime-300 transition-all cursor-pointer group"
                             >
                                 <div class="flex items-center mb-3">
                                     <div
-                                        class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mr-4 text-teal-700 font-semibold group-hover:bg-teal-200 transition-colors"
+                                        class="w-12 h-12 bg-lime-100 rounded-full flex items-center justify-center mr-4 text-lime-700 font-semibold group-hover:bg-lime-200 transition-colors"
                                     >
                                         {{
                                             employee.name
@@ -348,7 +348,7 @@ const submitForm = () => {
                                     </div>
                                     <div class="flex-1">
                                         <h4
-                                            class="font-medium text-gray-900 group-hover:text-teal-700"
+                                            class="font-medium text-gray-900 group-hover:text-lime-700"
                                         >
                                             {{ employee.name }}
                                         </h4>

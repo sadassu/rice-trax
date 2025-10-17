@@ -39,7 +39,7 @@ const warningCount = props.lowStockProducts.filter(
         class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
     >
         <!-- Header with Stats -->
-        <div class="bg-gradient-to-r from-teal-500 to-teal-800 p-6 text-white">
+        <div class="bg-gradient-to-r from-lime-500 to-lime-800 p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-2xl font-bold mb-1">Inventory Alert</h2>

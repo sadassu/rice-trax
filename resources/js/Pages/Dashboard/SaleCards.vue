@@ -9,12 +9,12 @@ defineProps({
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Daily Sales Card -->
         <div
-            class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg"
+            class="bg-gradient-to-r from-lime-500 to-lime-600 rounded-2xl p-6 text-white shadow-lg"
         >
             <div class="flex items-center justify-between">
                 <div>
                     <p
-                        class="text-teal-100 text-sm font-medium uppercase tracking-wide"
+                        class="text-lime-100 text-sm font-medium uppercase tracking-wide"
                     >
                         Daily Sales
                     </p>
@@ -42,7 +42,7 @@ defineProps({
 
         <!-- Weekly Sales Card -->
         <div
-            class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg"
+            class="bg-gradient-to-r from-lime-500 to-lime-600 rounded-2xl p-6 text-white shadow-lg"
         >
             <div class="flex items-center justify-between">
                 <div>
@@ -75,7 +75,7 @@ defineProps({
 
         <!-- Monthly Sales Card -->
         <div
-            class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg"
+            class="bg-gradient-to-r from-lime-500 to-lime-600 rounded-2xl p-6 text-white shadow-lg"
         >
             <div class="flex items-center justify-between">
                 <div>
