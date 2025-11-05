@@ -53,7 +53,7 @@ const props = defineProps({
                         </div>
                         <div>
                             <h1 class="text-4xl font-bold tracking-tight">
-                                RiceTrax
+                                RiceTraX
                             </h1>
                             <p class="text-emerald-100 text-lg">
                                 Rich-Anne Store
@@ -64,7 +64,7 @@ const props = defineProps({
                     <!-- Welcome Message -->
                     <div class="max-w-3xl mx-auto">
                         <h2 class="text-3xl font-semibold mb-4">
-                            Point of Sale System
+                            Sales and Inventory System
                         </h2>
                         <p class="text-xl text-emerald-100 leading-relaxed">
                             Professional rice retail management solution for
@@ -177,7 +177,7 @@ const props = defineProps({
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-2xl font-semibold text-gray-900">
-                                Welcome to RiceTrax POS
+                                Welcome to RiceTraX
                             </h3>
                             <p class="text-gray-600 mt-1">
                                 Manage your rice retail business with confidence

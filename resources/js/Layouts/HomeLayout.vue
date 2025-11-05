@@ -12,12 +12,12 @@
                         >
                             <img
                                 :src="'storage/assets/img/logo.jpg'"
-                                alt=""
+                                alt="logo"
                                 class="rounded"
                             />
                         </div>
                         <span class="text-xl font-semibold text-white">
-                            Rice Trax
+                            Rice TraX
                         </span>
                     </div>
 
@@ -67,19 +67,33 @@
                         <!-- Show this if logged in -->
                         <template v-else>
                             <Link
-                                :href="route('admin.dashboard')"
+                                :href="
+                                    $page.props.auth.user.is_admin
+                                        ? route('admin.dashboard')
+                                        : route('pos.index')
+                                "
                                 :class="[
                                     'relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ease-out',
                                     'hover:bg-gray-100 hover:scale-105 hover:shadow-sm',
                                     'active:scale-95',
-                                    $page.component === 'Admin/Dashboard'
+                                    $page.component === 'Admin/Dashboard' ||
+                                    $page.component === 'POS'
                                         ? 'bg-gradient-to-r from-emerald-600 to-lime-600 text-white shadow-lg shadow-emerald-500/25'
                                         : 'text-gray-700 hover:text-gray-900',
                                 ]"
                             >
-                                <span class="relative z-10">Dashboard</span>
+                                <span class="relative z-10 text-white">
+                                    {{
+                                        $page.props.auth.user.is_admin
+                                            ? "Dashboard"
+                                            : "POS"
+                                    }}
+                                </span>
                                 <div
-                                    v-if="$page.component === 'Admin/Dashboard'"
+                                    v-if="
+                                        $page.component === 'Admin/Dashboard' ||
+                                        $page.component === 'POS'
+                                    "
                                     class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-lime-600 rounded-full animate-pulse opacity-20"
                                 ></div>
                             </Link>

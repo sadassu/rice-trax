@@ -51,6 +51,7 @@ const navItems = [
         pageComponent: "Attendances/Attendances",
         label: "Attendance",
         icon: "/storage/assets/icons/calendar.svg",
+        role: "admin",
     },
     {
         href: "accounts",

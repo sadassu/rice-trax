@@ -59,7 +59,7 @@ const chartOptions = ref({
 
 <template>
     <div class="p-4 bg-white rounded-lg shadow">
-        <h2 class="text-lg font-bold mb-4">Top 10 Products by Sales</h2>
+        <h2 class="text-lg font-bold mb-4">Product Sales</h2>
         <apexchart
             type="bar"
             height="400"

@@ -128,8 +128,8 @@ const handleEscape = (e) => {
                                 :message="form.errors.name"
                             />
                             <TextInput
-                                name="contact"
-                                placeholder="Contact"
+                                name="contact "
+                                placeholder="+63 9xxx xxx xxxx"
                                 v-model="form.contact"
                                 :message="form.errors.contact"
                             />

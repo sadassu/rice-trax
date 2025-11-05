@@ -32,7 +32,9 @@ class StoreEmployeeRequest extends FormRequest
                 'required',
                 'string',
                 'min:7',
+                'regex:/^((\+63)|0)9\d{2}[-. ]?\d{3}[-. ]?\d{4}$/'
             ],
+            'contact.regex' => 'The contact number must be a valid Philippine mobile number.',
             'rate' => [
                 'required',
                 'numeric',

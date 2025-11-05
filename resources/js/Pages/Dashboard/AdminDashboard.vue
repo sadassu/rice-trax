@@ -105,7 +105,7 @@ const lineChartSeries = computed(() => {
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                Admin Dashboard
+                Dashboard
             </h1>
             <p class="text-gray-600">
                 Monitor your sales, inventory, and system activities

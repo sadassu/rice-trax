@@ -9,6 +9,9 @@ defineProps({
         type: String,
         required: true,
     },
+    placeholder: {
+        type: String,
+    },
     type: {
         type: String,
         default: "text",
@@ -36,7 +39,11 @@ defineProps({
                     '!border-red-500 !ring-red-500 ring-2': message,
                     'pr-10': $slots.icon, // add right padding if icon is present
                 }"
-                :placeholder="`Enter ${name}`"
+                :placeholder="
+                    placeholder
+                        ? `${placeholder}`
+                        : `Enter ${name}`
+                "
             />
 
             <!-- Optional right-side icon -->
