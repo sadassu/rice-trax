@@ -119,7 +119,7 @@ const filteredNavItems = computed(() => {
                 >
                     <div class="relative">
                         <img
-                            :src="'../storage/assets/img/logo.jpg'"
+                            :src="'/storage/assets/img/logo.jpg'"
                             alt="Company Logo"
                             class="rounded-xl w-full shadow-lg ring-2 ring-white/20"
                         />
