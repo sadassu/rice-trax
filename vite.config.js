@@ -23,11 +23,6 @@ export default defineConfig({
             "@img": resolve(__dirname, "resources/js/assets/img"),
         },
     },
-
-    server: {
-        cors: true,
-        origin: "http://127.0.0.1:5173", // or http://localhost:5173
-    },
     // server: {
     //     host: '0.0.0.0',
     //     port: 5173,

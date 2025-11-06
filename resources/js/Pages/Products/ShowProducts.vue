@@ -3,16 +3,18 @@ import { ref, watch } from "vue";
 import SideBar from "../../Layouts/SideBar.vue";
 import CreateProduct from "./CreateProduct.vue";
 import UpdateProduct from "./UpdateProduct.vue";
-import { router } from "@inertiajs/vue3";
-import { debounce } from "lodash";
 import DeleteProduct from "./DeleteProduct.vue";
+import PaginationLinks from "../../Components/PaginationLinks.vue";
+import { router, usePage, Link } from "@inertiajs/vue3";
+import { debounce } from "lodash";
 import { formatCurrency } from "../../utils/currencyFormat";
 import { formatDate } from "../../utils/dateFormat";
 import { formatSack } from "../../utils/helper";
-import PaginationLinks from "../../Components/PaginationLinks.vue";
 import { isSafeRowClick } from "../../utils/eventHelper";
 
 defineOptions({ layout: SideBar });
+
+const page = usePage();
 
 const props = defineProps({
     products: Object,
@@ -21,11 +23,25 @@ const props = defineProps({
 
 const search = ref(props.searchTerm);
 
-function onRowClick(event, id) {
-    if (!isSafeRowClick(event)) return;
-    router.visit(route("products.show", id));
-}
+const createdProductId = ref(null);
 
+// 🔍 Watch for flash.created_at from Laravel
+watch(
+    () => page.props.flash?.created_product_id,
+    (newVal) => {
+        if (newVal) {
+            createdProductId.value = newVal;
+
+            // Remove highlight after 5 seconds
+            setTimeout(() => {
+                createdProductId.value = null;
+            }, 5000);
+        }
+    },
+    { immediate: true }
+);
+
+// 🔄 Debounced search
 watch(
     search,
     debounce(
@@ -33,6 +49,11 @@ watch(
         500
     )
 );
+
+function onRowClick(event, id) {
+    if (!isSafeRowClick(event)) return;
+    router.visit(route("products.show", id));
+}
 </script>
 
 <template>
@@ -88,7 +109,6 @@ watch(
                         >
                             Sack
                         </th>
-
                         <th
                             class="px-6 py-3 text-center text-sm font-medium text-gray-900"
                         >
@@ -96,12 +116,17 @@ watch(
                         </th>
                     </tr>
                 </thead>
+
                 <tbody class="divide-y divide-gray-200">
                     <tr
                         v-for="product in products.data"
                         :key="product.id"
                         @click="onRowClick($event, product.id)"
                         class="hover:bg-gray-50 cursor-pointer transition-colors"
+                        :class="{
+                            'border-2 border-lime-500 bg-lime-50 transition-all duration-500':
+                                product.id === createdProductId,
+                        }"
                     >
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
@@ -158,6 +183,10 @@ watch(
                 v-for="product in products.data"
                 :key="product.id"
                 class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm"
+                :class="{
+                    'border-2 border-lime-500 bg-lime-50 transition-all duration-500':
+                        product.id === createdProductId,
+                }"
             >
                 <div class="flex items-center gap-3 mb-3">
                     <div

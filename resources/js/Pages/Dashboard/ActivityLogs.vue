@@ -39,11 +39,6 @@ defineProps({
                         >
                             Description
                         </th>
-                        <th
-                            class="text-left py-3 px-2 text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                            Time
-                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
@@ -80,9 +75,6 @@ defineProps({
                         </td>
                         <td class="py-3 px-2 text-sm text-gray-600">
                             {{ log.description }}
-                        </td>
-                        <td class="py-3 px-2 text-sm text-gray-500">
-                            {{ formatDate(log.created_at) }}
                         </td>
                     </tr>
                 </tbody>

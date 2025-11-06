@@ -38,7 +38,7 @@ const props = defineProps({
                             >
                                 <!-- Rice grain icon -->
                                 <img
-                                    :src="'/storage/assets/img/logo.jpg'"
+                                    :src="'/assets/img/logo.jpg'"
                                     alt=""
                                     class="rounded-2xl"
                                 />

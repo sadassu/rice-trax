@@ -53,7 +53,7 @@ const outOfStockCount = props.lowStockProducts.filter(
         <div class="bg-gradient-to-r from-lime-500 to-lime-800 p-6 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-2xl font-bold mb-1">Inventory Alert</h2>
+                    <h2 class="text-2xl font-bold mb-1">Inventory Status</h2>
                     <p class="text-red-50 text-sm">
                         Products requiring attention
                     </p>

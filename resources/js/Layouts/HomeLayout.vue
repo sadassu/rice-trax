@@ -11,7 +11,7 @@
                             class="w-16 h-16 bg-gradient-to-r from-emerald-600 to-lime-600 rounded-lg flex items-center justify-center"
                         >
                             <img
-                                :src="'/storage/assets/img/logo.jpg'"
+                                :src="'/assets/img/logo.jpg'"
                                 alt="logo"
                                 class="rounded"
                             />

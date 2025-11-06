@@ -54,9 +54,13 @@ class ProductController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->header('User-Agent'),
         ]);
-
-        return redirect()->route('products.index')
-            ->with(['product' => $product, 'message', 'Product created successfully!']);
+        return redirect()
+            ->route('products.index')
+            ->with([
+                'product' => $product,
+                'message' => 'Product created successfully!',
+                'created_product_id' => $product->id,
+            ]);
     }
 
     /**
