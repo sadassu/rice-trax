@@ -11,25 +11,24 @@ const props = defineProps({
 const getStockStatus = (kg) => {
     if (kg === 0) return { level: "out", label: "Out of Stock" };
     if (kg < 50) return { level: "critical", label: "Critical" };
-    if (kg >= 50 && kg <= 100) return { level: "warning", label: "Low" };
-    return { level: "normal", label: "Normal" };
+    if (kg >= 50 && kg <= 100) return { level: "warning", label: "Low Stock" };
+    return { level: "normal", label: "In Stock" };
 };
 
 const getStatusStyles = (kg) => {
-    if (kg === 0)
-        return "bg-gray-100 border-l-4 border-gray-600 hover:bg-gray-200";
+    if (kg === 0) return "bg-red-50 border-l-4 border-red-500 hover:bg-red-100";
     if (kg < 50) return "bg-red-50 border-l-4 border-red-500 hover:bg-red-100";
     if (kg >= 50 && kg <= 100)
         return "bg-amber-50 border-l-4 border-amber-500 hover:bg-amber-100";
-    return "bg-gray-50 border-l-4 border-gray-300 hover:bg-gray-100";
+    return "bg-green-50 border-l-4 border-green-500 hover:bg-green-100";
 };
 
 const getBadgeStyles = (kg) => {
-    if (kg === 0) return "bg-gray-200 text-gray-700 border border-gray-400";
+    if (kg === 0) return "bg-red-100 text-red-700 border border-red-200";
     if (kg < 50) return "bg-red-100 text-red-700 border border-red-200";
     if (kg >= 50 && kg <= 100)
         return "bg-amber-100 text-amber-700 border border-amber-200";
-    return "bg-gray-100 text-gray-700 border border-gray-200";
+    return "bg-green-100 text-green-700 border border-green-200";
 };
 
 const criticalCount = props.lowStockProducts.filter(
@@ -153,7 +152,7 @@ const outOfStockCount = props.lowStockProducts.filter(
                             class="h-full rounded-full transition-all duration-300"
                             :class="
                                 item.total_remaining === 0
-                                    ? 'bg-gray-500'
+                                    ? 'bg-red-500'
                                     : item.total_remaining < 50
                                     ? 'bg-red-500'
                                     : item.total_remaining <= 100
