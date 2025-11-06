@@ -31,7 +31,6 @@ const navItems = [
         pageComponent: "Sales/Sales",
         label: "Sales",
         icon: "/assets/icons/sale.svg",
-        role: "admin",
     },
     {
         href: "employees.index",

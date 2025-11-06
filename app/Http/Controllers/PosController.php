@@ -49,6 +49,7 @@ class PosController extends Controller
 
             $sale = Sale::create([
                 'total_price' => $request->total,
+                'user_id' => Auth::id(),
                 'sale_date' => Carbon::now(),
                 'amount_paid' => $request->amount_paid,
                 'change' => $request->amount_paid - $request->total,

@@ -1,10 +1,20 @@
 <script setup>
 import SideBar from "../../Layouts/SideBar.vue";
 import { Link, router } from "@inertiajs/vue3";
-import { watch } from "vue";
 import PaginationLinks from "../../Components/PaginationLinks.vue";
 import ExportSale from "./ExportSale.vue";
 import ImportSale from "./ImportSale.vue";
+import {
+    BanknoteArrowDown,
+    Calendar,
+    CheckCircle,
+    Eye,
+    DollarSign,
+    Wallet,
+    RefreshCw,
+    FileText,
+    User,
+} from "lucide-vue-next";
 
 defineOptions({
     layout: SideBar,
@@ -103,20 +113,7 @@ const formatDate = (dateString) => {
                         <div
                             class="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center"
                         >
-                            <svg
-                                class="w-3.5 h-3.5 sm:w-4 sm:h-4"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"
-                                />
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
+                            <BanknoteArrowDown class="w-4 h-4" />
                         </div>
                     </div>
                     <p class="text-2xl sm:text-3xl font-bold">
@@ -139,17 +136,7 @@ const formatDate = (dateString) => {
                         <div
                             class="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center"
                         >
-                            <svg
-                                class="w-3.5 h-3.5 sm:w-4 sm:h-4"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
+                            <CheckCircle class="w-4 h-4" />
                         </div>
                     </div>
                     <p class="text-2xl sm:text-3xl font-bold">
@@ -172,17 +159,7 @@ const formatDate = (dateString) => {
                         <div
                             class="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-lg flex items-center justify-center"
                         >
-                            <svg
-                                class="w-3.5 h-3.5 sm:w-4 sm:h-4"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
+                            <Calendar class="w-4 h-4" />
                         </div>
                     </div>
                     <p class="text-2xl sm:text-3xl font-bold">
@@ -295,6 +272,11 @@ const formatDate = (dateString) => {
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                 >
+                                    Cashier
+                                </th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                >
                                     Total Price
                                 </th>
                                 <th
@@ -326,6 +308,11 @@ const formatDate = (dateString) => {
                                     {{ formatDate(item.sale_date) }}
                                 </td>
                                 <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                                >
+                                    {{ item.user ? item.user.name : "—" }}
+                                </td>
+                                <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
                                 >
                                     {{ formatCurrency(item.total_price) }}
@@ -351,25 +338,7 @@ const formatDate = (dateString) => {
                                         "
                                         class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
-                                        <svg
-                                            class="w-4 h-4 mr-2"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                            />
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                            />
-                                        </svg>
+                                        <Eye class="w-4 h-4 mr-2" />
                                         View Receipt
                                     </button>
                                 </td>
@@ -406,27 +375,23 @@ const formatDate = (dateString) => {
                             @click="router.get(route('receipt', item.id))"
                             class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                         >
-                            <svg
-                                class="w-3 h-3 mr-1.5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                />
-                            </svg>
+                            <Eye class="w-3 h-3 mr-1.5" />
                             View
                         </button>
+                    </div>
+
+                    <div
+                        class="bg-blue-50 p-3 rounded-lg border border-blue-100 mb-3"
+                    >
+                        <div class="flex items-center gap-2 mb-1">
+                            <User class="w-3 h-3 text-blue-600" />
+                            <span class="text-xs font-medium text-blue-700"
+                                >Cashier</span
+                            >
+                        </div>
+                        <p class="text-sm font-semibold text-blue-900">
+                            {{ item.user ? item.user.name : "—" }}
+                        </p>
                     </div>
 
                     <div class="grid grid-cols-1 gap-3">
@@ -436,20 +401,9 @@ const formatDate = (dateString) => {
                             <div class="flex items-center justify-between">
                                 <div>
                                     <div class="flex items-center gap-2 mb-1">
-                                        <svg
+                                        <DollarSign
                                             class="w-3 h-3 text-green-600"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                        >
-                                            <path
-                                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"
-                                            />
-                                            <path
-                                                fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                                clip-rule="evenodd"
-                                            />
-                                        </svg>
+                                        />
                                         <span
                                             class="text-xs font-medium text-green-700"
                                             >Total Price</span
@@ -465,15 +419,7 @@ const formatDate = (dateString) => {
                         <div class="grid grid-cols-2 gap-3">
                             <div class="bg-gray-50 p-3 rounded-lg">
                                 <div class="flex items-center gap-2 mb-1">
-                                    <svg
-                                        class="w-3 h-3 text-gray-600"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                                        />
-                                    </svg>
+                                    <Wallet class="w-3 h-3 text-gray-600" />
                                     <span
                                         class="text-xs font-medium text-gray-600"
                                         >Amount Paid</span
@@ -486,17 +432,9 @@ const formatDate = (dateString) => {
 
                             <div class="bg-orange-50 p-3 rounded-lg">
                                 <div class="flex items-center gap-2 mb-1">
-                                    <svg
+                                    <RefreshCw
                                         class="w-3 h-3 text-orange-600"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                            clip-rule="evenodd"
-                                        />
-                                    </svg>
+                                    />
                                     <span
                                         class="text-xs font-medium text-orange-600"
                                         >Change</span
@@ -521,19 +459,7 @@ const formatDate = (dateString) => {
                 <div
                     class="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
                 >
-                    <svg
-                        class="w-10 h-10 sm:w-12 sm:h-12 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                    </svg>
+                    <FileText class="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
                 </div>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">
                     No sales found

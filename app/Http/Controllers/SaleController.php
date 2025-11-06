@@ -22,7 +22,14 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $query = Sale::query();
+        $user = Auth::user();
+
+        $query = Sale::query()->with('user');
+
+        // ✅ Only show all sales if the user is an admin
+        if ($user->role !== 'admin') {
+            $query->where('user_id', $user->id);
+        }
 
         // Filter by month
         if (request('month')) {

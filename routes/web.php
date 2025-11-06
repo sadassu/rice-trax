@@ -81,13 +81,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('/products', ProductController::class)
         ->except(['create']);
     Route::resource('/employees', EmployeeController::class);
+    Route::resource('/sales', SaleController::class)
+        ->except(['create', 'update', 'destroy']);
 
     //resource for admin only
     Route::resource('/attendances', AttendanceController::class)
         ->except(['create', 'store'])
-        ->middleware('role:admin');
-    Route::resource('/sales', SaleController::class)
-        ->except(['create', 'update', 'destroy'])
         ->middleware('role:admin');
 });
 

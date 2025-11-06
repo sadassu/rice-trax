@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -16,7 +17,8 @@ class Sale extends Model
         'total_price',
         'sale_date',
         'amount_paid',
-        'change'
+        'change',
+        'user_id'
     ];
 
     protected $casts = [
@@ -26,6 +28,11 @@ class Sale extends Model
     public function saleDetails(): HasMany
     {
         return $this->hasMany(SaleDetail::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     // 🔹 Total sales for today
