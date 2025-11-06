@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use Carbon\CarbonPeriod;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,9 +24,13 @@ class DashboardController extends Controller
         $recentLogs         = $this->recentActivityLogs();
 
         // Fetch notifications that haven't expired yet
-        $notifications = Notification::where('expired_at', '>', now())
-            ->orderBy('created_at', 'desc')
-            ->get();
+        try {
+            $notifications = Notification::where('expired_at', '>', now())
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } catch (QueryException $e) {
+            $notifications = collect();
+        }
 
         return Inertia::render('Dashboard/AdminDashboard', [
             'forecastedSale'     => $forecastedSale,

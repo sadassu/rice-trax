@@ -13,7 +13,7 @@ const props = defineProps({
     >
         <!-- Hero Section with Brand Identity -->
         <section
-            class="relative overflow-hidden bg-[url(assets/img/background-rt.jpg)] bg-no-repeat bg-cover text-white h-1/2"
+            class="relative overflow-hidden bg-[url(/assets/img/background-rt.jpg)] bg-no-repeat bg-cover text-white h-1/2"
         >
             <!-- Background Pattern -->
             <div class="absolute inset-0 opacity-10">
@@ -38,7 +38,7 @@ const props = defineProps({
                             >
                                 <!-- Rice grain icon -->
                                 <img
-                                    :src="'storage/assets/img/logo.jpg'"
+                                    :src="'@img/img/logo.jpg'"
                                     alt=""
                                     class="rounded-2xl"
                                 />
