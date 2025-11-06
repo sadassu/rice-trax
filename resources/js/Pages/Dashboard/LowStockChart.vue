@@ -8,39 +8,39 @@ const props = defineProps({
     },
 });
 
+// Stock status labels
 const getStockStatus = (kg) => {
-    if (kg === 0) return { level: "out", label: "Out of Stock" };
-    if (kg < 50) return { level: "critical", label: "Critical" };
-    if (kg >= 50 && kg <= 100) return { level: "warning", label: "Low Stock" };
-    return { level: "normal", label: "In Stock" };
+    if (kg <= 0) return { level: "out", label: "Out of Stock" };
+    if (kg < 50) return { level: "low", label: "Low Stock" };
+    return { level: "in", label: "In Stock" };
 };
 
+// Background & border color styles
 const getStatusStyles = (kg) => {
-    if (kg === 0) return "bg-red-50 border-l-4 border-red-500 hover:bg-red-100";
-    if (kg < 50) return "bg-red-50 border-l-4 border-red-500 hover:bg-red-100";
-    if (kg >= 50 && kg <= 100)
+    if (kg <= 0) return "bg-red-50 border-l-4 border-red-500 hover:bg-red-100";
+    if (kg < 50)
         return "bg-amber-50 border-l-4 border-amber-500 hover:bg-amber-100";
     return "bg-green-50 border-l-4 border-green-500 hover:bg-green-100";
 };
 
+// Badge color styles
 const getBadgeStyles = (kg) => {
-    if (kg === 0) return "bg-red-100 text-red-700 border border-red-200";
-    if (kg < 50) return "bg-red-100 text-red-700 border border-red-200";
-    if (kg >= 50 && kg <= 100)
-        return "bg-amber-100 text-amber-700 border border-amber-200";
+    if (kg <= 0) return "bg-red-100 text-red-700 border border-red-200";
+    if (kg < 50) return "bg-amber-100 text-amber-700 border border-amber-200";
     return "bg-green-100 text-green-700 border border-green-200";
 };
 
-const criticalCount = props.lowStockProducts.filter(
-    (p) => p.total_remaining < 50 && p.total_remaining > 0
-).length;
-
-const warningCount = props.lowStockProducts.filter(
-    (p) => p.total_remaining >= 50 && p.total_remaining <= 100
-).length;
-
+// Count summaries
 const outOfStockCount = props.lowStockProducts.filter(
-    (p) => p.total_remaining === 0
+    (p) => p.total_remaining <= 0
+).length;
+
+const lowStockCount = props.lowStockProducts.filter(
+    (p) => p.total_remaining > 0 && p.total_remaining < 50
+).length;
+
+const inStockCount = props.lowStockProducts.filter(
+    (p) => p.total_remaining >= 50
 ).length;
 </script>
 
@@ -69,12 +69,12 @@ const outOfStockCount = props.lowStockProducts.filter(
                     <div class="text-red-50 text-sm">Out of Stock</div>
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div class="text-3xl font-bold">{{ criticalCount }}</div>
-                    <div class="text-red-50 text-sm">Critical Stock</div>
+                    <div class="text-3xl font-bold">{{ lowStockCount }}</div>
+                    <div class="text-red-50 text-sm">Low Stock</div>
                 </div>
                 <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div class="text-3xl font-bold">{{ warningCount }}</div>
-                    <div class="text-red-50 text-sm">Low Stock</div>
+                    <div class="text-3xl font-bold">{{ inStockCount }}</div>
+                    <div class="text-red-50 text-sm">In Stock</div>
                 </div>
             </div>
         </div>
@@ -154,7 +154,7 @@ const outOfStockCount = props.lowStockProducts.filter(
                                 item.total_remaining === 0
                                     ? 'bg-red-500'
                                     : item.total_remaining < 50
-                                    ? 'bg-red-500'
+                                    ? 'bg-amber-500'
                                     : item.total_remaining <= 100
                                     ? 'bg-amber-500'
                                     : 'bg-green-500'
