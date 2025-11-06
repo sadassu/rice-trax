@@ -29,7 +29,23 @@ class UpdateProductRequest extends FormRequest
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0',
             ],
+        ];
+    }
 
+    /**
+     * Custom messages for validation errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Please enter the product name.',
+            'name.string' => 'The product name must be a valid text.',
+            'name.max' => 'The product name may not exceed 255 characters.',
+
+            'price_per_kilo.required' => 'Please enter the price per kilo.',
+            'price_per_kilo.numeric' => 'The price per kilo must be numeric.',
+            'price_per_kilo.regex' => 'The price per kilo must be a valid amount (up to 2 decimal places).',
+            'price_per_kilo.min' => 'The price per kilo cannot be negative.',
         ];
     }
 }

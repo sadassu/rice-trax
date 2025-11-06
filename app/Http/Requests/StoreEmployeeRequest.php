@@ -16,8 +16,6 @@ class StoreEmployeeRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -34,7 +32,6 @@ class StoreEmployeeRequest extends FormRequest
                 'min:7',
                 'regex:/^((\+63)|0)9\d{2}[-. ]?\d{3}[-. ]?\d{4}$/'
             ],
-            'contact.regex' => 'The contact number must be a valid Philippine mobile number.',
             'rate' => [
                 'required',
                 'numeric',
@@ -44,6 +41,24 @@ class StoreEmployeeRequest extends FormRequest
                 'required',
                 'in:Cashier,Helper,Manager',
             ],
+        ];
+    }
+
+    /**
+     * Custom messages for validation errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Please enter the employee’s name.',
+            'name.min' => 'The name must be at least 2 characters long.',
+            'contact.required' => 'Please enter a contact number.',
+            'contact.min' => 'The contact is not a valid number',
+            'contact.regex' => 'The contact number must be a valid Philippine mobile number.',
+            'rate.required' => 'Please enter a rate.',
+            'rate.numeric' => 'The rate must be a number.',
+            'role.required' => 'Please select a role.',
+            'role.in' => 'The selected role is invalid.',
         ];
     }
 }
