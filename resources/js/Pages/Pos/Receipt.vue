@@ -155,7 +155,7 @@ const downloadReceipt = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            ${props.sale.sale_detail
+                            ${props.sale.sale_details
                                 .map(
                                     (detail) => `
                                 <tr>
@@ -220,7 +220,6 @@ function goBack() {
 
 <template>
     <div class="min-h-screen bg-gray-50 p-6">
-
         <!-- Receipt Content (This will be printed) -->
         <div
             id="receipt-content"
@@ -368,7 +367,7 @@ function goBack() {
         <div class="flex items-center justify-center gap-2 mt-4">
             <button
                 @click="downloadReceipt"
-                class="w-64 bg-gray-800 hover:bg-gray-900 p-3 text-white font-semibold  rounded border shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                class="w-64 bg-gray-800 hover:bg-gray-900 p-3 text-white font-semibold rounded border shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
             >
                 <svg
                     class="w-5 h-5"
