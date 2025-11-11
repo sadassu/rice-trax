@@ -1,5 +1,6 @@
 <script setup>
 import SideBar from "../../Layouts/SideBar.vue";
+import { formatCurrency } from "../../utils/currencyFormat";
 
 defineOptions({
     layout: SideBar,
@@ -205,14 +206,6 @@ const formatDate = (dateString) => {
     });
 };
 
-// Format currency
-const formatCurrency = (amount) => {
-    return Number(amount).toLocaleString("en-PH", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
-};
-
 function goBack() {
     window.history.back();
 }
@@ -247,11 +240,9 @@ function goBack() {
                             </div>
                             <div class="flex justify-between items-center py-2">
                                 <span class="font-semibold">Total Amount:</span>
-                                <span class="font-bold text-lg"
-                                    >₱{{
-                                        formatCurrency(sale.total_price)
-                                    }}</span
-                                >
+                                <span class="font-bold text-lg">{{
+                                    formatCurrency(sale.total_price)
+                                }}</span>
                             </div>
                         </div>
                         <div class="space-y-3">
@@ -259,17 +250,15 @@ function goBack() {
                                 class="flex justify-between items-center py-2 border-b border-gray-200"
                             >
                                 <span class="font-semibold">Amount Paid:</span>
-                                <span class="font-bold"
-                                    >₱{{
-                                        formatCurrency(sale.amount_paid)
-                                    }}</span
-                                >
+                                <span class="font-bold">{{
+                                    formatCurrency(sale.amount_paid)
+                                }}</span>
                             </div>
                             <div class="flex justify-between items-center py-2">
                                 <span class="font-semibold">Change:</span>
-                                <span class="font-bold"
-                                    >₱{{ formatCurrency(sale.change) }}</span
-                                >
+                                <span class="font-bold">{{
+                                    formatCurrency(sale.change)
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -334,7 +323,7 @@ function goBack() {
                                     <td
                                         class="border border-gray-800 px-4 py-3 text-center"
                                     >
-                                        ₱{{
+                                        {{
                                             formatCurrency(
                                                 detail.price_per_kilo
                                             )
@@ -343,9 +332,7 @@ function goBack() {
                                     <td
                                         class="border border-gray-800 px-4 py-3 text-right font-semibold"
                                     >
-                                        ₱{{
-                                            formatCurrency(detail.total_price)
-                                        }}
+                                        {{ formatCurrency(detail.total_price) }}
                                     </td>
                                 </tr>
                             </tbody>

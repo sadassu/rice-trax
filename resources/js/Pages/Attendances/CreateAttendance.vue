@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import SideBar from "../../Layouts/SideBar.vue";
 import TodayAttendances from "./TodayAttendances.vue";
 import { router } from "@inertiajs/vue3";
+import { formatCurrency } from "../../utils/currencyFormat";
 
 defineOptions({
     layout: SideBar,
@@ -187,8 +188,11 @@ const submitForm = () => {
                                                 <b>Role:</b> {{ selected.role }}
                                             </p>
                                             <p>
-                                                <b>Rate:</b> ₱{{
-                                                    selected.rate
+                                                <b>Rate:</b>
+                                                {{
+                                                    formatCurrency(
+                                                        selected.rate
+                                                    )
                                                 }}/hr
                                             </p>
                                         </div>

@@ -199,7 +199,7 @@ function onRowClick(event, id) {
                             {{ product.name }}
                         </h2>
                         <p class="text-sm text-gray-500">
-                            ₱{{ formatCurrency(product.price_per_kilo) }}/kg
+                            {{ formatCurrency(product.price_per_kilo) }}/kg
                         </p>
                     </div>
                 </div>
