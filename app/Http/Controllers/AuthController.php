@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Inertia\Inertia;
 
 class AuthController extends Controller
@@ -53,18 +54,32 @@ class AuthController extends Controller
             'password' => ['required', 'max:255']
         ]);
 
+        $key = 'login-attempts:' . $request->ip(); // per IP throttling
+
+        if (RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors([
+                'email' => "Too many login attempts. Please try again in $seconds seconds."
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($fields, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            // Clear attempts on successful login
+            RateLimiter::clear($key);
+
             $user = Auth::user();
 
-            // redirect based on role
             if ($user->role === 'admin') {
                 return redirect()->intended('/admin-dashboard');
             }
 
             return redirect()->intended('/pos');
         }
+
+        // Increment attempts after a failed login
+        RateLimiter::hit($key, 60);
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
@@ -110,5 +125,42 @@ class AuthController extends Controller
         ]);
 
         return redirect()->back()->with('message', 'Password updated successfully.');
+    }
+
+    public function deleteUser(User $user)
+    {
+        // Ensure only admins can perform this action
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Prevent admin from deleting themselves (optional)
+        if (Auth::id() === $user->id) {
+            return back()->with('error', 'You cannot delete your own account.');
+        }
+
+        // Store user data for logging before deletion
+        $deletedUserData = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ];
+
+        // Delete the user
+        $user->delete();
+
+        // Log the activity
+        ActivityLog::create([
+            'user_id'    => Auth::id(),
+            'event'      => 'delete',
+            'module'     => 'User Management',
+            'description' => 'Deleted user: ' . $deletedUserData['name'] . ' (ID: ' . $deletedUserData['id'] . ')',
+            'properties' => $deletedUserData,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+
+        return redirect()->back()->with('success', 'User deleted successfully.');
     }
 }

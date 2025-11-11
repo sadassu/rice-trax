@@ -3,6 +3,7 @@ import axios from "axios";
 import SideBar from "../../Layouts/SideBar.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import { formatCurrency } from "../../utils/currencyFormat";
 defineOptions({ layout: SideBar });
 const props = defineProps({
     employee: Object,
@@ -234,9 +235,9 @@ const goBack = () => {
                             <span class="text-slate-600 font-medium"
                                 >Total Hours</span
                             >
-                            <span class="text-slate-900 font-semibold"
-                                >{{ result.total_hours }} hrs</span
-                            >
+                            <span class="text-slate-900 font-semibold">
+                                {{ Math.abs(result.total_hours) }} hrs
+                            </span>
                         </div>
 
                         <div
@@ -261,13 +262,10 @@ const goBack = () => {
                                     >Total Salary</span
                                 >
                                 <span class="text-3xl font-bold text-green-700">
-                                    ₱{{
-                                        Number(
-                                            result.total_salary
-                                        ).toLocaleString("en-PH", {
-                                            minimumFractionDigits: 2,
-                                            maximumFractionDigits: 2,
-                                        })
+                                    {{
+                                        formatCurrency(
+                                            Math.abs(result.total_salary)
+                                        )
                                     }}
                                 </span>
                             </div>

@@ -6,7 +6,6 @@ use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\ActivityLog;
-use App\Models\Attendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,48 +38,34 @@ class EmployeeController extends Controller
     public function computeSalary(Request $request, Employee $employee)
     {
         $validated = $request->validate([
-            'start_date' => ['required', 'date'],
-            'end_date'   => ['required', 'date', 'after_or_equal:start_date'],
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date|after_or_equal:start_date',
         ]);
 
         $startDate = Carbon::parse($validated['start_date'])->startOfDay();
         $endDate   = Carbon::parse($validated['end_date'])->endOfDay();
 
-        // Fetch attendance records for the employee within the range
-        $attendances = Attendance::where('employee_id', $employee->id)
+        $attendances = $employee->attendances()
             ->whereBetween('date', [$startDate, $endDate])
+            ->where('status', 'present')
             ->get();
 
         $totalHours = 0;
-        $totalAmount = 0;
 
         foreach ($attendances as $attendance) {
-            if ($attendance->time_in && $attendance->time_out && $attendance->status === 'present') {
+            if ($attendance->time_in && $attendance->time_out) {
                 $timeIn  = Carbon::parse($attendance->time_in);
                 $timeOut = Carbon::parse($attendance->time_out);
 
-                // Ensure time_out is after time_in
-                if ($timeOut->lessThanOrEqualTo($timeIn)) {
-                    continue;
+                if ($timeOut->greaterThanOrEqualTo($timeIn)) {
+                    $hours = $timeOut->floatDiffInHours($timeIn);
+                    $totalHours += $hours;
                 }
-
-                // Get accurate fractional hours
-                $hours = $timeOut->floatDiffInHours($timeIn);
-
-                // Skip if less than 1 hour
-                if ($hours < 1) {
-                    continue;
-                }
-
-                $hours = round($hours, 2);
-                $earned = $hours * $employee->rate;
-
-                $totalHours += $hours;
-                $totalAmount += $earned;
             }
         }
 
-        // Log activity
+        $totalSalary = round($totalHours * $employee->rate, 2);
+
         ActivityLog::create([
             'user_id'     => Auth::id(),
             'event'       => 'computed',
@@ -91,7 +76,7 @@ class EmployeeController extends Controller
             'properties'  => [
                 'employee_id' => $employee->id,
                 'total_hours' => round($totalHours, 2),
-                'total_salary' => round($totalAmount, 2),
+                'total_salary' => round($totalSalary, 2),
                 'period' => [
                     'start_date' => $startDate->toDateString(),
                     'end_date'   => $endDate->toDateString(),
@@ -105,11 +90,11 @@ class EmployeeController extends Controller
             'employee_id'   => $employee->id,
             'employee_name' => $employee->name,
             'total_hours'   => round($totalHours, 2),
-            'total_salary'  => round($totalAmount, 2),
-            'period' => [
+            'total_salary'  => $totalSalary,
+            'period'        => [
                 'start_date' => $startDate->toDateString(),
                 'end_date'   => $endDate->toDateString(),
-            ]
+            ],
         ]);
     }
 

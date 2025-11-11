@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         // Fetch notifications that haven't expired yet
         try {
-            $notifications = Notification::where('expired_at', '>', now())
+            $notifications = Notification::where('expires_at', '>', now())
                 ->orderBy('created_at', 'desc')
                 ->get();
         } catch (QueryException $e) {

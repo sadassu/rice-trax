@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounts', [AuthController::class, 'accounts'])
         ->name('accounts')
         ->middleware('role:admin');
+    Route::delete('/users/{user}', [AuthController::class, 'deleteUser'])
+        ->name('admin.users.delete')
+        ->middleware('role:admin');
+
 
     //others
     Route::get('/product-batches/batch/{product}', [ProductBatchController::class, 'showBatchesByProduct'])
@@ -48,6 +52,8 @@ Route::middleware('auth')->group(function () {
             'employee' => $employee,
         ]);
     })->name('employees.computeSalary.page');
+
+
 
     //export excel
     Route::post("/sales/export", [SaleController::class, 'export'])

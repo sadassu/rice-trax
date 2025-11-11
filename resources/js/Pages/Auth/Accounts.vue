@@ -2,6 +2,7 @@
 import PaginationLinks from "../../Components/PaginationLinks.vue";
 import SideBar from "../../Layouts/SideBar.vue";
 import ChangePassword from "./ChangePassword.vue";
+import DeleteUser from "./DeleteUser.vue";
 
 defineOptions({ layout: SideBar });
 
@@ -50,8 +51,9 @@ defineProps({
                         </td>
                         <td class="px-6 py-4">{{ user.email }}</td>
                         <td class="px-6 py-4">{{ user.role }}</td>
-                        <td class="px-6 py-4">
+                        <td class="flex gap-2 px-6 py-4">
                             <ChangePassword :user="user" />
+                            <DeleteUser :user="user" />
                         </td>
                     </tr>
                 </tbody>

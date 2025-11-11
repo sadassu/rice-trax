@@ -104,9 +104,7 @@ const lineChartSeries = computed(() => {
     <div class="min-h-screen bg-gray-50 p-6">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                Dashboard
-            </h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
             <p class="text-gray-600">
                 Monitor your sales, inventory, and system activities
             </p>
@@ -155,6 +153,26 @@ const lineChartSeries = computed(() => {
                             </div>
                         </div>
                     </div>
+
+                    <!-- Explanation paragraph -->
+                    <ul
+                        class="text-gray-700 mb-4 text-sm list-disc list-inside space-y-1"
+                    >
+                        <li>
+                            <strong>Levels:</strong> Show the actual daily
+                            revenue.
+                        </li>
+                        <li>
+                            <strong>Trends:</strong> Highlight the overall
+                            direction of sales over time.
+                        </li>
+                        <li>
+                            <strong>Forecast:</strong> Predicts future sales
+                            based on historical trends using Holt’s Linear
+                            method.
+                        </li>
+                    </ul>
+
                     <div class="h-80">
                         <VueApexCharts
                             type="line"
