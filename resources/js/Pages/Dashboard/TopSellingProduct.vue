@@ -24,6 +24,7 @@ const chartOptions = ref({
     chart: {
         type: "bar",
         height: 400,
+        foreColor: "#000000",
     },
     colors: ["#10B981", "#14B8A6"], // green & lime
     plotOptions: {
@@ -34,17 +35,36 @@ const chartOptions = ref({
     },
     xaxis: {
         categories: categories,
+        labels: {
+            style: {
+                colors: "#000000",
+            },
+        },
+    },
+    yaxis: {
+        labels: {
+            style: {
+                colors: "#000000",
+            },
+        },
     },
     dataLabels: {
         enabled: true,
+        style: {
+            colors: ["#000000"],
+        },
         formatter: (val, opts) => {
             if (opts.seriesIndex === 0) {
-                return formatCurrency(val); // format only "Total Sales"
+                return formatCurrency(val);
             }
-            return val; // leave kilograms as number
+            return val;
         },
     },
     tooltip: {
+        style: {
+            fontSize: "13px",
+            color: "#000000",
+        },
         y: {
             formatter: (val, opts) => {
                 if (opts.seriesIndex === 0) {
@@ -58,7 +78,7 @@ const chartOptions = ref({
 </script>
 
 <template>
-    <div class="p-4 bg-white rounded-lg shadow">
+    <div class="p-4 bg-white rounded-lg shadow text-black">
         <h2 class="text-lg font-bold mb-4">Product Sales</h2>
         <apexchart
             type="bar"

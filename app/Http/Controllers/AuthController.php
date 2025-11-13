@@ -54,7 +54,7 @@ class AuthController extends Controller
             'password' => ['required', 'max:255']
         ]);
 
-        $key = 'login-attempts:' . $request->ip(); // per IP throttling
+        $key = 'login-attempts:' . $request->ip();
 
         if (RateLimiter::tooManyAttempts($key, 3)) {
             $seconds = RateLimiter::availableIn($key);

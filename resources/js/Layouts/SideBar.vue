@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import FlashMessage from "../Components/FlashMessage.vue";
 import Timer from "./Timer.vue";
+import WelcomeModal from "../Components/WelcomeModal.vue";
 
 const page = usePage();
 
@@ -99,6 +100,7 @@ const filteredNavItems = computed(() => {
 </script>
 
 <template>
+    <WelcomeModal />
     <FlashMessage />
     <div class="flex min-h-screen text-white">
         <!-- Desktop Sidebar -->

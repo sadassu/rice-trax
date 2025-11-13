@@ -10,7 +10,7 @@ import DeleteEmployee from "./DeleteEmployee.vue";
 import { router } from "@inertiajs/vue3";
 import PaginationLinks from "../../Components/PaginationLinks.vue";
 import { isSafeRowClick } from "../../utils/eventHelper";
-import { Banknote } from "lucide-vue-next";
+import { Banknote, UsersRound } from "lucide-vue-next";
 
 defineOptions({ layout: SideBar });
 defineProps({
@@ -340,19 +340,7 @@ function onRowClick(event, id) {
                 <div
                     class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
                 >
-                    <svg
-                        class="w-12 h-12 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                        />
-                    </svg>
+                    <UsersRound />
                 </div>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">
                     No employees found
