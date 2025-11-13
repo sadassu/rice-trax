@@ -49,16 +49,7 @@ const chartOptions = ref({
         },
     },
     dataLabels: {
-        enabled: true,
-        style: {
-            colors: ["#000000"],
-        },
-        formatter: (val, opts) => {
-            if (opts.seriesIndex === 0) {
-                return formatCurrency(val);
-            }
-            return val;
-        },
+        enabled: false,
     },
     tooltip: {
         style: {
