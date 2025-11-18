@@ -26,7 +26,7 @@ const chartOptions = ref({
         height: 400,
         foreColor: "#000000",
     },
-    colors: ["#10B981", "#14B8A6"], // green & lime
+    colors: ["#4de336", "#4b44d4"], // green & lime
     plotOptions: {
         bar: {
             horizontal: false,

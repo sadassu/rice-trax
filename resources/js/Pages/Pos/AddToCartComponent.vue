@@ -94,16 +94,6 @@ const addToCartButton = () => {
     sacks.value = 0;
 };
 
-const setKilograms = (value) => {
-    kilograms.value = value;
-    inputMode.value = "kg";
-};
-
-// Add max available stock button
-const setMaxStock = () => {
-    kilograms.value = remainingStock.value;
-    inputMode.value = "kg";
-};
 
 // Increment/decrement functions
 const increment = () => {
@@ -215,35 +205,6 @@ const decrement = () => {
             </span>
         </div>
 
-        <!-- Quick Select Buttons -->
-        <div class="flex flex-wrap gap-2 justify-center">
-            <button
-                @click="setKilograms(0.25)"
-                class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm"
-            >
-                ¼ kg
-            </button>
-            <button
-                @click="setKilograms(0.5)"
-                class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm"
-            >
-                ½ kg
-            </button>
-            <button
-                @click="setKilograms(1)"
-                class="px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 shadow-sm"
-            >
-                1 kg
-            </button>
-
-            <button
-                @click="setMaxStock"
-                class="px-3 py-2 text-sm bg-orange-100 text-orange-700 border border-orange-300 rounded-lg hover:bg-orange-200 shadow-sm"
-                v-if="remainingStock > 0"
-            >
-                Max ({{ remainingStock }} kg)
-            </button>
-        </div>
 
         <!-- Stock Info -->
         <div class="text-sm text-gray-600 text-center">

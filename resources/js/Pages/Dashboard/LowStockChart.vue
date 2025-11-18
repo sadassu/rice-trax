@@ -42,6 +42,10 @@ const lowStockCount = props.lowStockProducts.filter(
 const inStockCount = props.lowStockProducts.filter(
     (p) => p.total_remaining >= 50
 ).length;
+
+const getTotalSacks = (kg) => {
+    return Math.floor(kg / 25);
+};
 </script>
 
 <template>
@@ -116,6 +120,23 @@ const inStockCount = props.lowStockProducts.filter(
                                 <p class="text-sm text-gray-500">
                                     Product inventory status
                                 </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="text-right mr-4">
+                                <div
+                                    class="text-2xl font-bold"
+                                    :class="
+                                        getTotalSacks(item.total_remaining) ===
+                                        0
+                                            ? 'text-gray-500'
+                                            : 'text-gray-900'
+                                    "
+                                >
+                                    {{ getTotalSacks(item.total_remaining) }}
+                                </div>
+                                <div class="text-xs text-gray-500">Sack</div>
                             </div>
                         </div>
 

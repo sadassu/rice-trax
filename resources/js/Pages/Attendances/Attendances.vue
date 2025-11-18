@@ -6,7 +6,7 @@ import { Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import { debounce } from "lodash";
 import { formatTime } from "../../utils/helper";
-import { FileWarning } from "lucide-vue-next"; // Lucide icon
+import { FileWarning } from "lucide-vue-next";
 import DeleteAttendance from "./DeleteAttendance.vue";
 import UpdateAttendance from "./UpdateAttendance.vue";
 
@@ -64,55 +64,61 @@ const formatStatus = (status) => {
 </script>
 
 <template>
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-4 md:py-6">
+        <div class="px-4 sm:px-6 lg:px-8">
             <!-- Header -->
-            <div class="mb-6">
-                <h1 class="text-3xl font-bold text-gray-900">Attendances</h1>
-                <p class="mt-1 text-sm text-gray-600">
+            <div class="mb-4 md:mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+                    Attendances
+                </h1>
+                <p class="mt-1 text-xs md:text-sm text-gray-600">
                     Manage and track employee attendance records
                 </p>
             </div>
 
             <!-- Filters -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">
+            <div class="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+                <h2
+                    class="text-base md:text-lg font-semibold text-gray-900 mb-3 md:mb-4"
+                >
                     Filters
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4"
+                >
                     <div>
                         <label
-                            class="block text-sm font-medium text-gray-700 mb-2"
+                            class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5 md:mb-2"
                         >
                             Date From
                         </label>
                         <input
                             type="date"
                             v-model="filterForm.date_from"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                     </div>
                     <div>
                         <label
-                            class="block text-sm font-medium text-gray-700 mb-2"
+                            class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5 md:mb-2"
                         >
                             Date To
                         </label>
                         <input
                             type="date"
                             v-model="filterForm.date_to"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                     </div>
                     <div>
                         <label
-                            class="block text-sm font-medium text-gray-700 mb-2"
+                            class="block text-xs md:text-sm font-medium text-gray-700 mb-1.5 md:mb-2"
                         >
                             Status
                         </label>
                         <select
                             v-model="filterForm.status"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                             <option value="">All Status</option>
                             <option value="present">Present</option>
@@ -120,10 +126,10 @@ const formatStatus = (status) => {
                             <option value="late">Late</option>
                         </select>
                     </div>
-                    <div class="flex items-end">
+                    <div class="flex items-end sm:col-span-2 lg:col-span-1">
                         <button
                             @click="resetFilters"
-                            class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                            class="w-full px-4 py-2 text-sm bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition active:bg-gray-400"
                         >
                             Reset
                         </button>
@@ -131,8 +137,10 @@ const formatStatus = (status) => {
                 </div>
             </div>
 
-            <!-- Attendances Table -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <!-- Desktop Table View (hidden on mobile) -->
+            <div
+                class="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden"
+            >
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -221,19 +229,21 @@ const formatStatus = (status) => {
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <UpdateAttendance
-                                        :attendance="attendance"
-                                    />
-                                    <DeleteAttendance
-                                        :attendance="attendance"
-                                    />
+                                    <div class="flex items-center gap-2">
+                                        <UpdateAttendance
+                                            :attendance="attendance"
+                                        />
+                                        <DeleteAttendance
+                                            :attendance="attendance"
+                                        />
+                                    </div>
                                 </td>
                             </tr>
 
-                            <!-- ✅ No Records Found (Lucide icon) -->
+                            <!-- No Records Found -->
                             <tr v-if="attendances.data.length === 0">
                                 <td
-                                    colspan="5"
+                                    colspan="7"
                                     class="px-6 py-12 text-center text-gray-500"
                                 >
                                     <FileWarning
@@ -253,6 +263,96 @@ const formatStatus = (status) => {
                 </div>
 
                 <!-- Pagination -->
+                <PaginationLinks
+                    :links="attendances.links"
+                    :from="attendances.from"
+                    :to="attendances.to"
+                    :total="attendances.total"
+                />
+            </div>
+
+            <!-- Mobile Card View (visible on mobile only) -->
+            <div class="md:hidden space-y-4">
+                <!-- Attendance Cards -->
+                <div
+                    v-for="attendance in attendances.data"
+                    :key="attendance.id"
+                    class="bg-white rounded-lg shadow-sm p-4 space-y-3"
+                >
+                    <!-- Employee Info -->
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-semibold text-gray-900">
+                                {{ attendance.employee?.name || "N/A" }}
+                            </h3>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                {{ attendance.employee?.email || "" }}
+                            </p>
+                        </div>
+                        <span
+                            :class="getStatusColor(attendance.status)"
+                            class="px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap"
+                        >
+                            {{ formatStatus(attendance.status) }}
+                        </span>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="border-t border-gray-100"></div>
+
+                    <!-- Details Grid -->
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Date</p>
+                            <p class="text-gray-900 font-medium">
+                                {{ formatDate(attendance.date) }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">
+                                Earned Amount
+                            </p>
+                            <p class="text-gray-900 font-medium">
+                                {{ attendance.earned_amount }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Time In</p>
+                            <p class="text-gray-900 font-medium">
+                                {{ formatTime(attendance.time_in) }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 mb-1">Time Out</p>
+                            <p class="text-gray-900 font-medium">
+                                {{ formatTime(attendance.time_out) }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center gap-2 pt-2">
+                        <UpdateAttendance :attendance="attendance" />
+                        <DeleteAttendance :attendance="attendance" />
+                    </div>
+                </div>
+
+                <!-- No Records Found (Mobile) -->
+                <div
+                    v-if="attendances.data.length === 0"
+                    class="bg-white rounded-lg shadow-sm p-8 text-center"
+                >
+                    <FileWarning class="mx-auto h-12 w-12 text-gray-400" />
+                    <p class="mt-4 text-base font-medium text-gray-900">
+                        No attendance records found
+                    </p>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Try adjusting your filters or add a new attendance
+                        record
+                    </p>
+                </div>
+
+                <!-- Pagination (Mobile) -->
                 <PaginationLinks
                     :links="attendances.links"
                     :from="attendances.from"

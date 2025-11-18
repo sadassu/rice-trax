@@ -4,6 +4,16 @@ import SideBar from "../../Layouts/SideBar.vue";
 import TodayAttendances from "./TodayAttendances.vue";
 import { router } from "@inertiajs/vue3";
 import { formatCurrency } from "../../utils/currencyFormat";
+import {
+    User,
+    Search,
+    X,
+    Plus,
+    ClipboardList,
+    Users,
+    Loader2,
+    AlertCircle,
+} from "lucide-vue-next";
 
 defineOptions({
     layout: SideBar,
@@ -66,7 +76,7 @@ const submitForm = () => {
 </script>
 
 <template>
-    <div class="max-w-7xl p-4 lg:p-6">
+    <div class="p-4 lg:p-6">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <!-- Form Section -->
             <div class="lg:col-span-1">
@@ -77,19 +87,7 @@ const submitForm = () => {
                         <div
                             class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mr-3"
                         >
-                            <svg
-                                class="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                                />
-                            </svg>
+                            <Search class="h-5 w-5 text-white" />
                         </div>
                         <div>
                             <h2 class="text-xl font-semibold text-white">
@@ -120,19 +118,7 @@ const submitForm = () => {
                                     <div
                                         class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                                     >
-                                        <svg
-                                            class="h-5 w-5 text-gray-400"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                            />
-                                        </svg>
+                                        <Search class="h-5 w-5 text-gray-600" />
                                     </div>
                                     <button
                                         v-if="search"
@@ -140,19 +126,7 @@ const submitForm = () => {
                                         type="button"
                                         class="absolute right-3 top-3 p-1 text-gray-400 hover:text-gray-600"
                                     >
-                                        <svg
-                                            class="w-5 h-5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12"
-                                            />
-                                        </svg>
+                                        <X class="w-5 h-5" />
                                     </button>
                                 </div>
                             </div>
@@ -184,17 +158,6 @@ const submitForm = () => {
                                             <p>
                                                 <b>Name:</b> {{ selected.name }}
                                             </p>
-                                            <p>
-                                                <b>Role:</b> {{ selected.role }}
-                                            </p>
-                                            <p>
-                                                <b>Rate:</b>
-                                                {{
-                                                    formatCurrency(
-                                                        selected.rate
-                                                    )
-                                                }}/hr
-                                            </p>
                                         </div>
                                     </div>
                                     <button
@@ -202,19 +165,7 @@ const submitForm = () => {
                                         type="button"
                                         class="p-1 text-green-600 hover:text-green-800"
                                     >
-                                        <svg
-                                            class="w-5 h-5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12"
-                                            />
-                                        </svg>
+                                        <X class="w-5 h-5" />
                                     </button>
                                 </div>
                             </div>
@@ -223,19 +174,7 @@ const submitForm = () => {
                                 v-else
                                 class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-gray-500 flex items-center"
                             >
-                                <svg
-                                    class="w-8 h-8 mr-3 text-gray-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    />
-                                </svg>
+                                <User class="w-8 h-8 text-gray-300" />
                                 No employee selected
                             </div>
 
@@ -244,19 +183,7 @@ const submitForm = () => {
                                 v-if="errorMessage"
                                 class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 flex items-center"
                             >
-                                <svg
-                                    class="w-5 h-5 mr-2 text-red-400"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                </svg>
+                                <AlertCircle class="w-5 h-5 text-red-400" />
                                 {{ errorMessage }}
                             </div>
 
@@ -270,20 +197,7 @@ const submitForm = () => {
                                     v-if="isSubmitting"
                                     class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
                                 />
-                                <svg
-                                    v-else
-                                    class="w-4 h-4 mr-2"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                    />
-                                </svg>
+                                <Plus class="w-4 h-4 mr-2" />
                                 {{
                                     isSubmitting
                                         ? "Adding Attendance..."
@@ -309,19 +223,7 @@ const submitForm = () => {
                             <div
                                 class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mr-3"
                             >
-                                <svg
-                                    class="w-5 h-5 text-white"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                                    />
-                                </svg>
+                                <User class="w-8 h-8 text-gray-300" />
                             </div>
                             <h3 class="text-lg font-semibold text-white">
                                 All Employees
@@ -376,19 +278,7 @@ const submitForm = () => {
                         </div>
 
                         <div v-else class="text-center py-8 text-gray-500">
-                            <svg
-                                class="mx-auto h-12 w-12 text-gray-300 mb-3"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 7a3 3 0 11-6 0 3 3 0 016 0zm-6 7h6a6 6 0 016 6H3a6 6 0 016-6z"
-                                />
-                            </svg>
+                            <User class="w-8 h-8 text-gray-300" />
                             No employees found
                         </div>
                     </div>

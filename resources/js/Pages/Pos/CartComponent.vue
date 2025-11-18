@@ -295,12 +295,16 @@ const submit = () => {
                     <!-- Buttons -->
                     <div class="space-y-2">
                         <button
-                            :disabled="amountPaid < getFinalTotal()"
+                            :disabled="
+                                amountPaid < getFinalTotal() || form.processing
+                            "
                             :class="{
                                 'bg-blue-600 hover:bg-blue-700 text-white':
-                                    amountPaid >= getFinalTotal(),
+                                    amountPaid >= getFinalTotal() &&
+                                    !form.processing,
                                 'bg-gray-300 text-gray-500 cursor-not-allowed':
-                                    amountPaid < getFinalTotal(),
+                                    amountPaid < getFinalTotal() ||
+                                    form.processing,
                             }"
                             class="w-full py-2 px-4 rounded transition-colors"
                             @click="submit"

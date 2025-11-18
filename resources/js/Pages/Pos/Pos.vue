@@ -48,7 +48,7 @@ const closeCartModal = () => {
 <template>
     <div class="flex h-screen">
         <!-- Products Section - Full width on mobile, half on desktop -->
-        <div class="w-full lg:w-1/2 flex flex-col">
+        <div class="w-full lg:w-4/5 flex flex-col">
             <div class="px-4 py-6">
                 <!-- Header -->
                 <div class="mb-6">
@@ -86,17 +86,12 @@ const closeCartModal = () => {
                     >
                         <!-- Product with Stock -->
                         <div v-if="product.total_kg_remaining > 0" class="p-6">
-                            <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-start justify-center mb-4">
                                 <h3
-                                    class="text-xl font-semibold text-gray-800 truncate uppercase"
+                                    class="martian-mono-800 text-2xl font-semibold text-gray-800 truncate uppercase"
                                 >
                                     {{ product.name }}
                                 </h3>
-                                <span
-                                    class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
-                                >
-                                    In Stock
-                                </span>
                             </div>
 
                             <div class="space-y-3">
@@ -140,11 +135,6 @@ const closeCartModal = () => {
                                     class="flex justify-between text-xs text-gray-500 mb-1"
                                 >
                                     <span>Stock Level</span>
-                                    <span>{{
-                                        product.total_kg_remaining <= 10
-                                            ? "Low Stock"
-                                            : "Good Stock"
-                                    }}</span>
                                 </div>
                                 <div
                                     class="w-full bg-gray-200 rounded-full h-2"

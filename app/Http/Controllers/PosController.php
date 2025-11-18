@@ -98,7 +98,7 @@ class PosController extends Controller
                 if ($totalRemaining <= 100) {
                     Notification::create([
                         'title' => 'Low Stock Alert',
-                        'message' => 'Product ID ' . $product['id'] . ' is low on stock (' . $totalRemaining . ' kg remaining).',
+                        'message' => 'Product "' . $product['name'] . '" is low on stock (' . $totalRemaining . ' kg remaining).',
                         'recipient_role' => 'admin',
                         'expires_at' => Carbon::now()->addDays(7),
                     ]);

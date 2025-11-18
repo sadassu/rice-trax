@@ -35,11 +35,6 @@ defineProps({
                         >
                             Message
                         </th>
-                        <th
-                            class="text-left py-3 px-2 text-xs font-medium text-red-500 uppercase tracking-wider"
-                        >
-                            Expiry
-                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-red-50">
@@ -53,9 +48,6 @@ defineProps({
                         </td>
                         <td class="py-3 px-2 text-sm text-red-600">
                             {{ notification.message }}
-                        </td>
-                        <td class="py-3 px-2 text-sm text-red-500">
-                            {{ formatDate(notification.expires_at) }}
                         </td>
                     </tr>
                 </tbody>
@@ -72,9 +64,6 @@ defineProps({
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-medium text-red-900">
                         {{ notification.title }}
-                    </span>
-                    <span class="text-xs text-red-500">
-                        Expires: {{ formatDate(notification.expires_at) }}
                     </span>
                 </div>
                 <div class="text-sm text-red-600">
