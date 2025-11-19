@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Notification;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DeleteExpiredNotifications extends Command
 {
@@ -31,5 +32,7 @@ class DeleteExpiredNotifications extends Command
             ->delete();
 
         $this->info('Expired notifications cleaned up.');
+
+        Log::channel('daily')->info("DeleteExpiredNotifications ran at " . now());
     }
 }

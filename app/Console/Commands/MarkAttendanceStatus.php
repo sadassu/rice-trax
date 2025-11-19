@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class MarkAttendanceStatus extends Command
 {
@@ -50,7 +51,7 @@ class MarkAttendanceStatus extends Command
                     'date'        => $today,
                 ],
                 [
-                    'status'  => 'Absent',
+                    'status'  => 'absent',
                     'remarks' => 'No time-in record for today',
                 ]
             );
@@ -83,5 +84,7 @@ class MarkAttendanceStatus extends Command
         }
 
         $this->info("Attendance auto-marking completed for {$today->toDateString()}.");
+
+        Log::channel('daily')->info("MarkAttendanceStatus ran at " . now());
     }
 }
