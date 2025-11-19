@@ -126,32 +126,6 @@ const lineChartSeries = computed(() => {
                         <h3 class="text-xl font-semibold text-gray-900">
                             Levels, Trends & Forecast
                         </h3>
-                        <div class="flex items-center space-x-3">
-                            <div
-                                class="flex items-center space-x-1 text-sm text-gray-600"
-                            >
-                                <div
-                                    class="w-3 h-3 bg-[#14b8a6] rounded-full"
-                                ></div>
-                                <span>Levels</span>
-                            </div>
-                            <div
-                                class="flex items-center space-x-1 text-sm text-gray-600"
-                            >
-                                <div
-                                    class="w-3 h-3 bg-rose-500 rounded-full"
-                                ></div>
-                                <span>Trends</span>
-                            </div>
-                            <div
-                                class="flex items-center space-x-1 text-sm text-gray-600"
-                            >
-                                <div
-                                    class="w-3 h-3 bg-blue-500 rounded-full"
-                                ></div>
-                                <span>Forecast</span>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Explanation paragraph -->

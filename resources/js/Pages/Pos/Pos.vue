@@ -48,7 +48,7 @@ const closeCartModal = () => {
 <template>
     <div class="flex h-screen">
         <!-- Products Section - Full width on mobile, half on desktop -->
-        <div class="w-full lg:w-4/5 flex flex-col">
+        <div class="w-full lg:w-19/20 flex flex-col">
             <div class="px-4 py-6">
                 <!-- Header -->
                 <div class="mb-6">

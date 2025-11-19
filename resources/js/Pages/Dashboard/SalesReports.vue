@@ -80,7 +80,11 @@ async function fetchReport() {
 
         chartOptions.value = {
             ...chartOptions.value,
-            xaxis: { ...chartOptions.value.xaxis, categories: labels },
+            xaxis: {
+                categories: labels,
+                axisBorder: { show: false },
+                axisTicks: { show: false },
+            },
         };
         series.value = [{ name: "Sales", data: values }];
     } catch (err) {
