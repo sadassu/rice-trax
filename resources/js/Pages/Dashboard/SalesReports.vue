@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import axios from "axios";
 import { formatCurrency } from "../../utils/currencyFormat";
+import { shortNumber } from "../../utils/helper";
 
 const chartOptions = ref({
     chart: {
@@ -24,7 +25,10 @@ const chartOptions = ref({
         axisTicks: { show: false },
         labels: {
             style: { colors: "#666", fontSize: "12px" },
-            formatter: (val) => formatCurrency(val),
+            formatter: (val) =>
+                window.innerWidth < 640
+                    ? "₱" + shortNumber(val)
+                    : formatCurrency(val),
         },
     },
     tooltip: {
@@ -99,31 +103,37 @@ watch([filter, year, month], fetchReport);
 <template>
     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
+        <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0"
+        >
             <h3 class="text-xl font-semibold text-gray-900">Sales Reports</h3>
 
             <!-- Filters -->
-            <div class="flex items-center space-x-3">
+            <div
+                class="flex flex-wrap sm:flex-nowrap items-center sm:space-x-3 gap-2"
+            >
                 <select
                     v-model="filter"
-                    class="border rounded-lg px-3 py-1 text-sm"
+                    class="border rounded-lg px-3 py-1 text-sm w-full sm:w-auto"
                 >
                     <option value="daily">Daily</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
                 </select>
+
                 <input
                     type="number"
                     v-model="year"
                     min="2000"
                     :max="new Date().getFullYear()"
-                    class="border rounded-lg px-3 py-1 text-sm w-24"
+                    class="border rounded-lg px-3 py-1 text-sm w-full sm:w-24"
                 />
+
                 <input
                     v-if="filter === 'daily'"
                     type="number"
                     v-model="month"
-                    class="border rounded-lg px-3 py-1 text-sm w-20"
+                    class="border rounded-lg px-3 py-1 text-sm w-full sm:w-20"
                     min="1"
                     max="12"
                 />

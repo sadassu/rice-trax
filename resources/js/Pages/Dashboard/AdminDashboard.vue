@@ -101,7 +101,7 @@ const lineChartSeries = computed(() => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-50 p-6">
+    <div class="min-h-screen bg-gray-50 lg:p-6 p-2">
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>

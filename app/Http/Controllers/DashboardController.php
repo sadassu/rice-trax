@@ -48,20 +48,13 @@ class DashboardController extends Controller
 
     public function salesReport(Request $request)
     {
-        $filter = $request->input('filter', 'daily'); // default daily
+        $filter = $request->input('filter', 'daily');
         $year   = $request->input('year', date('Y'));
-        $month  = $request->input('month', date('m')); // only for daily
+        $month  = $request->input('month', date('m'));
 
-        $driver = DB::getDriverName(); // "sqlite" or "mysql"
+        $driver = DB::getDriverName();
 
         if ($filter === 'daily') {
-            $start = Carbon::createFromDate($year, $month, 1);
-            $end   = $start->copy()->endOfMonth();
-
-            $dates = collect(CarbonPeriod::create($start, $end))->map(fn($date) => [
-                'period' => $date->format('Y-m-d'),
-                'total_sales' => 0,
-            ])->keyBy('period');
 
             if ($driver === 'sqlite') {
                 $sales = DB::table('sales')
@@ -79,11 +72,18 @@ class DashboardController extends Controller
                     ->pluck('total_sales', 'period');
             }
 
-            $report = $dates->map(function ($day) use ($sales) {
-                $day['total_sales'] = $sales->get($day['period'], 0);
-                return $day;
-            })->values();
+            // Filter out zero totals (exclude empty days)
+            $report = collect($sales)
+                ->map(function ($value, $period) {
+                    return [
+                        'period' => $period,
+                        'total_sales' => (float) $value
+                    ];
+                })
+                ->filter(fn($day) => $day['total_sales'] > 0)
+                ->values();
         } elseif ($filter === 'monthly') {
+
             $months = collect(range(1, 12))->map(fn($m) => [
                 'period' => $m,
                 'total_sales' => 0,
@@ -104,10 +104,11 @@ class DashboardController extends Controller
             }
 
             $report = $months->map(function ($m) use ($sales) {
-                $m['total_sales'] = $sales->get($m['period'], 0);
+                $m['total_sales'] = (float) ($sales->get($m['period'], 0));
                 return $m;
             })->values();
         } elseif ($filter === 'yearly') {
+
             if ($driver === 'sqlite') {
                 $report = DB::table('sales')
                     ->selectRaw("strftime('%Y', sale_date) as period, SUM(total_price) as total_sales")
