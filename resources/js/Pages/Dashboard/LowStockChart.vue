@@ -72,9 +72,7 @@ const getTotalSacks = (kg) => {
 
             <!-- Stats -->
             <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6">
-                <div
-                    class="bg-violet-500/50 backdrop-blur-sm rounded-lg p-2 sm:p-3"
-                >
+                <div class="bg-red-500/70 backdrop-blur-sm rounded-lg p-2 sm:p-3">
                     <div class="text-xl sm:text-3xl font-bold">
                         {{ outOfStockCount }}
                     </div>
@@ -83,7 +81,7 @@ const getTotalSacks = (kg) => {
                     </div>
                 </div>
                 <div
-                    class="bg-violet-500/50 backdrop-blur-sm rounded-lg p-2 sm:p-3"
+                    class="bg-amber-500/80 backdrop-blur-sm rounded-lg p-2 sm:p-3"
                 >
                     <div class="text-xl sm:text-3xl font-bold">
                         {{ lowStockCount }}
@@ -91,7 +89,7 @@ const getTotalSacks = (kg) => {
                     <div class="text-red-50 text-xs sm:text-sm">Low Stock</div>
                 </div>
                 <div
-                    class="bg-violet-500/50 backdrop-blur-sm rounded-lg p-2 sm:p-3"
+                    class="bg-green-500/50 backdrop-blur-sm rounded-lg p-2 sm:p-3"
                 >
                     <div class="text-xl sm:text-3xl font-bold">
                         {{ inStockCount }}

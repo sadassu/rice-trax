@@ -31,11 +31,14 @@ class MarkAttendanceStatus extends Command
     public function handle()
     {
         $today = Carbon::today();
-        $cutoffTime = Carbon::today()->setTime(17, 0, 0); // 5:00 PM
+        $now = Carbon::now();
+        $startTime = Carbon::today()->setTime(18, 0, 0); // 6:00 PM
+        $endTime = Carbon::tomorrow()->setTime(0, 0, 0); // 12:00 AM
+        $autoTimeOut = Carbon::today()->setTime(18, 0, 0); // 5:00 PM
 
-        // Only run this logic after 5 PM
-        if (Carbon::now()->lessThan($cutoffTime)) {
-            $this->warn("It’s not yet 5 PM. Absent/Auto Timeout marking skipped.");
+        // Only run between 6 PM and 12 AM
+        if ($now->lt($startTime) || $now->gte($endTime)) {
+            $this->warn("Current time is outside 6 PM - 12 AM. Attendance marking skipped.");
             return;
         }
 
@@ -67,24 +70,23 @@ class MarkAttendanceStatus extends Command
 
         foreach ($attendances as $attendance) {
             $attendance->update([
-                'time_out' => $cutoffTime,
+                'time_out' => $autoTimeOut, // always 6 PM
                 'status'   => 'present',
-                'remarks'  => 'Automatically timed out at 5:00 PM',
+                'remarks'  => 'Automatically timed out at 6 PM',
             ]);
 
             // Create notification for the employee
             Notification::create([
                 'title'          => 'Automatic Time Out',
-                'message'        => "You were automatically timed out at 5:00 PM on {$today->toFormattedDateString()}.",
+                'message'        => "You were automatically timed out at 6:00 PM on {$today->toFormattedDateString()}.",
                 'recipient_role' => 'admin',
                 'expires_at'     => now()->addDays(3),
             ]);
 
-            $this->info("Employee ID {$attendance->employee_id} auto timed out at 5:00 PM.");
+            $this->info("Employee ID {$attendance->employee_id} auto timed out at 6:00 PM.");
         }
 
         $this->info("Attendance auto-marking completed for {$today->toDateString()}.");
-
-        Log::channel('daily')->info("MarkAttendanceStatus ran at " . now());
+        Log::channel('daily')->info("MarkAttendanceStatus ran at " . $now);
     }
 }

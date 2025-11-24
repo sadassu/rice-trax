@@ -1,20 +1,70 @@
 <script setup>
+import { ref } from "vue";
 import { formatDate } from "../../utils/dateFormat";
+import axios from "axios";
+
+// Lucide icon imports
+import { BellOff } from "lucide-vue-next";
+import Modal from "../../Components/Modal.vue";
 
 defineProps({
     notifications: Array,
 });
+
+const loading = ref(false);
+
+// Modal state
+const modalShow = ref(false);
+const modalTitle = ref("");
+const modalSubtitle = ref("");
+const modalDanger = ref(false);
+
+const cleanupNotifications = async () => {
+    loading.value = true;
+    try {
+        const response = await axios.get("/cron/cleanup-notifications");
+
+        if (response.data.success) {
+            modalTitle.value = "Success";
+            modalSubtitle.value = response.data.message;
+            modalDanger.value = false;
+        } else {
+            modalTitle.value = "Failed";
+            modalSubtitle.value =
+                response.data.message || "Something went wrong";
+            modalDanger.value = true;
+        }
+    } catch (error) {
+        console.error(error);
+        modalTitle.value = "Failed";
+        modalSubtitle.value = "Failed to cleanup notifications";
+        modalDanger.value = true;
+    } finally {
+        modalShow.value = true;
+        loading.value = false;
+    }
+};
 </script>
 
 <template>
     <div class="bg-white rounded-2xl p-4 shadow-sm border border-red-200">
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-xl font-semibold">Notifications</h3>
-            <span
-                class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
-            >
-                Latest {{ notifications?.length || 0 }}
-            </span>
+            <div class="flex items-center gap-2">
+                <span
+                    class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
+                >
+                    Latest {{ notifications?.length || 0 }}
+                </span>
+                <button
+                    @click="cleanupNotifications"
+                    :disabled="loading"
+                    class="flex items-center gap-1 bg-red-100 text-red-700 text-xs px-3 py-1 rounded-full hover:bg-red-200 transition disabled:opacity-50"
+                >
+                    <BellOff class="w-4 h-4" />
+                    <span>{{ loading ? "Cleaning..." : "Cleanup" }}</span>
+                </button>
+            </div>
         </div>
 
         <!-- Table view (desktop) -->
@@ -75,21 +125,26 @@ defineProps({
         <!-- Empty state -->
         <div v-else class="h-64 flex items-center justify-center text-red-300">
             <div class="text-center">
-                <svg
-                    class="w-12 h-12 mx-auto mb-4 text-red-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 17h5l-1.405-1.405M19 13v-2a7 7 0 00-14 0v2m4 0v2m4-2v2m-8-2v2m0 0H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v6a2 2 0 01-2 2h-3"
-                    ></path>
-                </svg>
+                <BellOff class="w-12 h-12 mx-auto mb-4 text-red-200" />
                 <p class="text-sm text-red-400">No notifications</p>
             </div>
         </div>
     </div>
+
+    <Modal
+        :show="modalShow"
+        :title="modalTitle"
+        :subtitle="modalSubtitle"
+        :danger="modalDanger"
+        @close="modalShow = false"
+    >
+        <template #actions>
+            <button
+                class="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+                @click="modalShow = false"
+            >
+                OK
+            </button>
+        </template>
+    </Modal>
 </template>

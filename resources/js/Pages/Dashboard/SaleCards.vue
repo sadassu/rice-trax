@@ -22,7 +22,7 @@ defineProps({
                         {{ formatCurrency(totals?.today || 0) }}
                     </p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                <div class="bg-opacity-20 rounded-full p-3">
                     <svg
                         class="w-8 h-8"
                         fill="none"
@@ -55,7 +55,7 @@ defineProps({
                         {{ formatCurrency(totals?.week || 0) }}
                     </p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                <div class="bg-opacity-20 rounded-full p-3">
                     <svg
                         class="w-8 h-8"
                         fill="none"
@@ -88,7 +88,7 @@ defineProps({
                         {{ formatCurrency(totals?.month || 0) }}
                     </p>
                 </div>
-                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                <div class="bg-opacity-20 rounded-full p-3">
                     <svg
                         class="w-8 h-8"
                         fill="none"

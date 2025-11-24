@@ -1,6 +1,7 @@
 <script setup>
 import SideBar from "../../Layouts/SideBar.vue";
 import { formatCurrency } from "../../utils/currencyFormat";
+import { formatDate } from "../../utils/dateFormat";
 
 defineOptions({
     layout: SideBar,
@@ -119,32 +120,7 @@ const downloadReceipt = () => {
                     <div class="receipt-id">Receipt #${props.sale.id}</div>
                 </div>
 
-                <div class="receipt-info">
-                    <div class="info-row">
-                        <span class="info-label">Date:</span>
-                        <span class="info-value">${props.sale.sale_date}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Total Amount:</span>
-                        <span class="info-value">₱${formatCurrencyForPrint(
-                            props.sale.total_price
-                        )}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Amount Paid:</span>
-                        <span class="info-value">₱${formatCurrencyForPrint(
-                            props.sale.amount_paid
-                        )}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Change:</span>
-                        <span class="info-value">₱${formatCurrencyForPrint(
-                            props.sale.change
-                        )}</span>
-                    </div>
-                </div>
-
-                <div class="items-section">
+                 <div class="items-section">
                     <h2>Items Purchased</h2>
                     <table>
                         <thead>
@@ -176,6 +152,33 @@ const downloadReceipt = () => {
                     </table>
                 </div>
 
+                <div class="receipt-info">
+                    <div class="info-row">
+                        <span class="info-label">Date:</span>
+                        <span class="info-value">${formatDate(
+                            props.sale.created_at
+                        )}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Amount:</span>
+                        <span class="info-value">₱${formatCurrencyForPrint(
+                            props.sale.total_price
+                        )}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Amount Paid:</span>
+                        <span class="info-value">₱${formatCurrencyForPrint(
+                            props.sale.amount_paid
+                        )}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Change:</span>
+                        <span class="info-value">₱${formatCurrencyForPrint(
+                            props.sale.change
+                        )}</span>
+                    </div>
+                </div>
+
                 <div class="receipt-footer">
                     <p>Thank you for your business!</p>
                 </div>
@@ -192,18 +195,6 @@ const downloadReceipt = () => {
         printWindow.print();
         printWindow.close();
     }, 500);
-};
-
-// Format date function
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
 };
 
 function goBack() {
@@ -226,44 +217,6 @@ function goBack() {
 
             <!-- Receipt Body -->
             <div class="p-8">
-                <!-- Sale Information -->
-                <div class="border border-gray-300 p-6 mb-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-3">
-                            <div
-                                class="flex justify-between items-center py-2 border-b border-gray-200"
-                            >
-                                <span class="font-semibold">Date & Time:</span>
-                                <span class="font-bold">{{
-                                    formatDate(sale.sale_date)
-                                }}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2">
-                                <span class="font-semibold">Total Amount:</span>
-                                <span class="font-bold text-lg">{{
-                                    formatCurrency(sale.total_price)
-                                }}</span>
-                            </div>
-                        </div>
-                        <div class="space-y-3">
-                            <div
-                                class="flex justify-between items-center py-2 border-b border-gray-200"
-                            >
-                                <span class="font-semibold">Amount Paid:</span>
-                                <span class="font-bold">{{
-                                    formatCurrency(sale.amount_paid)
-                                }}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2">
-                                <span class="font-semibold">Change:</span>
-                                <span class="font-bold">{{
-                                    formatCurrency(sale.change)
-                                }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Items Section -->
                 <div class="items-section">
                     <h2
@@ -337,6 +290,44 @@ function goBack() {
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- Sale Information -->
+                <div class="border border-gray-300 p-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <div
+                                class="flex justify-between items-center py-2 border-b border-gray-200"
+                            >
+                                <span class="font-semibold">Date & Time:</span>
+                                <span class="font-bold">{{
+                                    formatDate(sale.created_at)
+                                }}</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <span class="font-semibold">Total Amount:</span>
+                                <span class="font-bold text-lg">{{
+                                    formatCurrency(sale.total_price)
+                                }}</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div
+                                class="flex justify-between items-center py-2 border-b border-gray-200"
+                            >
+                                <span class="font-semibold">Amount Paid:</span>
+                                <span class="font-bold">{{
+                                    formatCurrency(sale.amount_paid)
+                                }}</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <span class="font-semibold">Change:</span>
+                                <span class="font-bold">{{
+                                    formatCurrency(sale.change)
+                                }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

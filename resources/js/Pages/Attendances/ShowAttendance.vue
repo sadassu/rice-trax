@@ -13,7 +13,7 @@ const attendanceRecords = computed(() => {
     if (!props.employee?.attendances) return [];
 
     return props.employee.attendances.map((a) => ({
-        date: a.date,
+        date: a.date.split("T")[0],
         present: a.status === "present",
     }));
 });
@@ -29,9 +29,7 @@ const closeModal = () => {
 };
 
 const handleEscape = (e) => {
-    if (e.key === "Escape") {
-        closeModal();
-    }
+    if (e.key === "Escape") closeModal();
 };
 
 const currentMonth = computed(() => currentDate.value.getMonth());
@@ -62,18 +60,11 @@ const firstDayOfMonth = computed(() => {
 
 const calendarDays = computed(() => {
     const days = [];
-    const totalDays = daysInMonth.value;
-    const firstDay = firstDayOfMonth.value;
+    const total = daysInMonth.value;
+    const first = firstDayOfMonth.value;
 
-    // Add empty cells for days before the first day of month
-    for (let i = 0; i < firstDay; i++) {
-        days.push(null);
-    }
-
-    // Add all days of the month
-    for (let day = 1; day <= totalDays; day++) {
-        days.push(day);
-    }
+    for (let i = 0; i < first; i++) days.push(null);
+    for (let d = 1; d <= total; d++) days.push(d);
 
     return days;
 });
@@ -86,8 +77,16 @@ const getAttendanceStatus = (day) => {
     ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
     const record = attendanceRecords.value.find((r) => r.date === dateStr);
-
     return record ? record.present : null;
+};
+
+const isToday = (day) => {
+    const t = new Date();
+    return (
+        day === t.getDate() &&
+        currentMonth.value === t.getMonth() &&
+        currentYear.value === t.getFullYear()
+    );
 };
 
 const previousMonth = () => {
@@ -154,7 +153,7 @@ const goToToday = () => {
                         v-if="showModal"
                         class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
                     >
-                        <!-- Modal Header -->
+                        <!-- Header -->
                         <div class="p-6 border-b border-gray-200">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -167,12 +166,13 @@ const goToToday = () => {
                                         class="text-gray-600 mt-1"
                                         v-if="employee"
                                     >
-                                        {{ employee.name || "Employee" }}
+                                        {{ employee.name }}
                                     </p>
                                 </div>
+
                                 <button
                                     @click="closeModal"
-                                    class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                                    class="text-gray-400 hover:text-gray-600"
                                 >
                                     <svg
                                         class="w-6 h-6"
@@ -185,19 +185,19 @@ const goToToday = () => {
                                             stroke-linejoin="round"
                                             stroke-width="2"
                                             d="M6 18L18 6M6 6l12 12"
-                                        ></path>
+                                        />
                                     </svg>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Calendar Content -->
+                        <!-- Calendar -->
                         <div class="p-6">
-                            <!-- Calendar Header -->
+                            <!-- Month Header -->
                             <div class="flex items-center justify-between mb-6">
                                 <button
                                     @click="previousMonth"
-                                    class="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                                    class="p-2 hover:bg-gray-100 rounded-lg"
                                 >
                                     <svg
                                         class="w-5 h-5"
@@ -210,20 +210,18 @@ const goToToday = () => {
                                             stroke-linejoin="round"
                                             stroke-width="2"
                                             d="M15 19l-7-7 7-7"
-                                        ></path>
+                                        />
                                     </svg>
                                 </button>
 
                                 <div class="flex items-center gap-4">
-                                    <h3
-                                        class="text-xl font-semibold text-gray-900"
-                                    >
+                                    <h3 class="text-xl font-semibold">
                                         {{ monthNames[currentMonth] }}
                                         {{ currentYear }}
                                     </h3>
                                     <button
                                         @click="goToToday"
-                                        class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-md hover:bg-blue-200 transition-colors duration-200"
+                                        class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-md hover:bg-blue-200"
                                     >
                                         Today
                                     </button>
@@ -231,7 +229,7 @@ const goToToday = () => {
 
                                 <button
                                     @click="nextMonth"
-                                    class="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                                    class="p-2 hover:bg-gray-100 rounded-lg"
                                 >
                                     <svg
                                         class="w-5 h-5"
@@ -244,15 +242,15 @@ const goToToday = () => {
                                             stroke-linejoin="round"
                                             stroke-width="2"
                                             d="M9 5l7 7-7 7"
-                                        ></path>
+                                        />
                                     </svg>
                                 </button>
                             </div>
 
-                            <!-- Days of Week Header -->
+                            <!-- Week Header -->
                             <div class="grid grid-cols-7 gap-1 mb-2">
                                 <div
-                                    v-for="day in [
+                                    v-for="d in [
                                         'Sun',
                                         'Mon',
                                         'Tue',
@@ -261,47 +259,40 @@ const goToToday = () => {
                                         'Fri',
                                         'Sat',
                                     ]"
-                                    :key="day"
+                                    :key="d"
                                     class="h-10 flex items-center justify-center text-sm font-medium text-gray-500 bg-gray-50 rounded-lg"
                                 >
-                                    {{ day }}
+                                    {{ d }}
                                 </div>
                             </div>
 
-                            <!-- Calendar Grid -->
+                            <!-- Calendar Days -->
                             <div class="grid grid-cols-7 gap-1">
                                 <div
                                     v-for="(day, index) in calendarDays"
                                     :key="index"
-                                    class="h-12 flex items-center justify-center relative"
+                                    class="h-12 flex items-center justify-center"
                                 >
                                     <div
                                         v-if="day"
-                                        class="w-10 h-10 flex items-center justify-center rounded-lg relative transition-all duration-200"
+                                        class="w-10 h-10 flex items-center justify-center rounded-lg relative transition-all"
                                         :class="{
                                             'bg-green-100 text-green-800 border-2 border-green-300':
-                                                getAttendanceStatus(day) ===
-                                                true,
+                                                getAttendanceStatus(day),
+
                                             'bg-gray-50 text-gray-700 hover:bg-gray-100':
                                                 getAttendanceStatus(day) ===
                                                 null,
+
                                             'ring-2 ring-blue-500 ring-offset-1':
-                                                day === new Date().getDate() &&
-                                                currentMonth ===
-                                                    new Date().getMonth() &&
-                                                currentYear ===
-                                                    new Date().getFullYear(),
+                                                isToday(day),
                                         }"
                                     >
                                         {{ day }}
 
                                         <div
-                                            v-if="
-                                                getAttendanceStatus(day) ===
-                                                true
-                                            "
+                                            v-if="getAttendanceStatus(day)"
                                             class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
-                                            title="Present"
                                         ></div>
                                     </div>
                                 </div>
@@ -319,6 +310,7 @@ const goToToday = () => {
                                         >Present</span
                                     >
                                 </div>
+
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="w-4 h-4 bg-gray-300 rounded-full"
@@ -329,7 +321,7 @@ const goToToday = () => {
                                 </div>
                             </div>
 
-                            <!-- Statistics -->
+                            <!-- Stats -->
                             <div class="mt-6 grid grid-cols-3 gap-4">
                                 <div
                                     class="bg-green-50 p-4 rounded-lg text-center"
@@ -339,7 +331,7 @@ const goToToday = () => {
                                     >
                                         {{
                                             attendanceRecords.filter(
-                                                (r) => r.present === true
+                                                (r) => r.present
                                             ).length
                                         }}
                                     </div>
@@ -347,6 +339,7 @@ const goToToday = () => {
                                         Days Present
                                     </div>
                                 </div>
+
                                 <div
                                     class="bg-blue-50 p-4 rounded-lg text-center"
                                 >
@@ -356,7 +349,7 @@ const goToToday = () => {
                                         {{
                                             Math.round(
                                                 (attendanceRecords.filter(
-                                                    (r) => r.present === true
+                                                    (r) => r.present
                                                 ).length /
                                                     attendanceRecords.length) *
                                                     100

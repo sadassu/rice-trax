@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
@@ -17,6 +18,9 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::inertia('/about', 'About')->name('about');
 
+//cron jobs
+Route::get('/cron/mark-attendance', [CronController::class, 'markAttendance']);
+Route::get('/cron/cleanup-notifications', [CronController::class, 'cleanupNotifications']);
 
 Route::middleware('auth')->group(function () {
 
