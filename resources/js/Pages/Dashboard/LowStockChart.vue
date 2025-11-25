@@ -1,5 +1,7 @@
 <script setup>
+import { router } from "@inertiajs/vue3";
 import { Package, AlertTriangle, TrendingDown, XCircle } from "lucide-vue-next";
+import { isSafeRowClick } from "../../utils/eventHelper";
 
 const props = defineProps({
     lowStockProducts: {
@@ -46,6 +48,11 @@ const inStockCount = props.lowStockProducts.filter(
 const getTotalSacks = (kg) => {
     return Math.floor(kg / 25);
 };
+
+function onRowClick(event, id) {
+    if (!isSafeRowClick(event)) return;
+    router.visit(route("products.show", id));
+}
 </script>
 
 <template>
@@ -72,7 +79,9 @@ const getTotalSacks = (kg) => {
 
             <!-- Stats -->
             <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6">
-                <div class="bg-red-500/70 backdrop-blur-sm rounded-lg p-2 sm:p-3">
+                <div
+                    class="bg-red-500/70 backdrop-blur-sm rounded-lg p-2 sm:p-3"
+                >
                     <div class="text-xl sm:text-3xl font-bold">
                         {{ outOfStockCount }}
                     </div>
@@ -118,7 +127,10 @@ const getTotalSacks = (kg) => {
                     class="rounded-lg p-3 sm:p-4 transition-all duration-200"
                 >
                     <!-- Mobile Layout (< 640px) -->
-                    <div class="sm:hidden">
+                    <div
+                        class="sm:hidden cursor-pointer"
+                        @click="(e) => onRowClick(e, item.id)"
+                    >
                         <div class="flex items-start justify-between mb-3">
                             <div
                                 class="flex items-start space-x-3 flex-1 min-w-0"
@@ -192,7 +204,10 @@ const getTotalSacks = (kg) => {
                     </div>
 
                     <!-- Desktop Layout (>= 640px) -->
-                    <div class="hidden sm:flex items-center justify-between">
+                    <div
+                        class="hidden sm:flex items-center justify-between cursor-pointer"
+                        @click="(e) => onRowClick(e, item.id)"
+                    >
                         <div class="flex items-center space-x-4 flex-1">
                             <XCircle
                                 v-if="item.total_remaining === 0"

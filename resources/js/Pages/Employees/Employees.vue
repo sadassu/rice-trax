@@ -321,13 +321,17 @@ function onRowClick(event, id) {
                         </div>
 
                         <!-- Actions -->
-                        <div class="mt-5 pt-4 border-t border-gray-200">
-                            <button
-                                class="cursor-pointer inline-flex items-center px-3 py-2 border border-green-300 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition"
-                            >
-                                Edit
-                            </button>
+                        <div
+                            class="flex mt-5 pt-4 border-t gap-3 border-gray-200"
+                        >
                             <ShowAttendance :employee="employee" />
+                            <button
+                                @click="goToSalary(employee.id)"
+                                title="Compute Salary"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                            >
+                                <Banknote />
+                            </button>
                             <EditEmployee :employee="employee" />
                             <DeleteEmployee :employee="employee" />
                         </div>

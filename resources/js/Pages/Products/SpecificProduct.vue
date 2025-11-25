@@ -5,6 +5,7 @@ import VueApexCharts from "vue3-apexcharts";
 import { formatCurrency } from "../../utils/currencyFormat";
 import { formatDate } from "../../utils/dateFormat";
 import { formatSack } from "../../utils/helper";
+import { Link } from "@inertiajs/vue3";
 
 defineOptions({ layout: SideBar });
 
@@ -287,6 +288,17 @@ const bestSellingDay = computed(() => {
                                 {{ totalKgRemaining || 0 }} Kg /
                                 {{ formatSack(totalKgRemaining) }} sack
                             </span>
+                            <Link
+                                :href="
+                                    route(
+                                        'product-batches.product.show',
+                                        product.id
+                                    )
+                                "
+                                class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                            >
+                                Batches
+                            </Link>
                         </div>
                     </div>
                 </div>

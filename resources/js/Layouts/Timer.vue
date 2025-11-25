@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import Notifications from "../Components/Notifications.vue";
 
 const currentTime = ref("");
 
@@ -21,7 +22,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="fixed top-0 right-0 bg-lime-900 text-white px-4 rounded-b-2xl">
-        Current Time: {{ currentTime }}
+    <div class="fixed top-0 right-0 flex">
+        <div>
+            <Notifications />
+        </div>
+
+        <div class="bg-lime-900 text-white px-4 rounded-b-2xl">
+            Current Time: {{ currentTime }}
+        </div>
     </div>
 </template>
