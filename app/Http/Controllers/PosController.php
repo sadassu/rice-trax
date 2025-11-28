@@ -28,7 +28,16 @@ class PosController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $sales = Sale::latest()->take(9)->get();
+
+        // SALES QUERY (admin vs user)
+        if (Auth::user()->role === 'admin') {
+            $sales = Sale::latest()->take(9)->get();
+        } else {
+            $sales = Sale::where('user_id', Auth::id())
+                ->latest()
+                ->take(9)
+                ->get();
+        }
 
         return Inertia::render('Pos/Pos', [
             'sales'      => $sales,
