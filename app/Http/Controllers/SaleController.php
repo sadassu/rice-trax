@@ -48,13 +48,34 @@ class SaleController extends Controller
 
         $sales = $query->latest()->paginate(10);
 
+        $totalQuery = Sale::query();
+
+        if ($user->role !== 'admin') {
+            $totalQuery->where('user_id', $user->id);
+        }
+
+        // Totals
+        $totals = [
+            'today' => (clone $totalQuery)
+                ->whereDate('sale_date', now()->toDateString())
+                ->sum('total_price'),
+
+            'week' => (clone $totalQuery)
+                ->whereBetween('sale_date', [
+                    now()->startOfWeek(),
+                    now()->endOfWeek()
+                ])
+                ->sum('total_price'),
+
+            'month' => (clone $totalQuery)
+                ->whereMonth('sale_date', now()->month)
+                ->whereYear('sale_date', now()->year)
+                ->sum('total_price'),
+        ];
+
         return Inertia::render('Sales/Sales', [
             'sale' => $sales,
-            'totals' => [
-                'today' => Sale::totalSalesToday(),
-                'week'  => Sale::totalSalesWeek(),
-                'month' => Sale::totalSalesMonth(),
-            ],
+            'totals' => $totals,
             'filters' => [
                 'month' => request('month'),
                 'year' => request('year'),
