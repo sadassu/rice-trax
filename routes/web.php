@@ -61,13 +61,11 @@ Route::middleware('auth')->group(function () {
 
     //export excel
     Route::post("/sales/export", [SaleController::class, 'export'])
-        ->name("sales.export")
-        ->middleware('role:admin');
+        ->name("sales.export");
 
     //import excel
     Route::post("/sales/import", [SaleController::class, 'import'])
-        ->name("sales.import")
-        ->middleware('role:admin');
+        ->name("sales.import");
 
     //attendances without the middleware of admin this can be accessed by the normal user
     Route::get('/attendances/create', [AttendanceController::class, 'create'])
