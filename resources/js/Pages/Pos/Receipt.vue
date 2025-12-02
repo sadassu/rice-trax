@@ -1,7 +1,6 @@
 <script setup>
 import SideBar from "../../Layouts/SideBar.vue";
 import { formatCurrency } from "../../utils/currencyFormat";
-import { formatDate } from "../../utils/dateFormat";
 
 defineOptions({
     layout: SideBar,
@@ -10,6 +9,15 @@ defineOptions({
 const props = defineProps({
     sale: Object,
 });
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-PH", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    });
+};
 
 const downloadReceipt = () => {
     const printWindow = window.open("", "_blank");
