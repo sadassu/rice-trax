@@ -31,10 +31,12 @@ class PosController extends Controller
 
         // SALES QUERY (admin vs user)
         if (Auth::user()->role === 'admin') {
-            $sales = Sale::latest()->take(9)->get();
+            $sales = Sale::orderBy('sale_date', 'desc')
+                ->take(9)
+                ->get();
         } else {
             $sales = Sale::where('user_id', Auth::id())
-                ->latest()
+                ->orderBy('sale_date', 'desc')
                 ->take(9)
                 ->get();
         }

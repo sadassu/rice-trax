@@ -46,7 +46,7 @@ class SaleController extends Controller
             $query->whereDate('sale_date', request('date'));
         }
 
-        $sales = $query->latest()->paginate(10);
+        $sales = $query->orderBy('sale_date', 'desc')->paginate(10);
 
         $totalQuery = Sale::query();
 

@@ -156,7 +156,7 @@ const downloadReceipt = () => {
                     <div class="info-row">
                         <span class="info-label">Date:</span>
                         <span class="info-value">${formatDate(
-                            props.sale.created_at
+                            props.sale.sale_date
                         )}</span>
                     </div>
                     <div class="info-row">
@@ -302,7 +302,7 @@ function goBack() {
                             >
                                 <span class="font-semibold">Date & Time:</span>
                                 <span class="font-bold">{{
-                                    formatDate(sale.created_at)
+                                    formatDate(sale.sale_date)
                                 }}</span>
                             </div>
                             <div class="flex justify-between items-center py-2">
