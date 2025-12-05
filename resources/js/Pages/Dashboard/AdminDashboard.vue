@@ -1,15 +1,14 @@
 <script setup>
+import { ref } from "vue";
+
 import SideBar from "../../Layouts/SideBar.vue";
-import { computed } from "vue";
-import VueApexCharts from "vue3-apexcharts";
 import SaleCards from "./SaleCards.vue";
 import ActivityLogs from "./ActivityLogs.vue";
-import { formatCurrency } from "../../utils/currencyFormat";
 import TopSellingProduct from "./TopSellingProduct.vue";
 import LowStockChart from "./LowStockChart.vue";
-import { formatDate } from "../../utils/dateFormat";
 import SalesReports from "./SalesReports.vue";
 import NotificationBar from "./NotificationBar.vue";
+import LevelTrendsForecastChart from "./LevelTrendsForecastChart.vue";
 
 defineOptions({ layout: SideBar });
 
@@ -25,79 +24,13 @@ const props = defineProps({
     notifications: Array,
 });
 
-// Line Chart Configuration
-const lineChartOptions = computed(() => {
-    // unified timeline (historical + forecast)
-    const levelDates = props.forecastedSale?.levels?.map((l) => l.date) || [];
-    const trendDates = props.forecastedSale?.trends?.map((t) => t.date) || [];
-    const forecastDates =
-        props.forecastedSale?.forecast?.map((f) => f.date) || [];
-
-    const categories = [
-        ...new Set([...levelDates, ...trendDates, ...forecastDates]),
-    ];
-
-    return {
-        chart: {
-            type: "line",
-            height: 320,
-            toolbar: { show: false },
-            zoom: { enabled: false },
-        },
-        stroke: { curve: "smooth", width: 3, dashArray: [0, 0, 5] },
-        colors: ["#14b8a6", "#f43f5e", "#3b82f6"],
-        grid: { borderColor: "#f0f0f0", strokeDashArray: 3 },
-        xaxis: {
-            categories,
-            axisBorder: { show: false },
-            axisTicks: { show: false },
-            labels: { show: false },
-        },
-        yaxis: {
-            axisBorder: { show: false },
-            axisTicks: { show: false },
-            labels: {
-                style: { colors: "#666", fontSize: "12px" },
-                formatter: (val) => formatCurrency(val),
-            },
-        },
-        tooltip: {
-            theme: "light",
-            y: { formatter: (val) => formatCurrency(val) },
-        },
-        markers: { size: 5, strokeWidth: 2, hover: { size: 7 } },
-    };
-});
-
-// Align data with categories
-const lineChartSeries = computed(() => {
-    const categories = lineChartOptions.value.xaxis.categories;
-
-    const levelsMap = Object.fromEntries(
-        props.forecastedSale?.levels?.map((l) => [l.date, l.value]) || []
-    );
-    const trendsMap = Object.fromEntries(
-        props.forecastedSale?.trends?.map((t) => [t.date, t.value]) || []
-    );
-    const forecastMap = Object.fromEntries(
-        props.forecastedSale?.forecast?.map((f) => [f.date, f.value]) || []
-    );
-
-    return [
-        {
-            name: "Levels",
-            data: categories.map((date) => levelsMap[date] ?? null),
-        },
-        {
-            name: "Trends",
-            data: categories.map((date) => trendsMap[date] ?? null),
-        },
-        {
-            name: "Forecast",
-            data: categories.map((date) => forecastMap[date] ?? null),
-        },
-    ];
-});
+const tabs = [
+    "Sales Reports",
+    "Levels & Forecast",
+    "Top Products",
+    "Low Stock",
+];
+const activeTab = ref("Sales Reports");
 </script>
 
 <template>
@@ -115,53 +48,41 @@ const lineChartSeries = computed(() => {
 
         <!-- Main Content: Charts (2/3) + Activity Logs (1/3) -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            <!-- Left Side: Charts (2/3 width) -->
+            <!-- Left Side: Charts with Tabs -->
             <div class="xl:col-span-2 space-y-6">
-                <SalesReports />
-                <!-- Levels/Trends/Forecast Line Chart -->
-                <div
-                    class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
-                >
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900">
-                            Levels, Trends & Forecast
-                        </h3>
-                    </div>
-
-                    <!-- Explanation paragraph -->
-                    <ul
-                        class="text-gray-700 mb-4 text-sm list-disc list-inside space-y-1"
+                <!-- TAB BUTTONS -->
+                <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                    <button
+                        v-for="tab in tabs"
+                        :key="tab"
+                        @click="activeTab = tab"
+                        :class="[
+                            'px-4 py-2.5 rounded-md font-medium transition-all duration-200 flex-1',
+                            activeTab === tab
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+                        ]"
                     >
-                        <li>
-                            <strong>Levels:</strong> Show the actual daily
-                            revenue.
-                        </li>
-                        <li>
-                            <strong>Trends:</strong> Highlight the overall
-                            direction of sales over time.
-                        </li>
-                        <li>
-                            <strong>Forecast:</strong> Predicts future sales
-                            based on historical trends using Holt’s Linear
-                            method.
-                        </li>
-                    </ul>
-
-                    <div class="h-80">
-                        <VueApexCharts
-                            type="line"
-                            height="320"
-                            :options="lineChartOptions"
-                            :series="lineChartSeries"
-                        />
-                    </div>
+                        {{ tab }}
+                    </button>
                 </div>
 
-                <!-- Top Products Bar Chart -->
-                <TopSellingProduct :topMostSaleProducts="topMostSaleProduct" />
-
-                <!-- Low Stock Chart -->
-                <LowStockChart :lowStockProducts="lowStockProducts" />
+                <!-- TAB CONTENT -->
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <SalesReports v-if="activeTab === 'Sales Reports'" />
+                    <LevelTrendsForecastChart
+                        v-if="activeTab === 'Levels & Forecast'"
+                        :forecastedSale="forecastedSale"
+                    />
+                    <TopSellingProduct
+                        v-if="activeTab === 'Top Products'"
+                        :topMostSaleProducts="topMostSaleProduct"
+                    />
+                    <LowStockChart
+                        v-if="activeTab === 'Low Stock'"
+                        :lowStockProducts="lowStockProducts"
+                    />
+                </div>
             </div>
 
             <!-- Right Side: Activity Logs (1/3 width) -->

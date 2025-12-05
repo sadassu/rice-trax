@@ -28,6 +28,12 @@ const navItems = [
         icon: "/assets/icons/products.svg",
     },
     {
+        href: "product-batches.index",
+        pageComponent: "ProductBatches/ProductBatches",
+        label: "Products Batches",
+        icon: "/assets/icons/products.svg",
+    },
+    {
         href: "sales.index",
         pageComponent: "Sales/Sales",
         label: "Sales",

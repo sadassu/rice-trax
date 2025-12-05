@@ -7,24 +7,55 @@ use App\Http\Requests\StoreProductBatchRequest;
 use App\Http\Requests\UpdateProductBatchRequest;
 use App\Models\ActivityLog;
 use App\Models\Product;
-use Illuminate\Http\Client\Request;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
+
 class ProductBatchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        /* this need to be update as have search and a to z*/
-        return inertia(
-            'ProductBatches/ProductBatches',
-            [
-                'product_batches' => ProductBatch::all(),
-                'products' => Product::all(),
-            ]
-        );
+        $perPage = 10;
+        $searchTerm = $request->search;
+
+        // Fetch products with batches sum and optional search
+        $productsQuery = Product::with('batches')
+            ->withSum('batches', 'kg_remaining') // total kg remaining
+            ->when($searchTerm, fn($q) => $q->where('name', 'like', "%{$searchTerm}%"))
+            ->orderBy('batches_sum_kg_remaining', 'asc'); // sort by total remaining
+
+        $paginated = $productsQuery->paginate($perPage)->withQueryString();
+
+        // Totals
+        $totalInventoryValue = Product::with('batches')
+            ->get()
+            ->sum(
+                fn($product) =>
+                $product->batches->sum(fn($batch) => $batch->kg_remaining * $product->price_per_kilo)
+            );
+
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
+
+        $totalRecentInvestment = Product::with('batches')
+            ->get()
+            ->sum(
+                fn($product) =>
+                $product->batches
+                    ->where('created_at', '>=', $thirtyDaysAgo)
+                    ->sum(fn($batch) => $batch->kg_remaining * $batch->price_per_sack)
+            );
+
+        return Inertia::render('ProductBatches/ProductBatches', [
+            'products'              => $paginated,
+            'searchTerm'            => $searchTerm,
+            'totalInventoryValue'   => number_format($totalInventoryValue, 2, '.', ''),
+            'totalRecentInvestment' => number_format($totalRecentInvestment, 2, '.', ''),
+        ]);
     }
 
     public function showBatchesByProduct(Product $product)

@@ -11,6 +11,7 @@ import { formatCurrency } from "../../utils/currencyFormat";
 import { formatDate } from "../../utils/dateFormat";
 import { formatSack } from "../../utils/helper";
 import { isSafeRowClick } from "../../utils/eventHelper";
+import { PackageSearch } from "lucide-vue-next";
 
 defineOptions({ layout: SideBar });
 
@@ -59,33 +60,72 @@ function onRowClick(event, id) {
 <template>
     <Head :title="` | Products`" />
 
-    <div class="p-6">
-        <!-- Header -->
-        <div class="mb-6 flex justify-between items-center flex-wrap gap-3">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Products</h1>
-                <p class="text-gray-600">Manage your product inventory</p>
+    <div class="p-4 sm:p-6">
+        <!-- Mobile Header Section -->
+        <div class="mb-6 md:hidden">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4"
+            >
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Products</h1>
+                    <p class="text-sm text-gray-600 mt-1">
+                        Manage your product inventory
+                    </p>
+                </div>
+                <div>
+                    <CreateProduct />
+                </div>
             </div>
-            <CreateProduct />
-        </div>
 
-        <!-- Search Bar -->
-        <div class="mb-6 flex justify-between items-center flex-wrap gap-3">
-            <div class="text-sm text-gray-600">
-                {{ products.total }} products
+            <!-- Mobile Search Bar -->
+            <div class="flex flex-col gap-3">
+                <div class="text-sm text-gray-600">
+                    <span class="font-medium">{{ products.total }}</span>
+                    products
+                </div>
+                <input
+                    type="search"
+                    placeholder="Search products..."
+                    v-model="search"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
             </div>
-            <input
-                type="search"
-                placeholder="Search products..."
-                v-model="search"
-                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-auto"
-            />
         </div>
 
         <!-- Desktop Table -->
         <div
-            class="hidden md:block bg-white rounded-lg border border-gray-200 overflow-hidden"
+            class="hidden md:block bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
         >
+            <!-- Desktop Header inside table -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between gap-4 mb-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            Products
+                        </h1>
+                        <p class="text-gray-600 mt-1">
+                            Manage your product inventory
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Desktop Search and Actions Bar -->
+                <div class="flex items-center justify-between gap-4">
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium">{{ products.total }}</span>
+                        products
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input
+                            type="search"
+                            placeholder="Search products..."
+                            v-model="search"
+                            class="w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        />
+                        <CreateProduct />
+                    </div>
+                </div>
+            </div>
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr>
@@ -166,9 +206,9 @@ function onRowClick(event, id) {
                                             product.id
                                         )
                                     "
-                                    class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                                    class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
                                 >
-                                    Batches
+                                    <PackageSearch />
                                 </Link>
                             </div>
                         </td>
@@ -194,8 +234,8 @@ function onRowClick(event, id) {
                     >
                         {{ product.name.charAt(0).toUpperCase() }}
                     </div>
-                    <div>
-                        <h2 class="font-semibold text-gray-900">
+                    <div class="flex-1">
+                        <h2 class="font-semibold text-gray-900 capitalize">
                             {{ product.name }}
                         </h2>
                         <p class="text-sm text-gray-500">
@@ -203,24 +243,33 @@ function onRowClick(event, id) {
                         </p>
                     </div>
                 </div>
-                <div class="text-sm text-gray-700 mb-2">
-                    <p>
-                        <span class="font-medium">Stock:</span>
-                        {{ product.batches_sum_kg_remaining ?? 0 }} kg
-                    </p>
-                    <p>
-                        <span class="font-medium">Updated:</span>
-                        {{ formatDate(product.updated_at) }}
-                    </p>
+                <div
+                    class="grid grid-cols-2 gap-2 text-sm text-gray-700 mb-3 bg-gray-50 rounded-lg p-3"
+                >
+                    <div>
+                        <p class="text-xs text-gray-500 mb-0.5">Stock</p>
+                        <p class="font-medium">
+                            {{ product.batches_sum_kg_remaining ?? 0 }} kg
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-0.5">Sacks</p>
+                        <p class="font-medium">
+                            {{
+                                formatSack(product.batches_sum_kg_remaining) ??
+                                0
+                            }}
+                        </p>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-2 mt-3">
+                <div class="flex flex-wrap gap-2">
                     <UpdateProduct :product="product" />
                     <DeleteProduct :product="product" />
                     <Link
                         :href="
                             route('product-batches.product.show', product.id)
                         "
-                        class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md"
+                        class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
                     >
                         Batches
                     </Link>
@@ -229,11 +278,13 @@ function onRowClick(event, id) {
         </div>
 
         <!-- Pagination -->
-        <PaginationLinks
-            :links="products.links"
-            :from="products.from"
-            :to="products.to"
-            :total="products.total"
-        />
+        <div class="mt-6">
+            <PaginationLinks
+                :links="products.links"
+                :from="products.from"
+                :to="products.to"
+                :total="products.total"
+            />
+        </div>
     </div>
 </template>
