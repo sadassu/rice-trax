@@ -124,7 +124,7 @@ const downloadReceipt = () => {
         <body>
             <div class="receipt-container">
                 <div class="receipt-header">
-                    <div class="receipt-title">Sales Receipt</div>
+                    <div class="receipt-title">Sales Invoice</div>
                     <div class="receipt-id">Receipt #${props.sale.id}</div>
                 </div>
 
@@ -219,7 +219,7 @@ function goBack() {
         >
             <!-- Receipt Header -->
             <div class="border-b-2 border-gray-800 text-center p-6">
-                <h1 class="text-3xl font-bold mb-2">Sales Receipt</h1>
+                <h1 class="text-3xl font-bold mb-2">Sales Invoice</h1>
                 <p class="text-xl font-semibold">Receipt #{{ sale.id }}</p>
             </div>
 

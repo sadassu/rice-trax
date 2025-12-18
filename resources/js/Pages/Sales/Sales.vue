@@ -339,7 +339,7 @@ const formatDate = (dateString) => {
                                         class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                     >
                                         <Eye class="w-4 h-4 mr-2" />
-                                        View Receipt
+                                        View Sales Invoice
                                     </button>
                                 </td>
                             </tr>
